@@ -16,3 +16,34 @@ happend it will be correct state afterwords
 	\item \textbf{Isolation}: everyone using the database thinks he is working alone
 	\item \textbf{Durability}: once the transaction is done it is save
 \end{itemize}
+
+\section{Modelling-Level of Data models}
+\begin{itemize}
+\setlength{\itemsep}{1pt}
+	\item \textbf{conceptual data models} defines the mini-world that is
+represented by the database
+	\item \textbf{logical data models} defines a specification that is easily
+implemented
+	\item \textbf{physical model} defines the concrete datastorage
+\end{itemize}
+
+\section{Hierarchie Model}
+The Hierarchie model defines one dataset and all depending datasets as a
+hierarchy. Relation between datasets can have different characteristics.
+Think unix-file-system-hierarchy.
+\begin{itemize}
+\setlength{\itemsep}{1pt}
+	\item 1:1 parent-element is bound the child-element
+	\item 1:n parent-element is bound to n child-elements
+	\item m:n m parent-element are bound to n child-elements
+(m $\in [1 \dots n]$)
+	\item no cycles are allowed
+\end{itemize}
+
+\section{Network Model}
+The network-model builds upon the Hierarchie Model. One element can be part of
+more than one group.
+
+\section{Flat relational model}
+The flat relational model is build from tables hat hab attributes and
+column-header. These tables are container for complex datatypes.

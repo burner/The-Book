@@ -381,40 +381,38 @@ $R \bowtie_{A != B} S = \sigma_{A != B} (R \times S) $
 	\end{tabular}
 \end{tabular}\\
 
-\hspace{-0.5cm}
-\begin{tabular}{ c c}
-	R $\times$ S &JOIN(R, R.a $<>$ S.e, S)\\
-	\begin{tabular}{|c|c|c|c|c|c|c|}
-		\hline
-		A & B & C & D & E & F & G\\
-		\hline
-		1 & 2 & 3 & 4 & 1 & 2 & 3\\
-		\hline
-		4 & 5 & 6 & 7 & 7 & 8 & 9\\
-		\hline
-		7 & 8 & 9 & 0 & 1 & 2 & 3\\
-		\hline                     
-		1 & 2 & 3 & 4 & 7 & 8 & 9\\
-		\hline
-		4 & 5 & 6 & 7 & 1 & 2 & 3\\
-		\hline                     
-		7 & 8 & 9 & 0 & 7 & 8 & 9\\
-		\hline
-	\end{tabular} &
+R $\times$ \\
+\begin{tabular}{|c|c|c|c|c|c|c|}
+	\hline
+	A & B & C & D & E & F & G\\
+	\hline
+	1 & 2 & 3 & 4 & 1 & 2 & 3\\
+	\hline
+	4 & 5 & 6 & 7 & 7 & 8 & 9\\
+	\hline
+	7 & 8 & 9 & 0 & 1 & 2 & 3\\
+	\hline                     
+	1 & 2 & 3 & 4 & 7 & 8 & 9\\
+	\hline
+	4 & 5 & 6 & 7 & 1 & 2 & 3\\
+	\hline                     
+	7 & 8 & 9 & 0 & 7 & 8 & 9\\
+	\hline
+\end{tabular}\\
 
-	\begin{tabular}{|c|c|c|c|c|c|c|}
-		\hline
-		A & B & C & D & E & F & G\\
-		\hline
-		4 & 5 & 6 & 7 & 7 & 8 & 9\\
-		\hline
-		7 & 8 & 9 & 0 & 1 & 2 & 3\\
-		\hline                     
-		1 & 2 & 3 & 4 & 7 & 8 & 9\\
-		\hline
-		4 & 5 & 6 & 7 & 1 & 2 & 3\\
-		\hline
-	\end{tabular} 
+JOIN(R, R.a $<>$ S.e, S)\\
+\begin{tabular}{|c|c|c|c|c|c|c|}
+	\hline
+	A & B & C & D & E & F & G\\
+	\hline
+	4 & 5 & 6 & 7 & 7 & 8 & 9\\
+	\hline
+	7 & 8 & 9 & 0 & 1 & 2 & 3\\
+	\hline                     
+	1 & 2 & 3 & 4 & 7 & 8 & 9\\
+	\hline
+	4 & 5 & 6 & 7 & 1 & 2 & 3\\
+	\hline
 \end{tabular}\\
 
 \lstset{language=SQL,tabsize=4,captionpos=b,frame=single,
@@ -453,36 +451,34 @@ $R \bowtie_{A = B} S = \sigma_{A = B} (R \times S) $
 	\end{tabular}
 \end{tabular}\\
 
-\hspace{-0.5cm}
-\begin{tabular}{ c c c }
-	R $\times$ S &JOIN(R, R.a = S.e, S)\\
-	\begin{tabular}{|c|c|c|c|c|c|c|}
-		\hline
-		A & B & C & D & E & F & G\\
-		\hline
-		1 & 2 & 3 & 4 & 1 & 2 & 3\\
-		\hline
-		4 & 5 & 6 & 7 & 7 & 8 & 9\\
-		\hline
-		7 & 8 & 9 & 0 & 1 & 2 & 3\\
-		\hline                     
-		1 & 2 & 3 & 4 & 7 & 8 & 9\\
-		\hline
-		4 & 5 & 6 & 7 & 1 & 2 & 3\\
-		\hline                     
-		7 & 8 & 9 & 0 & 7 & 8 & 9\\
-		\hline
-	\end{tabular} &
+R $\times$ S \\
+\begin{tabular}{|c|c|c|c|c|c|c|}
+	\hline
+	A & B & C & D & E & F & G\\
+	\hline
+	1 & 2 & 3 & 4 & 1 & 2 & 3\\
+	\hline
+	4 & 5 & 6 & 7 & 7 & 8 & 9\\
+	\hline
+	7 & 8 & 9 & 0 & 1 & 2 & 3\\
+	\hline                     
+	1 & 2 & 3 & 4 & 7 & 8 & 9\\
+	\hline
+	4 & 5 & 6 & 7 & 1 & 2 & 3\\
+	\hline                     
+	7 & 8 & 9 & 0 & 7 & 8 & 9\\
+	\hline
+\end{tabular}\\
 
-	\begin{tabular}{|c|c|c|c|c|c|c|}
-		\hline
-		A & B & C & D & E & F & G\\
-		\hline
-		1 & 2 & 3 & 4 & 1 & 2 & 3\\
-		\hline
-		7 & 8 & 9 & 0 & 7 & 8 & 9\\
-		\hline
-	\end{tabular} 
+JOIN(R, R.a = S.e, S)\\
+\begin{tabular}{|c|c|c|c|c|c|c|}
+	\hline
+	A & B & C & D & E & F & G\\
+	\hline
+	1 & 2 & 3 & 4 & 1 & 2 & 3\\
+	\hline
+	7 & 8 & 9 & 0 & 7 & 8 & 9\\
+	\hline
 \end{tabular}\\
 
 \lstset{language=SQL,tabsize=4,captionpos=b,frame=single,
@@ -500,9 +496,8 @@ of any attribute, even if R and S define two.\\
 Definition: $R \bowtie S = \{r \cup s_{[C_1, \dots, C_N]} | r \in R \land s \in S
 \land r_{[B_1, \dots, B_N]} = s_{[B_1, \dots, B_N]}$
 
-\hspace{-0.5cm}
-\begin{tabular}{ c c c}
-	R: & S & $NATURAL\_JOIN(R,S)$ \\
+\begin{tabular}{ c c}
+	R: & S \\
 	\begin{tabular}{|c|c|c|c|}
 		\hline
 		A & B & C & D\\
@@ -523,17 +518,18 @@ Definition: $R \bowtie S = \{r \cup s_{[C_1, \dots, C_N]} | r \in R \land s \in 
 		\hline
 		7 & 8 & 9\\
 		\hline
-	\end{tabular} &
-
-	\begin{tabular}{|c|c|c|c|c|c|}
-		\hline
-		A & B & C & D & F & G \\
-		\hline
-		1 & 2 & 3 & 4 & 2 & 3\\
-		\hline
-		7 & 8 & 9 & 0 & 8 & 9\\
-		\hline
 	\end{tabular}
+\end{tabular}\\
+
+$NATURAL\_JOIN(R,S)$ \\
+\begin{tabular}{|c|c|c|c|c|c|}
+	\hline
+	A & B & C & D & F & G \\
+	\hline
+	1 & 2 & 3 & 4 & 2 & 3\\
+	\hline
+	7 & 8 & 9 & 0 & 8 & 9\\
+	\hline
 \end{tabular}\\
 
 \lstset{language=SQL,tabsize=4,captionpos=b,frame=single,
