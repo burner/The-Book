@@ -1,6 +1,6 @@
 \section{Relational Algebra}
 \begin{keywords}
-SQL commands, Relational databases, Relational Algebra, Databases
+SQL commands, Relational databases, Relational Algebra, Databases, Minimality
 \end{keywords}
 \subsection{Requirements}
 To perform set operationen on two relations two requirements must be satisfied.
@@ -91,7 +91,7 @@ Definition: $R-S= R\backslash S = \{t | t \in R \land t \not\in S \}$\\
 		1 & 2 & 3\\
 		\hline
 	\end{tabular}
-\end{tabular}
+\end{tabular}\\
 
 \lstset{language=SQL,tabsize=4,captionpos=b,frame=single,
 basicstyle=\footnotesize}
@@ -136,7 +136,7 @@ Definition: $R \bigtriangleup S = (R \backslash S ) \cup (S \backslash R) = (R
 		7 & 8 & 9 \\
 		\hline
 	\end{tabular}
-\end{tabular}
+\end{tabular}\\
 
 \lstset{language=SQL,tabsize=4,captionpos=b,frame=single,
 basicstyle=\footnotesize}
@@ -179,7 +179,7 @@ Definition: $R \cap S = \{t | t \in R \land t \in S \}$
 		4 & 5 & 6 \\
 		\hline
 	\end{tabular}
-\end{tabular}
+\end{tabular}\\
 
 \lstset{language=SQL,tabsize=4,captionpos=b,frame=single,
 basicstyle=\footnotesize}
@@ -236,7 +236,7 @@ Definition: $R \times S = \{a_1, a_2, \dots, a_n, b_1, b_2, \dots, b_m) |\\
 	\hline
 	7 & 8 & 9 & 0 & 7 & 8 & 3\\
 	\hline
-\end{tabular}
+\end{tabular}\\
 
 \lstset{language=SQL,tabsize=4,captionpos=b,frame=single,
 basicstyle=\footnotesize}
@@ -332,7 +332,7 @@ Definition: $\sigma_{Expression}(R) = \{t | t \in R \land$satisfies Expression $
 		1 & 6 & 7\\
 		\hline
 	\end{tabular} 
-\end{tabular}
+\end{tabular}\\
 
 \lstset{language=SQL,tabsize=4,captionpos=b,frame=single,
 basicstyle=\footnotesize}
@@ -415,7 +415,7 @@ $R \bowtie_{A != B} S = \sigma_{A != B} (R \times S) $
 		4 & 5 & 6 & 7 & 1 & 2 & 3\\
 		\hline
 	\end{tabular} 
-\end{tabular} 
+\end{tabular}\\
 
 \lstset{language=SQL,tabsize=4,captionpos=b,frame=single,
 basicstyle=\footnotesize}
@@ -483,7 +483,7 @@ $R \bowtie_{A = B} S = \sigma_{A = B} (R \times S) $
 		7 & 8 & 9 & 0 & 7 & 8 & 9\\
 		\hline
 	\end{tabular} 
-\end{tabular} 
+\end{tabular}\\
 
 \lstset{language=SQL,tabsize=4,captionpos=b,frame=single,
 basicstyle=\footnotesize}
@@ -858,3 +858,67 @@ basicstyle=\footnotesize}
 \begin{lstlisting}[caption=Right-Outer-Join]
 SELECT A, B AS X, C FROM R;
 \end{lstlisting}
+
+\subsection{Devision Operation}
+The devision operation can be seen as the logical opposite to the
+crossproduct.\\
+Definition: $R \div S = \pi_{R'}(R) - \pi_{R'}((\pi_{R'}(R) \times S) - R)$
+
+The examples uses the division operation to get the tuple attributes father and
+mother who have the child's defined in S. It also removes the attributes from
+the tuple who are defined in S.\\
+
+R:\\
+\begin{tabular}{|c|c|c|c|}
+	\hline
+	Father & Mother & Child & Age\\
+	\hline
+	Hans & Helga & Harald & 5\\
+	\hline
+	Hans & Helga & Maria & 2\\
+	\hline
+	Hans & Ursula & Sabina & 7\\
+	\hline
+	Martin & Melanie & Maria & 4\\
+	\hline
+	Martin & Melanie & Gertrud & 7\\
+	\hline
+	Martin & Melanie & Sabine & 2\\
+	\hline
+	Peter & Christina & Robert & 9\\
+	\hline
+\end{tabular}\\
+
+\begin{tabular}{c c}
+S: & R $\div$ S\\
+	\begin{tabular}{|c|c|}
+		\hline
+		Child & Age\\
+		\hline
+		Maria & 4\\
+		\hline
+		Sabine & 2\\
+		\hline
+	\end{tabular} & 
+
+	\begin{tabular}{|c|c|}
+		\hline
+		Father & Mother\\
+		\hline
+		Martin & Melanie\\
+		\hline
+	\end{tabular} 
+\end{tabular}\\
+
+\subsection{Minimality}
+Minimality defines a set of operations that can be used to perform all possible
+operations. The set goes as followed.
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\item projection
+	\item selection
+	\item crossproduct
+	\item join
+	\item difference
+	\item rename
+\end{itemize}

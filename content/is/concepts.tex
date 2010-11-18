@@ -1,0 +1,18 @@
+\section{Concepts}
+\begin{keywords}
+Database, ACID
+\end{keywords}
+Databases work under a closed world assumption, that means that not all Details
+of the actual world are took into consideration. Only attributes relevant to the
+task are considered. Another imported aspect is that database give every user
+the illusion that he is working alone. Therefor four attributes are defined to
+make databases work the way the do. These attributes are called ACID.
+\begin{itemize}
+\setlength{\itemsep}{1pt}
+	\item \textbf{Atomicity}: this means that only one operation at a time will change
+the database
+	\item \textbf{Consistency}: if the database was in a correct state start before any change
+happend it will be correct state afterwords
+	\item \textbf{Isolation}: everyone using the database thinks he is working alone
+	\item \textbf{Durability}: once the transaction is done it is save
+\end{itemize}
