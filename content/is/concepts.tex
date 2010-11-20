@@ -108,5 +108,56 @@ Grade)}\\
 \section{Entity-Relationship-Model}
 \begin{tikzpicture}
 	\node[entity] (emp) {employee};
-	\node[attribute] (essn) [above left of=emp,node distance=1.5cm] {Sse} edge (emp);
+	\node[attribute] (essn) [above left of=emp,node distance=1.5cm] {\key{Sse}} edge (emp);
+	\node[attribute] (bday) [left of=emp,node distance=2.0cm] {BDay} edge (emp);
+	\node[attribute] (name) [above of=emp,node distance=1.5cm] {Name} edge (emp);
+	\node[attribute] (sName) [above left of=name,node distance=1.1cm] {SName} edge (name);
+	\node[attribute] (mName) [above of=name,node distance=1.3cm] {MName} edge (name);
+	\node[attribute] (lName) [above right of=name,node distance=1.1cm] {LName} edge (name);
+	\node[relationship] (control) [below of=emp,node distance=1.5cm] {Controls} 
+		edge node[auto,swap] {1} (emp.-140)
+		edge node[auto,swap] {n} (emp.-40);
+
+	\node[entity] (section) [right of=emp,node distance=5.0cm] {section};
+	\node[relationship] (works) [right of=emp,node distance=2.5cm] {Works For}
+		edge [total] node[auto,swap] {n} (emp)
+		edge [total] node[auto,swap] {1} (section);
+	\node[relationship] (leads) [below of=works,node distance=1.6cm] {leads}
+		edge node[auto,swap] {1} (emp)
+		edge [total] node[auto,swap] {1} (section);
+	\node[attribute] (name) [above left of=section,node distance=1.5cm] {\key{Name}}
+		edge (section);
+	\node[attribute] (num) [above of=section,node distance=1.6cm] {\key{Number}}
+		edge (section);
+	\node[multi attribute] (location) [below of=section,node distance=1.5cm]
+		{Location} edge (section);
 \end{tikzpicture}
+
+\subsection{Entities}
+Entities describe things of the displayed world. Entities can live on there own.
+There are two kinds of entities. Strong which have attributes for
+identification. Weak entities need extra entities for identification.
+\begin{tikzpicture}
+	\node[entity] (emp) {Employ};
+	\node[ident relationship] (from) [right of=emp, node distance=2.5cm] {belongsTo}
+		edge [total] node[auto,swap] {1} (emp);
+	\node[weak entity] (fam) [right of=from, node distance=2.5cm] {Family}
+		edge [total] node[auto,swap] {n} (from);
+\end{tikzpicture}
+The employ is a strong entity. It doesn't need any other entity make make itself
+identifiable. The family needs an employ entity to be even considered a part of
+the model.
+
+\subsection{Attributes}
+Attributes describe entities. There are different kinds of attributes.
+\begin{itemize}
+\setlength{\itemsep}{1pt}
+	\item atomar - these attributes can be devided
+	\item combined - consist of more than one attribute
+	\item univalent - can only appear once
+	\item multivalent - can appear more than one time
+	\item complex - can consist of different kind of attributes.
+	\item key - makes an entity identifiable
+	\item partiell key - is part of the key that makes the entity idenfiable
+\end{itemize}
+
