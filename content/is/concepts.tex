@@ -11,8 +11,8 @@ make databases work the way the do. These attributes are called ACID.
 \setlength{\itemsep}{1pt}
 	\item \textbf{Atomicity}: this means that only one operation at a time will change
 the database
-	\item \textbf{Consistency}: if the database was in a correct state start before any change
-happend it will be correct state afterwords
+	\item \textbf{Consistency}: if the database was in a correct state start before 
+any change happend it will be correct state afterwords
 	\item \textbf{Isolation}: everyone using the database thinks he is working alone
 	\item \textbf{Durability}: once the transaction is done it is save
 \end{itemize}
@@ -46,4 +46,67 @@ more than one group.
 
 \section{Flat relational model}
 The flat relational model is build from tables hat hab attributes and
-column-header. These tables are container for complex datatypes.
+column-header. These tables are container for complex datatypes.\\
+\begin{tabular}{|c|c|c|c|}
+\hline
+\multicolumn{4}{|c|}{Participants}\\
+\hline
+StudentNum & Surname & Name & Semester \\
+\hline
+4711 & Martha & Mustermann & 3 \\
+\hline
+42 & Arthur & Dent & 23\\
+\hline
+\end{tabular}\\
+Relations are created through grouping attributes in tables or through
+value-based associating.\\
+\begin{tabular}{|c|c|}
+\hline
+\multicolumn{2}{|c|}{Lecture}\\
+\hline
+LectureNum & Title \\
+\hline
+48 & Informationsystems \\
+\hline
+43 & Operation Systems\\
+\hline
+\end{tabular}\\
+
+\begin{tabular}{|c|c|}
+\hline
+\multicolumn{2}{|c|}{Selection}\\
+\hline
+LectureNum & StudentNum \\
+\hline
+42 & 4711 \\
+\hline
+43 & 42\\
+\hline
+\end{tabular}
+
+\section{Nested relational Model}
+This allows attribute-values to be relation itself.\\
+
+\scriptsize \begin{tabular}{|c|c|c|c|} 
+\hline
+GRADE\_REPORT & StudentNum & \multicolumn{2}{|c|}{SectionGrade(SectionID,
+Grade)}\\
+\hline
+& \multirow{2}{*}{17} & 122 & B\\
+\cline{3-4}
+& & 119 & C\\
+\hline
+& \multirow{4}{*}{8} & 85 & A\\
+& & 92 & A\\
+\cline{3-4}
+& & 102 & B\\
+\cline{3-4}
+& & 135 & A\\
+\hline
+\end{tabular}
+
+\section{Entity-Relationship-Model}
+\begin{tikzpicture}
+	\node[entity] (emp) {employee};
+	\node[attribute] (essn) [above left of=emp,node distance=1.5cm] {Sse} edge (emp);
+\end{tikzpicture}
