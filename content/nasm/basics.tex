@@ -1,0 +1,38 @@
+\section{Basics}
+The nasm assembler is a assembler for intel x86 as well as x86-64. Nasm stands
+for netwide assambler. To comment the code we use the C programming language.
+
+\section{The first program}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=First nasm program,language={[x86masm]Assembler},
+xleftmargin=20pt, label=lst:firstNamsProgram]
+section .data
+section .bss
+section .text
+
+global _start
+
+_start:				; void main() {
+
+end:mov eax, 1		; exit(0);
+	mov ebx, 9
+	int 80h			; }
+\end{lstlisting}
+All this program does is to exit with a return value of 9. To compile and run
+it to the following.
+\begin{lstlisting}[language=bash,numbers=none]
+nasm -f elf32 -g FILENAME
+ld -o OUTPUTFILE FILENAME.o
+./OUTPUTFILE
+echo $?
+\end{lstlisting}
+The shell should print 9. You can ignore the lines $1 \dots 3$ right now. Line
+5 makes the label \_start visible to the outside so it can be used as startup
+function for the program. The interesting parts are $9 \dots 11$. These three
+lines move the integer 1 to the eax register. The interger 9 into ebx and than
+creates a interrupt. The value in register eax defines which function is
+called, value 1 means exit. The value in register ebx is the exit code, this
+code is returned to the shell. That means the syntax of nasm is OPERATION
+DESTINATION SOURCE. Everything that comes before the : is a label name. So
+\textbf{\_start} as well is \textbf{end} mark a label. Labels are point you can
+jump to. Everything after a semicolon is a comment. Comments are ignored. 

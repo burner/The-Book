@@ -11,3 +11,7 @@ show: pdf
 
 clean:
 	rm -rf *.aux *.log *.pdf *.toc
+
+fshow:
+	pdflatex -hald-on-error thebook.tex
+	evince thebook.pdf
