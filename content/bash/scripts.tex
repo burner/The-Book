@@ -1,0 +1,49 @@
+\section{Scripts}
+In this section many useful scripts for daily use will be presented. Every
+script will have a small piece of documentation.
+
+\subsection{ASM Scripts}
+Scripts that help develop assembler programs.
+
+\subsubsection{Build and Link}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Build and Link,language={Bash},
+xleftmargin=20pt, label=lst:firstNamsProgram]
+#/bin/bash
+
+if [ ! -f $1 ]
+then
+	echo "file doesn't exists"
+	exit
+fi
+
+fn=$1
+l=${#fn}
+l4=$(($l-4))
+jn=${fn:${l4}:l}
+if [ ! .asm == $jn ] 
+then
+	echo "fail doesn't end on asm"
+	exit
+fi
+
+if [ `uname -m` == x86_64 ] 
+then
+	elfType="elf64"
+else
+	elfType="elf32"
+fi
+
+if [ ! $1 == "-g" ]
+then
+	debug="-g"
+else
+	debug=""
+fi
+
+nasm -f $elfType ${debug} $1
+ld -o ${fn:0:${l4}} ${fn:0:${l4}}.o 
+\end{lstlisting}
+This script allows you to compile and link an asm file with one call. All you
+need to do is pass the filename. The filename must have an .asm at it's end.
+If you need debug symbols you can pass another args called -g.
