@@ -163,4 +163,19 @@ Attributes describe entities. There are different kinds of attributes.
 
 \subsection{Relationships}
 There are two kinds of relationships \textbf{normal relationships} as well as
-\textbf{identifying relationships}.
+\textbf{identifying relationships}. These relationships have a cardinality.
+Cardinalities are defines as (min,max), common cardinalities are 1:1, 1:n, n:m.
+A relationship is called total if all entities participate. Relationships can be
+binary as well as ternary. Ternary relationships can be map on binary with the
+lose of semantics. Similar to entities relationships can have attributes.
+
+\subsection{Notation}
+\begin{tikzpicture}
+	\node[entity] (ent) {Entity};
+	\node[weak entity] (ient) [right of=ent, node distance=2.5cm] {Identifing Entity};
+	\node[relationship] (relation) [right of=ient, node distance=2.5cm] {Relationship};
+	\node[ident relationship] (irelation) [below of=ent, node distance=2cm] {Ident Rela};
+	\node[attribute] (attr) [below of=ient, node distance=2cm] {Attribute};
+	\node[attribute] (pattr) [below of=relation, node distance=2cm] {\discriminator{Partial Key}};
+	\node[attribute] (kattr) [below of=irelation, node distance=2cm] {\underline{Primary Key}};
+\end{tikzpicture}
