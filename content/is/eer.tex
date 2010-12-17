@@ -3,7 +3,8 @@ The enhanced ER-Modell extends the ER-Modell with specialization and
 generalization. Specialization defines a set of Subentities to a given (Super-)
 Entity. Generalization builds a generalizing (Super)-Entity. This is used to
 represent object orientierend programs.\\
-%\begin{wrapfigure}{l}{1.0\textwidth}
+\begin{figure}[h]
+\scriptsize
 \begin{tikzpicture}
 	\node[entity] (employ) {Employee};
 	\node[attribute] (d) [below of=employ, node distance=1cm] {d}
@@ -18,5 +19,9 @@ represent object orientierend programs.\\
 		edge [(-] (d);
 	\node[attribute] (field) [above of=eng, node distance=1cm] {Field}
 		edge (eng);
+	\note[attribute] (name) [above left of=emp, node distance=1cm] {Name};
+		%edge [-] (employ);
 \end{tikzpicture}
-%\end{wrapfigure}
+\caption{Generalization example}
+\label{fig:is:GeneralizationExample}
+\end{figure}
