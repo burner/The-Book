@@ -3,7 +3,9 @@ The enhanced ER-Modell extends the ER-Modell with specialization and
 generalization. Specialization defines a set of Subentities to a given (Super-)
 Entity. Generalization builds a generalizing (Super)-Entity. This is used to
 represent object orientierend programs.\\
-%\begin{wrapfigure}{l}{1.0\textwidth}
+\subsection{Generalization}
+\begin{figure}[h]
+\scriptsize
 \begin{tikzpicture}
 	\node[entity] (employ) {Employee};
 	\node[attribute] (d) [below of=employ, node distance=1cm] {d}
@@ -18,5 +20,76 @@ represent object orientierend programs.\\
 		edge [(-] (d);
 	\node[attribute] (field) [above of=eng, node distance=1cm] {Field}
 		edge (eng);
+	\node[attribute] (name) [right of=employ, node distance=2cm] {Name}
+		edge [-] (employ);
 \end{tikzpicture}
-%\end{wrapfigure}
+\caption{Generalization example}
+\label{fig:is:GeneralizationExample}
+\end{figure}
+The (d) means disjunct.
+
+\subsection{Specialization}
+\begin{figure}[h]
+\scriptsize
+\begin{tikzpicture}
+	\node[entity] (employ) {Employee};
+	\node[attribute] (d) [below left of=employ, node distance=2.0cm] {d}
+		edge node[auto,swap] { } (employ);
+	\node[entity] (eng) [below of=d, node distance=1.5cm] {Engineer}
+		edge [(-] (d);
+	\node[entity] (tec) [left of=eng, node distance=1.8cm] {Technician}
+		edge [(-] (d);
+	\node[entity] (sec) [above left of=d, node distance=1.8cm] {Secretary}
+		edge [(-] (d);
+	\node[entity] (man) [right of=eng, node distance=1.8cm] {Manager}
+		edge [(-] (employ);
+	\node[attribute] (d2) [right of=d, node distance=3.5cm] {d}
+		edge node[auto,swap] { } (employ);
+	\node[entity] (hourem) [below right of=d2, node distance=1.5cm] 
+		{Hours\_Employee} edge [(-] (d2);
+	\node[entity] (nem) [below left of=hourem, node distance=2.0cm] 
+		{Normal\_Employee} edge [(-] (d2);
+	\node[entity] (mancon) [below of=man, node distance=2.0cm] 
+		{Manager\_Construction} edge [(-] (man) edge [(-] (eng) 
+		edge [(-] (nem);
+\end{tikzpicture}
+\caption{Specialization network}
+\label{fig:is:GeneralizationExample}
+\end{figure}
+
+\subsection{From Specialization to Generalization}
+\begin{figure}
+\scriptsize
+\begin{multicols}{2}
+%\begin{minipage}{0.2\textwidth}
+	\begin{tikzpicture}
+	\node[entity] (car) {Car};
+	\node[attribute] (price) [above right of=car, node distance=1.3cm] {Price}
+		edge [-] (car);
+	\node[attribute] (passanger) [above of=car, node distance=1.5cm] {Passanger}
+		edge [-] (car);
+	\node[attribute] (speed) [above left of=car, node distance=1.3cm] {MaxSpeed}
+		edge [-] (car);
+	\node[attribute] (VehicId) [left of=car, node distance=2.0cm] {VehicleId}
+		edge [-] (car);
+	\node[attribute] (plade) [below of=car, node distance=1.5cm] {Plade}
+		edge [-] (car);
+	\end{tikzpicture}
+%\end{minipage}
+%\begin{minipage}{0.2\textwidth}
+	\begin{tikzpicture}
+	\node[entity] (truck) {Truck};
+	\node[attribute] (price) [above left of=truck, node distance=1.3cm] {Price}
+		edge [-] (truck);
+	\node[attribute] (ax) [above of=truck, node distance=1.5cm] {Axles}
+		edge [-] (truck);
+	\node[attribute] (ccm) [above right of=truck, node distance=1.3cm] {ccm}
+		edge [-] (truck);
+	\node[attribute] (VehicId) [right of=truck, node distance=2.0cm] {VehicleId}
+		edge [-] (truck);
+	\node[attribute] (plade) [below of=truck, node distance=1.5cm] {Plade}
+		edge [-] (truck);
+	\end{tikzpicture}
+%\end{minipage}
+\end{multicols}
+\end{figure}

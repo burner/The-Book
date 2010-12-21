@@ -9,6 +9,10 @@ pdf:
 show: pdf
 	evince thebook.pdf
 
+showf:
+	pdflatex -hald-on-error thebook.tex
+	evince thebook.pdf
+
 clean:
 	rm -rf *.aux *.log *.pdf *.toc
 

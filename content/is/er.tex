@@ -30,6 +30,8 @@
 Entities describe things of the displayed world. Entities can live on there own.
 There are two kinds of entities. Strong which have attributes for
 identification. Weak entities need extra entities for identification.
+\begin{figure}[h]
+\scriptsize
 \begin{tikzpicture}
 	\node[entity] (emp) {Employ};
 	\node[ident relationship] (from) [right of=emp, node distance=2.5cm] {belongsTo}
@@ -37,9 +39,12 @@ identification. Weak entities need extra entities for identification.
 	\node[weak entity] (fam) [right of=from, node distance=2.5cm] {Family}
 		edge [total] node[auto,swap] {n} (from);
 \end{tikzpicture}
+\caption{Entity example}
+\label{fig:is:EntityExample}
+\end{figure}
 The employ is a strong entity. It doesn't need any other entity make make itself
 identifiable. The family needs an employ entity to be even considered a part of
-the model.
+the model. See figure \ref{fig:is:EntityExample}
 
 \subsection{Attributes}
 Attributes describe entities. There are different kinds of attributes.
@@ -63,12 +68,18 @@ binary as well as ternary. Ternary relationships can be map on binary with the
 lose of semantics. Similar to entities relationships can have attributes.
 
 \subsection{Notation}
+Notation uses throughout the The-Book.
+\begin{figure}[h]
+\scriptsize
 \begin{tikzpicture}
 	\node[entity] (ent) {Entity};
 	\node[weak entity] (ient) [right of=ent, node distance=2.5cm] {Identifing Entity};
 	\node[relationship] (relation) [right of=ient, node distance=2.5cm] {Relationship};
-	\node[ident relationship] (irelation) [below of=ent, node distance=2cm] {Ident Rela};
-	\node[attribute] (attr) [below of=ient, node distance=2cm] {Attribute};
-	\node[attribute] (pattr) [below of=relation, node distance=2cm] {\discriminator{Partial Key}};
-	\node[attribute] (kattr) [below of=irelation, node distance=2cm] {\underline{Primary Key}};
+	\node[ident relationship] (irelation) [below of=ent, node distance=1.5cm] {Ident Rela};
+	\node[attribute] (attr) [below of=ient, node distance=1.5cm] {Attribute};
+	\node[attribute] (pattr) [below of=relation, node distance=1.5cm] {\discriminator{Partial Key}};
+	\node[attribute] (kattr) [below of=irelation, node distance=1.5cm] {\underline{Primary Key}};
 \end{tikzpicture}
+\caption{Notation}
+\label{fig:is:Notation}
+\end{figure}
