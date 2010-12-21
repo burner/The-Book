@@ -19,9 +19,30 @@ represent object orientierend programs.\\
 		edge [(-] (d);
 	\node[attribute] (field) [above of=eng, node distance=1cm] {Field}
 		edge (eng);
-	\note[attribute] (name) [above left of=emp, node distance=1cm] {Name};
-		%edge [-] (employ);
+	\node[attribute] (name) [right of=employ, node distance=2cm] {Name}
+		edge [-] (employ);
 \end{tikzpicture}
 \caption{Generalization example}
+\label{fig:is:GeneralizationExample}
+\end{figure}
+The (d) means disjunct.
+\begin{figure}[h]
+\scriptsize
+\begin{tikzpicture}
+	\node[entity] (employ) {Employee};
+	\node[attribute] (d) [below left of=employ, node distance=2.5cm] {d}
+		edge node[auto,swap] { } (employ);
+	\node[entity] (sec) [below left of=d, node distance=1.8cm] {Secretary}
+		edge [(-] (d);
+	\node[entity] (tec) [left of=sec, node distance=1.8cm] {Technician}
+		edge [(-] (d);
+	\node[entity] (eng) [left of=tec, node distance=1.8cm] {Engineer}
+		edge [(-] (d);
+	\node[entity] (man) [below of=employ, node distance=3.2cm] {Manager}
+		edge [(-] (employ);
+	\node[entity] (mancon) [below of=man, node distance=1.5cm] 
+		{Manager\_Construction} edge [(-] (man) edge [(-] (eng);
+\end{tikzpicture}
+\caption{Specialization network}
 \label{fig:is:GeneralizationExample}
 \end{figure}
