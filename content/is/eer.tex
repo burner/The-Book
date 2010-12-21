@@ -54,14 +54,16 @@ The (d) means disjunct.
 		edge [(-] (nem);
 \end{tikzpicture}
 \caption{Specialization network}
-\label{fig:is:GeneralizationExample}
+\label{fig:is:SpecializationNetwork}
 \end{figure}
 
 \subsection{From Specialization to Generalization}
-\begin{figure}
+Figure \ref{fig:is:FormSpecializationToGeneralization:Specialization} is transformed into
+Figure \ref{fig:is:FormSpecializationToGeneralization:Generalization}.
+\begin{figure}[h]
 \scriptsize
-\begin{multicols}{2}
-%\begin{minipage}{0.2\textwidth}
+\centering
+\begin{minipage}{0.2\textwidth}
 	\begin{tikzpicture}
 	\node[entity] (car) {Car};
 	\node[attribute] (price) [above right of=car, node distance=1.3cm] {Price}
@@ -70,13 +72,13 @@ The (d) means disjunct.
 		edge [-] (car);
 	\node[attribute] (speed) [above left of=car, node distance=1.3cm] {MaxSpeed}
 		edge [-] (car);
-	\node[attribute] (VehicId) [left of=car, node distance=2.0cm] {VehicleId}
+	\node[attribute] (VehicId) [left of=car, node distance=2.0cm] {\underline{VehicleId}}
 		edge [-] (car);
-	\node[attribute] (plade) [below of=car, node distance=1.5cm] {Plade}
+	\node[attribute] (plade) [below of=car, node distance=1.0cm] {\underline{Plade}}
 		edge [-] (car);
 	\end{tikzpicture}
-%\end{minipage}
-%\begin{minipage}{0.2\textwidth}
+\end{minipage} \hspace{1cm}
+\begin{minipage}{0.2\textwidth}
 	\begin{tikzpicture}
 	\node[entity] (truck) {Truck};
 	\node[attribute] (price) [above left of=truck, node distance=1.3cm] {Price}
@@ -85,11 +87,46 @@ The (d) means disjunct.
 		edge [-] (truck);
 	\node[attribute] (ccm) [above right of=truck, node distance=1.3cm] {ccm}
 		edge [-] (truck);
-	\node[attribute] (VehicId) [right of=truck, node distance=2.0cm] {VehicleId}
+	\node[attribute] (VehicId) [right of=truck, node distance=2.0cm] {\underline{VehicleId}}
 		edge [-] (truck);
-	\node[attribute] (plade) [below of=truck, node distance=1.5cm] {Plade}
+	\node[attribute] (plade) [below of=truck, node distance=1.0cm] {\underline{Plade}}
 		edge [-] (truck);
 	\end{tikzpicture}
-%\end{minipage}
-\end{multicols}
+\end{minipage}
+\caption{Form specialization to generalization: Specialization}
+\label{fig:is:FormSpecializationToGeneralization:Specialization}
 \end{figure}
+
+\begin{figure}[h]
+\scriptsize
+\centering
+\begin{tikzpicture}
+	\node[entity] (vehicle) {Vehicle};
+	\node[attribute] (price) [above of=vehicle, node distance=1.8cm] {Price}
+		edge [-] (vehicle);
+	\node[attribute] (VehicId) [above right of=vehicle, node distance=1.5cm] {\underline{VehicleId}}
+		edge [-] (vehicle);
+	\node[attribute] (plade) [above left of=vehicle, node distance=1.5cm] {\underline{Plade}}
+		edge [-] (vehicle);
+	\node[attribute] (d) [below of=vehicle, node distance=1.0cm] {d}
+		edge [total] (vehicle);
+	\node[entity] (car) [below left of=d, node distance=2.5cm] {Car}
+		edge [(-] (d);
+	\node[attribute] (passanger) [above of=car, node distance=1.5cm] {Passanger}
+		edge [-] (car);
+	\node[attribute] (speed) [right of=car, node distance=1.7cm] {Speed}
+		edge [-] (car);
+	\node[entity] (truck) [below right of=d, node distance=2.5cm] {Truck}
+		edge [(-] (d);
+	\node[attribute] (axles) [above of=truck, node distance=1.5cm] {Axles}
+		edge [-] (truck);
+	\node[attribute] (ccm) [right of=truck, node distance=1.7cm] {ccm}
+		edge [-] (truck);
+\end{tikzpicture}
+\caption{Form specialization to generalization: Generalization}
+\label{fig:is:FormSpecializationToGeneralization:Generalization}
+\end{figure}
+
+\subsection{Documentation and Business Rules}
+The (E)ER-Scheme is usually not enough to display all interesting details of the
+miniworld. A example would be: The projectbudget is never under \euro{50k}.
