@@ -129,4 +129,32 @@ Figure \ref{fig:is:FormSpecializationToGeneralization:Generalization}.
 
 \subsection{Documentation and Business Rules}
 The (E)ER-Scheme is usually not enough to display all interesting details of the
-miniworld. A example would be: The projectbudget is never under \euro{50k}.
+miniworld. A example would be: The projectbudget is never under \euro{50k}. To
+fix this problem \textit{business rules} are used. A business rule is basically
+just a textual description of the problem. See table
+\ref{tab:is:buisnessRuleExample}
+\ref{tab:is:buisnessRuleConstraintExample}.
+
+\begin{table}[h]
+\begin{tabular}{|c|c|c|}
+\hline
+Entity & Description & Attribute\\
+\hline
+Employee & Company Employee & Ssn, Bday, Name\\
+\hline
+\end{tabular}
+\caption{Business Rule Example}
+\label{tab:is:buisnessRuleExample}
+\end{table}
+
+\begin{table}[h]
+\begin{tabular}{|l|c|}
+\hline
+\multicolumn{2}{|c|}{Constraints}\\
+\hline
+\textbf{(BR)} & The projectleader must be member of the project\\
+\hline
+\end{tabular}
+\caption{Business Rule Constraint Example}
+\label{tab:is:buisnessRuleConstraintExample}
+\end{table}
