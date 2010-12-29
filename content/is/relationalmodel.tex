@@ -1,0 +1,96 @@
+\section{Relational Model}
+The relational model presents a database as a collection of relations
+respectively tables. See the figure \ref{tab:is:rm:uniexample} as for example.
+There are tables for students, courses, sections, grade reports and
+prerequisite. Data elements have different types. A logical connection exists
+between the tables. Compare Student.Student\-Number with
+Grade\_Report.Student\-Number for example.
+
+\begin{table}[h]
+Student\\
+\begin{tabular}{|c|c|c|c|}
+\hline
+Name & StudentNumber & Class & Major \\
+\hline
+Smith & 17 & 1 & CS\\ 
+\hline
+Brown & 8 & 2 & CS\\ 
+\hline
+\end{tabular}
+
+Course\\
+\begin{tabular}{|c|c|c|c|}
+\hline
+CourseName & CNumber & CHours & Department\\
+\hline
+Intro into CS & CS1310 & 5 & CS\\
+\hline
+Data Structures & CS3320 & 4 & CS\\
+\hline
+Discrete Math & MATH2410 & 3 & MATH\\
+\hline
+Database & CS3380 & 3 & CS\\
+\hline
+\end{tabular}
+
+Section\\
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+SectionId & CNumber & Semester & Year & Instructor\\
+\hline
+85 & MATH2410 & Fall & 98 & King\\
+\hline
+92 & CS1310 & Fall & 98 & Anderson\\
+\hline
+102 & CS3320 & Spring & 99 & Knuth\\
+\hline
+112 & MATH2410 & Fall & 99 & Chang\\
+\hline
+\end{tabular}
+
+Grade\_Report\\
+\begin{tabular}{|c|c|c|}
+\hline
+StudentNumber & SectionId & Grade \\
+\hline
+17 & 122 & B\\
+\hline
+17 & 119 & C\\
+\hline
+8 & 85 & A\\
+\hline
+8 & 92 & A\\
+\hline
+\end{tabular}
+
+Prerequisite\\
+\begin{tabular}{|c|c|c|}
+\hline
+CNumber & PrerequisiteNumber\\
+\hline
+CS3380 & CS3320\\
+\hline
+CS3380 & MATH2410\\
+\hline
+CS3320 & CS1310\\
+\hline
+\end{tabular}
+
+\caption{Relational Model University example}
+\label{tab:is:rm:uniexample}
+\end{table}
+
+\subsection{From Entity Relation to Relational Model}
+Entities and relationships of the ER-Model are displayed as relations. No
+information must be lost. Usually every row of a table represents a entity of a
+relationship of the mini-world.
+
+\subsection{Terminologie}
+The first row of a table defines the attribute names. Every following row
+is called a tuple. To every attribute there is a useful value-type. (Integer,
+String, timestamp \dots). The value-type is also called Domain. The name of the
+relation as well as the attribute-name are freely choose able. A
+Relation-schema $R(A_1, \dots , A_n)$ splits up to R the relation-name A the
+attribute names. The degree of a relation is the number of attributes.
+
+\section{Super-Keys and Keys}
