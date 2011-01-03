@@ -90,7 +90,19 @@ The first row of a table defines the attribute names. Every following row
 is called a tuple. To every attribute there is a useful value-type. (Integer,
 String, timestamp \dots). The value-type is also called Domain. The name of the
 relation as well as the attribute-name are freely choose able. A
-Relation-schema $R(A_1, \dots , A_n)$ splits up to R the relation-name A the
+Relation-schema $R(A_1, \dots , A_n)$ splits up to R the relation-name a the
 attribute names. The degree of a relation is the number of attributes.
 
-\section{Super-Keys and Keys}
+\subsection{Super-Keys and Keys}
+Keys are certain attributes who are unique for every entry in the table.
+Super-Keys are keys that consists of at least two attributes. Each value alone
+doesn't have to be unique per entry, only the combination must be unique. A
+minimal Super-Key, that means no more attribute can be left out or it won't be
+unique anymore, is called Key. Relation can have multiple keys. Attributes of a
+key may not be NULL.
+
+\subsection{DB-Schema and DB-State}
+A relational Database-Schema consists of a set von Relation-Schema and a set of
+integrity-conditions.
+
+A DB-State consists valid state of all relations at time x.

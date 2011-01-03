@@ -1,0 +1,12 @@
+\section{Relational Calculus} 
+The relational calculus allows the user to define what he wants and not how this
+shoulb be constructed.
+\subsection{Generel From}
+$\{t|COND(t)\}$ Where t is the tuplevariable and COND is the condition. The result
+is a set of tuple that forfill the condition.\newline
+$\{t.A1,t.A2|COND(t)\}$ means that one the attributes A1 and A2 should be returned.
+
+\subsection{Examples}
+$\{t|EMPLOYEE(t) and t.SALARY>5000\}$ gives as employees who earn more that
+5000.\newline $\{t.SURNAME,t.NAME|EMPLOYEE(t) and t.SALARY > 5000\}$ returns
+only the first and the last name of all employees who earn more than 5000.
