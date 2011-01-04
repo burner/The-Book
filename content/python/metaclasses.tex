@@ -1,0 +1,134 @@
+\section{Meta-Classes}
+In python, classes are themselves objects. Just as other objects are instances
+of a particular class, classes themselves are instances of a metaclass.
+
+\subsection{Class Factories}
+The simplest use of python metaclasses is a class factory. This concept makes
+use of the fact that class definitions in python are first-class objects. Such a
+function can create or modify a class definition, using the same syntax one
+would normally use in declaring a class definition. Once again, it is useful to
+use the model of classes as dictionaries. First, let's look at a basic class
+factory:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Class Factory,language={Python},
+xleftmargin=15pt, label=lst:]
+>>> def StringContainer():
+...     # define a class
+...     class String:
+...             content_string = ""
+...             def len(self):
+...                     return len(self.content_string)
+...     # return the class definition
+...     return String
+...
+>>> # create the class definition
+... container_class = StringContainer()
+>>>
+>>> # create an instance of the class
+... wrapped_string = container_class()
+>>>
+>>> # take it for a test drive
+... wrapped_string.content_string = 'emu emissary'
+>>> wrapped_string.len()
+12
+\end{lstlisting}
+
+Of course, just like any other data in python, class definitions can also be
+modified. Any modifications to attributes in a class definition will be seen in
+any instances of that definition, so long as that instance hasn't overridden the
+attribute that you're modifying.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Attribute Constructor,language={Python},
+xleftmargin=15pt, label=lst:attributeconstructor]
+>>> def DeAbbreviate(sequence_container):
+...     setattr(sequence_container, 'length', sequence_container.len)
+...     delattr(sequence_container, 'len')
+...
+>>> DeAbbreviate(container_class)
+>>> wrapped_string.length()
+12
+>>> wrapped_string.len()
+ Traceback (most recent call last):
+   File "<stdin>", line 1, in ?
+ AttributeError: String instance has no attribute 'len'
+\end{lstlisting}
+
+You can also delete class definitions, but that will not affect instances of the
+class.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Container Class Deletion,language={Python},
+xleftmargin=15pt, label=lst:containerclassdeletion]
+>>> del container_class
+>>> wrapped_string2 = container_class()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in ?
+NameError: name 'container_class' is not defined
+>>> wrapped_string.length()
+12
+\end{lstlisting}
+
+\subsection{The type Metaclass}
+The metaclass for all standard python types is the "type" object.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Meta Class,language={Python},
+xleftmargin=15pt, label=lst:metaclass]
+>>> type(object)
+<type 'type'>
+>>> type(int)
+<type 'type'>
+>>> type(list)
+<type 'type'>
+\end{lstlisting}
+
+Just like list, int and object, "type" is itself a normal python object, and is
+itself an instance of a class. In this case, it is in fact an instance of
+itself.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Type of Type,language={Python},
+xleftmargin=15pt, label=lst:typeoftype]
+>>> type(type)
+<type 'type'>
+\end{lstlisting}
+
+It can be instantiated to create new class objects similarly to the class
+factory example above by passing the name of the new class, the base classes to
+inherit from, and a dictionary defining the namespace to use.  For instance, the
+code:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Meta Class Inheritance,language={Python},
+xleftmargin=15pt, label=lst:metaclassinheritance]
+>>> class MyClass(BaseClass):
+...     attribute = 42
+Could also be written as:
+>>> MyClass = type("MyClass", (BaseClass,), {'attribute' : 42})
+\end{lstlisting}
+
+\subsection{Metaclasses}
+It is possible to create a class with a different metaclass than type by setting
+its \_\_metaclass\_\_ attribute when defining. When this is done, the class, and its
+subclass will be created using your custom metaclass. For example
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Custom Meta Class,language={Python},
+xleftmargin=15pt, label=lst:custommetaclass]
+class CustomMetaclass(type):
+    def __init__(cls, name, bases, dct):
+        print "Creating class %s using CustomMetaclass" % name
+        super(CustomMetaclass, cls).__init__(name, bases, dct)
+ 
+class BaseClass(object):
+    __metaclass__ = CustomMetaclass
+ 
+class Subclass1(BaseClass):
+    pass
+\end{lstlisting}
+This will print
+\scriptsize
+\begin{verbatim}
+Creating class BaseClass using CustomMetaclass
+Creating class Subclass1 using CustomMetaclass
+\end{verbatim}
+\normalsize
+By creating a custom metaclass in this way, it is possible to change how the
+class is constructed. This allows you to add or remove attributes and methods,
+register creation of classes and subclasses creation and various other
+manipulations when the class is created.

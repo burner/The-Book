@@ -39,7 +39,7 @@ xleftmargin=15pt, label=lst:definigmemberfunctions]
 ...     def setx(self, x):
 ...         self.x = x
 ...     def bar(self):
-...         print self.x
+...         print(self.x)
 \end{lstlisting}
 
 If this code were executed, nothing would happen, at least until an instance of
@@ -238,7 +238,8 @@ before using them. They can be defined using staticmethod()
 xleftmargin=15pt, label=lst:staticmethode]
 >>> class StaticSpam(object):
 ...     def StaticNoSpam():
-...         print "You can't have have the spam, spam, eggs and spam without any spam... that's disgusting"
+...         print("You can't have have the spam, spam, eggs and spam without any
+spam... that's disgusting")
 ...     NoSpam = staticmethod(StaticNoSpam)
  
 >>> StaticSpam.NoSpam()
@@ -252,7 +253,8 @@ xleftmargin=15pt, label=lst:anotherstaticmethode]
 >>> class StaticSpam(object):
 ...     @staticmethod
 ...     def StaticNoSpam():
-...         print "You can't have have the spam, spam, eggs and spam without any spam... that's disgusting"
+...         print("You can't have have the spam, spam, eggs and spam without any
+spam... that's disgusting")
 \end{lstlisting}
 
 \subsection{Inheritance}
@@ -276,12 +278,12 @@ class, as in Foo.setx(f,5) above:
 xleftmargin=15pt, label=lst:inheritanceexample]
 >>> class Foo:
 ...     def bar(self):
-...         print "I'm doing Foo.bar()"
+...         print("I'm doing Foo.bar()")
 ...     x = 10
 ...
 >>> class Bar(Foo):
 ...     def bar(self):
-...         print "I'm doing Bar.bar()"
+...         print("I'm doing Bar.bar()")
 ...         Foo.bar(self)
 ...     y = 9
 ...
@@ -331,7 +333,7 @@ necessary to return the instance manually). As an example,
 xleftmargin=15pt, label=lst:initmethode]
 class A:
     def __init__(self):
-        print 'A.__init__()'
+        print('A.__init__()')
 a = A()
 \end{lstlisting}
 
@@ -348,7 +350,7 @@ to the class in order to create an instance. For example,
 xleftmargin=15pt, label=lst:initarguments]
 class Foo:
     def __init__ (self, printme):
-        print printme
+        print(printme)
 foo = Foo('Hi!')
 \end{lstlisting}
 
@@ -366,11 +368,11 @@ Here is an example showing the difference between using \_\_init\_\_() and not u
 xleftmargin=15pt, label=lst:difference]
 class Foo:
     def __init__ (self, x):
-         print x
+         print(x)
 foo = Foo('Hi!')
 class Foo2:
     def setx(self, x):
-        print x
+        print(x)
 f = Foo2()
 Foo2.setx(f,'Hi!')
 \end{lstlisting}
@@ -385,3 +387,476 @@ Hi!
 \subsubsection{\_\_del\_\_}
 Similarly, '\_\_del\_\_' is called when an instance is destroyed; e.g. when it
 is no longer referenced.
+
+\subsubsection{Representation}
+String Representation Override Functions
+
+\begin{tabular}{|c|c|}
+\hline
+Function&	Operator\\
+\hline
+\_\_str\_\_&	str(A)\\
+\hline
+\_\_repr\_\_&	repr(A)\\
+\hline
+\_\_unicode\_\_&	unicode(x) (2.x only)\\
+\hline
+\end{tabular}
+\paragraph{\_\_str\_\_}
+Converting an object to a string, as with the print statement or with the str()
+conversion function, can be overridden by overriding \_\_str\_\_. Usually,
+\_\_str\_\_ returns a formatted version of the objects content. This will NOT
+usually be something that can be executed. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=str example,language={Python},
+xleftmargin=15pt, label=lst:strexample]
+class Bar:
+    def __init__ (self, iamthis):
+        self.iamthis = iamthis
+    def __str__ (self):
+        return self.iamthis
+bar = Bar('apple')
+print(bar)
+\end{lstlisting}
+
+output:
+\scriptsize
+\begin{verbatim}
+apple
+\end{verbatim}
+\normalsize
+
+\paragraph{\_\_repr\_\_}
+This function is much like \_\_str\_\_(). If \_\_str\_\_ is not present but this
+one is, this function's output is used instead for printing. \_\_repr\_\_ is
+used to return a representation of the object in string form. In general, it can
+be executed to get back the original object. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=repr example,language={Python},
+xleftmargin=15pt, label=lst:reprexample]
+class Bar:
+    def __init__ (self, iamthis):
+        self.iamthis = iamthis
+    def __repr__(self):
+        return "Bar('%s')" % self.iamthis
+bar = Bar('apple')
+bar
+\end{lstlisting}
+
+outputs (note the difference: now is not necessary to put it inside a print)
+\scriptsize
+\begin{verbatim}
+Bar('apple')
+\end{verbatim}
+\normalsize
+
+\subsection{Attributes}
+\begin{tabular}{|c|c|c|}
+\hline
+Function&Indirect form & Direct form\\
+\hline
+\_\_getattr\_\_&	getattr(A)& A.B\\
+\hline
+\_\_setattr\_\_&	setattr(A)& A.B = C\\
+\hline
+\_\_delattr\_\_&	delattr(x) (2.x only) & del A.B\\
+\hline
+\end{tabular}
+
+\subsubsection{\_\_setattr\_\_}
+This is the function which is in charge of setting attributes of a class. It is
+provided with the name and value of the variables being assigned. Each class, of
+course, comes with a default \_\_setattr\_\_ which simply sets the value of the
+variable, but we can override it.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=setattr example,language={Python},
+xleftmargin=15pt, label=lst:setattrexample]
+>>> class Unchangable:
+...    def __setattr__(self, name, value):
+...        print "Nice try"
+...
+>>> u = Unchangable()
+>>> u.x = 9
+Nice try
+>>> u.x
+Traceback (most recent call last):
+  File "<stdin>", line 1, in ?
+AttributeError: Unchangable instance has no attribute 'x'
+\end{lstlisting}
+
+\subsubsection{\_\_getattr\_\_}
+Similar to \_\_setattr\_\_, except this function is called when we try to access
+a class member, and the default simply returns the value.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=getattr example,language={Python},
+xleftmargin=15pt, label=lst:getattrexample]
+>>> class HiddenMembers:
+...     def __getattr__(self, name):
+...         return "You don't get to see " + name
+...
+>>> h = HiddenMembers()
+>>> h.anything
+"You don't get to see anything"
+\end{lstlisting}
+
+\subsubsection{\_\_delattr\_\_}
+This function is called to delete an attribute.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=delattr example,language={Python},
+xleftmargin=15pt, label=lst:delattrexample]
+>>> class Permanent:
+...     def __delattr__(self, name):
+...         print name, "cannot be deleted"
+...
+>>> p = Permanent()
+>>> p.x = 9
+>>> del p.x
+x cannot be deleted
+>>> p.x
+9
+\end{lstlisting}
+
+\subsection{Operator Overloading}
+Operator overloading allows us to use the built-in Python syntax and operators
+to call functions which we define.
+
+\begin{tabular}{|c|p{1.5cm}|}
+\hline
+Function&Operator \\
+\hline
+\_\_add\_\_&	A + B \\
+\hline
+\_\_sub\_\_&	A - B \\
+\hline
+\_\_mul\_\_&	A * B \\
+\hline
+\_\_div\_\_&	A / B \\
+\hline
+\_\_floordiv\_\_&	A // B \\
+\hline
+\_\_mod\_\_&	A \% B \\
+\hline
+\_\_pow\_\_&	A ** B \\
+\hline
+\_\_and\_\_&	A \& B \\
+\hline
+\_\_or\_\_ & A | B \\
+\hline
+\_\_xor\_\_&	A \^ B \\
+\hline
+\_\_eq\_\_&	A == B \\
+\hline
+\_\_ne\_\_&	A != B \\
+\hline
+\_\_gt\_\_&	A $>$ B \\
+\hline
+\_\_lt\_\_&	A $<$ B \\
+\hline
+\_\_ge\_\_&	A $>=$ B \\
+\hline
+\_\_le\_\_&	A $<=$ B \\
+\hline
+\_\_lshift\_\_&	A $<<$ B \\
+\hline
+\_\_rshift\_\_&	A $>>$ B \\
+\hline
+\_\_contains\_\_&	A in B, A not in B \\
+\hline
+\end{tabular}
+
+\begin{tabular}{|c|p{2cm}|}
+\hline
+Function&Operator\\ \hline
+\_\_pos\_\_ & $+A$\\ \hline
+\_\_neg\_\_ & $-A$\\ \hline
+\_\_inv\_\_ & $~A$\\ \hline
+\_\_abs\_\_ & abs(A)\\ \hline
+\_\_len\_\_ & len(A)\\ \hline
+\end{tabular}\\
+
+\begin{tabular}{|c|p{1.5cm}|} \hline
+Function & Operator\\ \hline
+\_\_getitem\_\_	 & C[i]\\ \hline
+\_\_setitem\_\_	 & C[i] = v\\ \hline
+\_\_delitem\_\_	 & del C[i]\\ \hline
+\_\_getslice\_\_ & C[s:e]\\ \hline
+\_\_setslice\_\_ & C[s:e] = v\\ \hline
+\_\_delslice\_\_ & del C[s:e]\\ \hline
+\end{tabular}
+
+If a class has the \_\_add\_\_ function, we can use the '+' operator to add
+instances of the class. This will call \_\_add\_\_ with the two instances of the
+class passed as parameters, and the return value will be the result of the
+addition.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Add Operator,language={Python},
+xleftmargin=15pt, label=lst:addoperator]
+>>> class FakeNumber:
+...     n = 5
+...     def __add__(A,B):
+...         return A.n + B.n
+...
+>>> c = FakeNumber()
+>>> d = FakeNumber()
+>>> d.n = 7
+>>> c + d
+12
+\end{lstlisting}
+
+To override the augmented assignment operators, merely add 'i' in front of the
+normal binary operator, i.e. for '+=' use '\_\_iadd\_\_' instead of
+'\_\_add\_\_'. The function will be given one argument, which will be the object
+on the right side of the augmented assignment operator. The returned value of
+the function will then be assigned to the object on the left of the operator.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Mul Operator,language={Python},
+xleftmargin=15pt, label=lst:muloperator]
+>>> c.__imul__ = lambda B: B.n - 6
+>>> c *= d
+>>> c
+1
+\end{lstlisting}
+
+It is important to note that the augmented assignment operators will also use
+the normal operator functions if the augmented operator function hasn't been set
+directly. This will work as expected, with "\_\_add\_\_" being called for "+=" and
+so on.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Add Assign Operator,language={Python},
+xleftmargin=15pt, label=lst:addassignoperator]
+>>> c = FakeNumber()
+>>> c += d
+>>> c
+12
+\end{lstlisting}
+
+Unary operators will be passed simply the instance of the class that they are
+called on.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Unary Example,language={Python},
+xleftmargin=15pt, label=lst:unaryexample]
+>>> FakeNumber.__neg__ = lambda A : A.n + 6
+>>> -d
+13
+\end{lstlisting}
+
+It is also possible in Python to override the indexing and slicing operators.
+This allows us to use the class[i] and class[a:b] syntax on our own objects.
+The simplest form of item operator is \_\_getitem\_\_. This takes as a parameter the
+instance of the class, then the value of the index.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Index Operator,language={Python},
+xleftmargin=15pt, label=lst:indexoperator]
+>>> class FakeList:
+...     def __getitem__(self,index):
+...         return index * 2
+...
+>>> f = FakeList()
+>>> f['a']
+'aa'
+\end{lstlisting}
+
+We can also define a function for the syntax associated with assigning a value
+to an item. The parameters for this function include the value being assigned,
+in addition to the parameters from \_\_getitem\_\_
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Index Assign,language={Python},
+xleftmargin=15pt, label=lst:indexassign]
+>>> class FakeList:
+...     def __setitem__(self,index,value):
+...         self.string = index + " is now " + value
+...
+>>> f = FakeList()
+>>> f['a'] = 'gone'
+>>> f.string
+'a is now gone'
+\end{lstlisting}
+
+We can do the same thing with slices. Once again, each syntax has a different
+parameter list associated with it.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Slice Operator,language={Python},
+xleftmargin=15pt, label=lst:sliceoperator]
+>>> class FakeList:
+...     def __getslice___(self,start,end):
+...         return str(start) + " to " + str(end)
+...
+>>> f = FakeList()
+>>> f[1:4]
+'1 to 4'
+\end{lstlisting}
+
+Keep in mind that one or both of the start and end parameters can be blank in
+slice syntax. Here, Python has default value for both the start and the end, as
+show below.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Slice Limits,language={Python},
+xleftmargin=15pt, label=lst:slicelimits]
+>> f[:]
+'0 to 2147483647'
+\end{lstlisting}
+
+Note that the default value for the end of the slice shown here is simply the
+largest possible signed integer on a 32-bit system, and may vary depending on
+your system and C compiler.
+\_\_setslice\_\_ has the parameters (self,start,end,value)
+We also have operators for deleting items and slices.
+\_\_delitem\_\_ has the parameters (self,index)
+\_\_delslice\_\_ has the parameters (self,start,end)
+Note that these are the same as \_\_getitem\_\_ and \_\_getslice\_\_.
+
+\begin{tabular}{|c|c|} \hline
+Function&	Operator \\ \hline
+\_\_cmp\_\_ &	cmp(x, y) \\ \hline
+\_\_hash\_\_ &	hash(x) \\ \hline
+\_\_nonzero\_\_ &	bool(x) \\ \hline
+\_\_call\_\_ &	f(x) \\ \hline
+\_\_iter\_\_ &	iter(x) \\ \hline
+\_\_reversed\_\_ &	reversed(x) (2.6+) \\ \hline
+\_\_divmod\_\_ &	divmod(x, y) \\ \hline
+\_\_int\_\_ &	int(x) \\ \hline
+\_\_long\_\_ &	long(x) \\ \hline
+\_\_float\_\_ &	float(x) \\ \hline
+\_\_complex\_\_ &	complex(x) \\ \hline
+\_\_hex\_\_ &	hex(x) \\ \hline
+\_\_oct\_\_ &	oct(x) \\ \hline
+\_\_index\_\_ &	 \\ \hline
+\_\_copy\_\_ &	copy.copy(x) \\ \hline
+\_\_deepcopy\_\_ &	copy.deepcopy(x) \\ \hline
+\_\_sizeof\_\_ &	sys.getsizeof(x) (2.6+) \\ \hline
+\_\_trunc\_\_ &	math.trunc(x) (2.6+) \\ \hline
+\_\_format\_\_ &	format(x, ...) (2.6+) \\ \hline
+\end{tabular}
+
+\section{Programming Practices}
+The flexibility of python classes means that classes can adopt a varied set of
+behaviors. For the sake of understandability, however, it's best to use many of
+Python's tools sparingly. Try to declare all methods in the class definition,
+and always use the <class>.<member> syntax instead of \_\_dict\_\_ whenever
+possible. Look at classes in C++ and Java to see what most programmers will
+expect from a class.
+
+\subsection{Encapsulation}
+Since all python members of a python class are accessible by functions/methods
+outside the class, there is no way to enforce encapsulation short of overriding
+\_\_getattr\_\_, \_\_setattr\_\_ and \_\_delattr\_\_. General practice, however,
+is for the creator of a class or module to simply trust that users will use only
+the intended interface and avoid limiting access to the workings of the module
+for the sake of users who do need to access it. When using parts of a class or
+module other than the intended interface, keep in mind that the those parts may
+change in later versions of the module, and you may even cause errors or
+undefined behaviors in the module.
+
+\subsection{Doc Strings}
+When defining a class, it is convention to document the class using a string
+literal at the start of the class definition. This string will then be placed in
+the \_\_doc\_\_ attribute of the class definition.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Doc String Example,language={Python},
+xleftmargin=15pt, label=lst:Doc String Example]
+>>> class Documented:
+...     """This is a docstring"""
+...     def explode(self):
+...         """
+...         This method is documented, too! The coder is really serious about
+...         making this class usable by others who don't know the code as well
+...         as he does.
+...
+...         """
+...         print "boom"
+>>> d = Documented()
+>>> d.__doc__
+'This is a docstring'
+\end{lstlisting}
+
+Docstrings are a very useful way to document your code. Even if you never write
+a single piece of separate documentation (and let's admit it, doing so is the
+lowest priority for many coders), including informative docstrings in your
+classes will go a long way toward making them usable.  Several tools exist for
+turning the docstrings in Python code into readable API documentation, e.g.,
+EpyDoc.  Don't just stop at documenting the class definition, either. Each
+method in the class should have its own docstring as well. Note that the
+docstring for the method explode in the example class Documented above has a
+fairly lengthy docstring that spans several lines. Its formatting is in
+accordance with the style suggestions of Python's creator, Guido van Rossum.
+
+\section{Adding methods at runtime}
+\subsection{To a class}
+It is fairly easy to add methods to a class at runtime. Lets assume that we have
+a class called Spam and a function cook. We want to be able to use the function
+cook on all instances of the class Spam:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Reflection,language={Python},
+xleftmargin=15pt, label=lst:reflection]
+class Spam:
+  def __init__(self):
+    self.myeggs = 5
+ 
+def cook(self):
+  print "cooking %s eggs" % self.myeggs
+ 
+Spam.cook = cook   #add the function to the class Spam
+eggs = Spam()      #NOW create a new instance of Spam
+eggs.cook()        #and we are ready to cook!
+\end{lstlisting}
+
+This will output.
+\scriptsize
+\begin{verbatim}
+cooking 5 eggs
+\end{verbatim}
+\normalsize
+
+\subsection{To an instance of a class}
+It is a bit more tricky to add methods to an instance of a class that has
+already been created. Lets assume again that we have a class called Spam and we
+have already created eggs. But then we notice that we wanted to cook those eggs,
+but we do not want to create a new instance but rather use the already created
+one:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Add function to Class,language={Python},
+xleftmargin=15pt, label=lst:addfunctiontoclass]
+class Spam:
+  def __init__(self):
+    self.myeggs = 5
+ 
+eggs = Spam()
+ 
+def cook(self):
+  print "cooking %s eggs" % self.myeggs
+ 
+import types
+f = types.MethodType(cook, eggs, Spam)
+eggs.cook = f
+ 
+eggs.cook()
+\end{lstlisting}
+
+Now we can cook our eggs and the last statement will output:
+\scriptsize
+\begin{verbatim}
+cooking 5 eggs
+\end{verbatim}
+\normalsize
+
+\subsection{Using a function}
+We can also write a function that will make the process of adding methods to an
+instance of a class easier.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Adding Member Reflection,language={Python},
+xleftmargin=15pt, label=lst:addingmemberreflection]
+def attach_method(fxn, instance, myclass):
+  f = types.MethodType(fxn, instance, myclass)
+  setattr(instance, fxn.__name__, f)
+\end{lstlisting}
+
+All we now need to do is call the attach\_method with the arguments of the
+function we want to attach, the instance we want to attach it to and the class
+the instance is derived from. Thus our function call might look like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Adding Member Usage,language={Python},
+xleftmargin=15pt, label=lst:addingmemberusage]
+attach_method(cook, eggs, Spam)
+\end{lstlisting}
+Note that in the function add\_method we cannot write instance.fxn = f since this
+would add a function called fxn to the instance.
