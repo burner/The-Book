@@ -1,0 +1,77 @@
+\section{Erros}
+In python there are two types of errors; syntax errors and exceptions.
+
+\subsection{Syntax errors}
+Syntax errors are the most basic type of error. They arise when the Python
+parser is unable to understand a line of code. Syntax errors are always fatal,
+i.e. there is no way to successfully execute a piece of code containing syntax
+errors.
+
+\subsection{Exceptions}
+Exceptions arise when the python parser knows what to do with a piece of code
+but is unable to perform the action. An example would be trying to access the
+internet with python without an internet connection; the python interpreter
+knows what to do with that command but is unable to perform it.
+
+\subsection{Dealing with exceptions}
+Unlike syntax errors, exceptions are not always fatal. Exceptions can be handled
+with the use of a try statement.  Consider the following code to display the
+HTML of the website 'goat.com'. When the execution of the program reaches the
+try statement it will attempt to perform the indented code following, if for
+some reason there is an error (the computer is not connected to the internet or
+something) the python interpreter will jump to the indented code below the
+'except:' command.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=try except 1,language={Python},
+xleftmargin=15pt, label=lst:tryexcept1]
+import urllib2
+url = 'http://www.goat.com'
+try:
+    req = urllib2.Request(url)
+    response = urllib2.urlopen(req)
+    the_page = response.read()
+    print the_page
+except:
+    print "We have a problem."
+\end{lstlisting}
+
+Another way to handle an error is to except a specific error.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=expect type,language={Python},
+xleftmargin=15pt, label=lst:expecttype]
+try:
+    age = int(raw_input("Enter your age: "))
+    print "You must be {0} years old.".format(age)
+except ValueError:
+    print "Your age must be numeric."
+\end{lstlisting}
+
+If the user enters a numeric value as his/her age, the output should look like
+this: Enter your age: 5 You must be 5 years old.  However, if the user enters a
+non-numeric value as his/her age, a ValueError is thrown when trying to execute
+the int() method on a non-numeric string, and the code under the except clause
+is executed: Enter your age: five Your age must be a number.  You can also use a
+try block with a while loop to validate input:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=expect type 2,language={Python},
+xleftmargin=15pt, label=lst:expecttype2]
+valid = False
+while valid == False:
+    try:
+        age = int(raw_input("Enter your age: "))
+        valid = True     # This statement will only execute if the above statement executes without error.
+        print "You must be {0} years old.".format(age)
+    except ValueError:
+        print "Your age must be numeric."
+\end{lstlisting}
+The program will prompt you for your age until you enter a valid age:
+\scriptsize
+\begin{verbatim}
+Enter your age: five
+Your age must be numeric.
+Enter your age: abc10
+Your age must be numeric.
+Enter your age: 15
+You must be 15 years old.
+\end{verbatim}
+\normalsize

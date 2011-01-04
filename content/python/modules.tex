@@ -1,0 +1,77 @@
+\section{Modules}
+Modules are libraries that can be called from other scripts. For example, a
+popular module is the time module. You can call it using:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Basic Import,language={Python},
+xleftmargin=15pt, label=lst:basicimport]
+import time
+\end{lstlisting}
+
+Then, create a new python file, you can name it anything (except time.py, since
+it'd mess up python's module importing, you'll see why later):
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Name imported Module 1,language={Python},
+xleftmargin=15pt, label=lst:nameimportedmodule1]
+import time
+ 
+def main():
+    #define the variable 'current_time' as a tuple of time.localtime()
+    current_time = time.localtime() 
+    print(current_time) # print the tuple
+    # if the year is 2009 (first value in the current_time tuple)
+    if current_time[0] == 2009: 
+        print('The year is 2009') # print the year
+ 
+if __name__ == '__main__': # if the function is the main function ...
+    main() # ...call it
+\end{lstlisting}
+
+Modules can be called in a various number of ways. For example, we could import
+the time module as t: import time as t \# import the time module and call it 't'
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Name imported Module 2,language={Python},
+xleftmargin=15pt, label=lst:nameimportedmodule2]
+def main():
+    current_time = t.localtime() 
+    print(current_time)
+    if current_time[0] == 2009: 
+        print('The year is 2009')
+ 
+if __name__ == '__main__': 
+    main()
+\end{lstlisting}
+
+It is not necessary to import the whole module, if you only need a certain
+function or class. To do this, you can do a from-import. Note that a from-import
+would import the name directly into the global namespace, so when invoking the
+imported function, it is unnecessary (and wrong) to call the module again:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Select Import,language={Python},
+xleftmargin=15pt, label=lst:selectimport]
+from time import localtime #1
+ 
+def main():
+    current_time = localtime() #2
+    print(current_time)
+    if current_time[0] == 2009: 
+        print 'The year is 2009'
+ 
+if __name__ == '__main__': 
+    main()
+\end{lstlisting}
+it is possible to alias a name imported through from-import
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Alias Module,language={Python},
+xleftmargin=15pt, label=lst:aliasmodule]
+from time import localtime as lt 
+ 
+def main():
+    current_time = lt()
+    print(current_time)
+    if current_time[0] == 2009: 
+        print('The year is 2009')
+ 
+if __name__ == '__main__': 
+    main()
+\end{lstlisting}

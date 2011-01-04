@@ -1,0 +1,86 @@
+\section{Comments}
+There will always be a time in which you have to return to your code. Perhaps it
+is to fix a bug, or to add a new feature. Regardless, looking at your own code
+after six months is almost as bad as looking at someone else's code. What one
+needs is a means to leave reminders to yourself as to what you were doing.  For
+this purpose, you leave comments. Comments are little snippets of text embedded
+inside your code that are ignored by the Python interpreter. A comment is
+denoted by the hash character (\#) and extends to the end of the line. For
+example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Basic Comment,language={Python},
+xleftmargin=15pt, label=lst:basiccomment]
+#!/usr/bin/env python
+# commentexample.py
+ 
+# Display the knights that come after Scene 24
+print("The Knights Who Say Ni!")
+# print("I will never see the light of day!")
+\end{lstlisting}
+
+As you can see, you can also use comments to temporarily remove segments of your
+code, like the second print statement.
+
+\section{Comment Guidelines}
+The following guidelines are from PEP 8, written by Guido van Rossum.  General
+Comments that contradict the code are worse than no comments. Always make a
+priority of keeping the comments up-to-date when the code changes!  Comments
+should be complete sentences. If a comment is a phrase or sentence, its first
+word should be capitalized, unless it is an identifier that begins with a lower
+case letter (never alter the case of identifiers!).  If a comment is short, the
+period at the end can be omitted. Block comments generally consist of one or
+more paragraphs built out of complete sentences, and each sentence should end in
+a period.  You should use two spaces after a sentence-ending period.  When
+writing English, Strunk and White applies.  Python coders from non-English
+speaking countries: please write your comments in English, unless you are 120\%
+sure that the code will never be read by people who don't speak your language.
+Inline Comments An inline comment is a comment on the same line as a statement.
+Inline comments should be separated by at least two spaces from the statement.
+They should start with a \# and a single space.  Inline comments are unnecessary
+and in fact distracting if they state the obvious. Don't do this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=End of Line Comment,language={Python},
+xleftmargin=15pt, label=lst:dndoflinecomment]
+x = x + 1 # Increment x
+But sometimes, this is useful:
+x = x + 1 # Compensate for border
+\end{lstlisting}
+
+\section{Documentation Strings}
+But what if you just want to know how to use a function, class, or method? You
+could add comments before the function, but comments are inside the code, so you
+would have to pull up a text editor and view them that way. But you can't pull
+up comments from a C extension, so that is less than ideal. You could always
+write a separate text file with how to call the functions, but that would mean
+that you would have to remember to update that file. If only there was a
+mechanism for being able to embed the documentation and get at it easily...
+Fortunately, Python has such a capability. Documentation strings (or docstrings)
+are used to create easily-accessible documentation. You can add a docstring to a
+function, class, or module by adding a string as the first indented statement.
+For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Documentation String,language={Python},
+xleftmargin=15pt, label=lst:documentationstring]
+#!/usr/bin/env python
+# docstringexample.py
+ 
+"""Example of using documentation strings."""
+ 
+class Knight:
+    """
+    An example class.
+ 
+    Call spam to get bacon.
+    """
+ 
+    def spam(eggs="bacon"):
+        """Prints the argument given."""
+        print(eggs)
+\end{lstlisting}
+
+The convention is to use triple-quoted strings, because it makes it easier to
+add more documentation spanning multiple lines.  To access the documentation,
+you can use the help function inside a Python shell with the object you want
+help on, or you can use the pydoc command from your system's shell. If we were
+in the directory where docstringexample.py lives, one could enter pydoc
+docstringexample to get documentation on that module.

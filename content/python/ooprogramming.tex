@@ -1,0 +1,161 @@
+\section{Object Oriented Coding}
+OOP is a programming approach where objects are defined with methods (functions,
+actions or events) and properties (values, characteristics), resulting in more
+readable, more reusable code.  Lets say you're writing a program where you need
+to keep track of multiple cars. Each car has different characteristics like
+mileage, color, and top speed, but lucky for us they all can perform some common
+actions like braking, accelerating, and turning.  Instead of writing code
+separately for each car we could create a class called 'Car' that will be the
+blueprint for each particular car.  [edit]Constructing a Class
+
+Class is the name given to a generic description of an object. In python you
+define a class method (an action, event, or function) using the following
+structure:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Basic Class Definition,language={Python},
+xleftmargin=15pt, label=lst:basicclassdefinition]
+class <<name>>:
+    def <<method>> (self [, <<optional arguments>>]):
+        <<Function codes>>
+\end{lstlisting}
+
+Let's take a detailed look. We define our object using the 'class' keyword, the
+name we want, and a colon. We define its methods as we would a normal function:
+only one indent with 'self' as its first argument (we get to this later). So our
+example car class may look like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Example Class Car,language={Python},
+xleftmargin=15pt, label=lst:exampleclasscar]
+class Car:
+    def brake(self):
+        print("Brakes")
+ 
+    def accelerate(self):
+        print("Accelerating")
+\end{lstlisting}
+
+\textit{This is an example of encapsulation, where processing instructions are defined
+as part of another structure for future reuse.
+The first letter of the class name should be capitalized (Car instead of car).
+That is a very common convention, but is not required by the language.}
+
+\subsection{But how do I use it?}
+Once you have created the class, you actually need to create an object for each
+instance of that class. In python we create a new variable to create an instance
+of a class. Example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Class usage,language={Python},
+xleftmargin=15pt, label=lst:classusage]
+car1 = Car() # car 1 is my instance for the first car
+car2 = Car()
+ 
+# And use the object methods like
+car1.brake()
+\end{lstlisting}
+
+Using the parentheses ("calling" the class) tells Python that you want to create
+an instance and not just copy the class definition. You would need to create a
+variable for each car. However, now each car object can take advantage of the
+class methods and attributes, so you don't need to write a brake and accelerate
+function for each car independently.
+
+\subsection{Properties}
+Right now all the cars look the same, but let's give them some properties to
+differentiate them.  A property is just a variable that is specific to a given
+object. To assign a property we write it like:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Property Example Set,language={Python},
+xleftmargin=15pt, label=lst:propertyexampleset]
+car1.color = "Red"
+\end{lstlisting}
+
+And retrieve its value like:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Property Example Read,language={Python},
+xleftmargin=15pt, label=lst:propertyexampleread]
+print(car1.color)
+\end{lstlisting}
+
+It is good programming practice to write functions to get (or retrieve) and set
+(or assign) properties that are not 'read-only'. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Getter Setter,language={Python},
+xleftmargin=15pt, label=lst:gettersetter]
+class Car:
+    ... previous methods ...
+ 
+    def set_owner(self,Owners_Name): # This will set the owner property
+        self._owner = Owners_Name
+ 
+    def get_owner(self): # This will retrieve the owner property
+        return self._owner
+\end{lstlisting}
+
+Notice the single underscore before the property name; this is a way of hiding
+variable names from users.  Beginning from Python 2.2, you may also define the
+above example in a way that looks like a normal variable:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Variable hiding,language={Python},
+xleftmargin=15pt, label=lst:variablehiding]
+class Car:
+    ... previous methods ...
+    owner = property(get_owner, set_owner)
+\end{lstlisting}
+
+When code such as mycar.owner = "John Smith" is used, the set\_owner function is
+called transparently.
+\textit{Think of a property that needs to be validated before it can be
+assigned. If we don't hide such a variable from the user, it can create a
+security risk in our program.}
+
+\subsection{Extending a Class}
+Let's say we want to add more functions to our class, but we are reluctant to
+change its code for fear that this might mess up programs that depend on its
+current version. The solution is to 'extend' our class. When you extend a class
+you inherit all the parent methods and properties and can add new ones. For
+example, we can add a start\_car method to our car class. To extend a class we
+supply the name of the parent class in parentheses after the new class name, for
+example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Extending Classes,language={Python},
+xleftmargin=15pt, label=lst:extendingclasses]
+class New_car(Car):
+   def start_car(self):
+      self.on = true
+\end{lstlisting}
+
+This new class extends the parent class.
+\textit{When methods and attributes are passed down to new classes in
+hierarchies, it is called Inheritance.}
+
+\subsection{Special Class Methods}
+A Constructor is a method that gets called whenever you create a new instance of
+a class. In python you create a constructor by writing a function inside the
+method name \_\_init\_\_. It can even accept arguments, e.g. to set attribute values
+upon creating a new instance of the class. For instance, we could create a new
+car object and set its brand, model, and year attributes on a single line,
+rather than expending an additional line for each attribute:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Constructor,language={Python},
+xleftmargin=15pt, label=lst:constructor]
+class New_car(Car):
+    def __init__(self,brand, model, year):
+        # Sets all the properties
+        self.brand = brand
+        self.model = model
+        self.year = year
+ 
+    def start_car(self):
+        """ Start the cars engine """
+        print ("vroem vroem")
+ 
+if __name__ == "__main__":
+    # Creates two instances of new_car, each with unique properties
+    car1 = New_car("Ford","F-150",2001)
+    car2 = New_car("Toyota","Corolla",2007)
+ 
+    car1.start_car()
+    car2.start_car()
+\end{lstlisting}
+
+For more information on classes go to the Class Section in this book.

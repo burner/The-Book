@@ -1,0 +1,144 @@
+\section{File I/O}
+Read entire file:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Reading a File,language={Python},
+xleftmargin=15pt, label=lst:readingafile]
+inputFileText = open("testit.txt", "r").read()
+print(inputFileText)
+\end{lstlisting}
+
+In this case the "r" parameter means the file will be opened in read-only mode.
+Read certain amount of bytes from a file:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Reading number of bytes,language={Python},
+xleftmargin=15pt, label=lst:readingnumberofbytes]
+inputFileText = open("testit.txt", "r").read(123)
+print(inputFileText)
+\end{lstlisting}
+When opening a file, one starts reading at the beginning of the file, if one
+would want more random access to the file, it is possible to use seek() to
+change the current position in a file and tell() to get to know the current
+position in the file. This is illustrated in the following example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Tell and seek on File,language={Python},
+xleftmargin=15pt, label=lst:tellandseekonfile]
+>>> f=open("/proc/cpuinfo","r")
+>>> f.tell()
+0L
+>>> f.read(10)
+'processor\t'
+>>> f.read(10)
+': 0\nvendor'
+>>> f.tell()
+20L
+>>> f.seek(10)
+>>> f.tell()
+10L
+>>> f.read(10)
+': 0\nvendor'
+>>> f.close()
+>>> f
+<closed file '/proc/cpuinfo', mode 'r' at 0xb7d79770>
+\end{lstlisting}
+
+Here a file is opened, twice ten bytes are read, tell() shows that the current
+offset is at position 20, now seek() is used to go back to position 10 (the same
+position where the second read was started) and ten bytes are read and printed
+again. And when no more operations on a file are needed the close() function is
+used to close the file we opened.  Read one line at a time:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Line by Line,language={Python},
+xleftmargin=15pt, label=lst:linebyline]
+for line in open("testit.txt", "r"):
+    print line
+\end{lstlisting}
+
+In this case readlines() will return an array containing the individual lines of
+the file as array entries. Reading a single line can be done using the
+readline() function which returns the current line as a string. This example
+will output an additional newline between the individual lines of the file, this
+is because one is read from the file and print introduces another newline.
+Write to a file requires the second parameter of open() to be "w", this will
+overwrite the existing contents of the file if it already exists when opening
+the file:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Write to file,language={Python},
+xleftmargin=15pt, label=lst:writetofile]
+outputFileText = "Here's some text to save in a file"
+open("testit.txt", "w").write(outputFileText)
+\end{lstlisting}
+
+Append to a file requires the second parameter of open() to be "a" (from append):
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Append to file,language={Python},
+xleftmargin=15pt, label=lst:appendtofile]
+outputFileText = "Here's some text to add to the existing file."
+open("testit.txt", "a").write(outputFileText)
+\end{lstlisting}
+
+Note that this does not add a line break between the existing file content and
+the string to be added.
+
+\section{Testing Files}
+Determine whether path exists:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Test if file exists,language={Python},
+xleftmargin=15pt, label=lst:testiffileexists]
+import os
+os.path.exists('<path string>')
+\end{lstlisting}
+
+There are some other convenient functions in os.path, where path.code.exists()
+only confirms whether or not path exists, there are functions which let you know
+if the path is a file, a directory, a mount point or a symlink. There is even a
+function os.path.realpath() which reveals the true destination of a symlink:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Test Path,language={Python},
+xleftmargin=15pt, label=lst:testpath]
+>>> import os
+>>> os.path.isfile("/")
+False
+>>> os.path.isfile("/proc/cpuinfo")
+True
+>>> os.path.isdir("/")
+True
+>>> os.path.isdir("/proc/cpuinfo")
+False
+>>> os.path.ismount("/")
+True
+>>> os.path.islink("/")
+False
+>>> os.path.islink("/vmlinuz")
+True
+>>> os.path.realpath("/vmlinuz")
+'/boot/vmlinuz-2.6.24-21-generic'
+\end{lstlisting}
+
+\section{Common File Operations}
+To copy or move a file, use the shutil library.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Copy File,language={Python},
+xleftmargin=15pt, label=lst:copyfile]
+import shutil
+shutil.move("originallocation.txt","newlocation.txt")
+shutil.copy("original.txt","copy.txt")
+\end{lstlisting}
+
+To perform a recursive copy it is possible to use copytree(), to perform a
+recursive remove it is possible to use rmtree()
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Recursive File handling,language={Python},
+xleftmargin=15pt, label=lst:recursivefilehandling]
+import shutil
+shutil.copytree("dir1","dir2")
+shutil.rmtree("dir1")
+\end{lstlisting}
+
+To remove an individual file there exists the remove() function in the os
+module:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Remove File,language={Python},
+xleftmargin=15pt, label=lst:removefile]
+import os
+os.remove("file.txt")
+\end{lstlisting}

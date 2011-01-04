@@ -1,0 +1,341 @@
+\section{Strings}
+We already covered strings, but that was before you knew what a sequence is. In
+other languages, the elements in arrays and sometimes the characters in strings
+may be accessed with the square brackets, or subscript operator. This works in
+Python too:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=String Char Sequence 1,language={Python},
+xleftmargin=15pt, label=lst:stringcharsequence1]
+>>> "Hello, world!"[0]
+'H'
+>>> "Hello, world!"[1]
+'e'
+>>> "Hello, world!"[2]
+'l'
+>>> "Hello, world!"[3]
+'l'
+>>> "Hello, world!"[4]
+'o'
+\end{lstlisting}
+
+Indexes are numbered from 0 to n-1 where n is the number of items (or
+characters), and they are positioned between the items:
+\scriptsize
+\begin{verbatim}
+H  e  l  l  o  ,  _  w  o  r  l  d  !
+0  1  2  3  4  5  6  7  8  9 10 11 12
+\end{verbatim}
+\normalsize
+
+The item which comes immediately after an index is the one selected by that
+index. Negative indexes are counted from the end of the string:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=String Char Sequence 2,language={Python},
+xleftmargin=15pt, label=lst:stringcharsequence2]
+>>> "Hello, world!"[-2]
+'d'
+>>> "Hello, world!"[-9]
+'o'
+>>> "Hello, world!"[-13]
+'H'
+>>> "Hello, world!"[-1]
+'!'
+\end{lstlisting}
+
+But in Python, the colon : allows the square brackets to take as many as two
+numbers. For any sequence which only uses numeric indexes, this will return the
+portion which is between the specified indexes. This is known as "slicing," and
+the result of slicing a string is often called a "substring."
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Slice Operation 1,language={Python},
+xleftmargin=15pt, label=lst:sliceoperation1]
+>>> "Hello, world!"[3:9]
+'lo, wo'
+>>> string = "Hello, world!"
+>>> string[:5]
+'Hello'
+>>> string[-6:-1]
+'world'
+>>> string[-9:]
+'o, world!'
+>>> string[:-8]
+'Hello'
+>>> string[:]
+'Hello, world!'
+\end{lstlisting}
+As demonstrated above, if either number is omitted it is assumed to be the beginning or end of the sequence.
+
+\section{Lists}
+A list is just what it sounds like: a list of values, organized in order. A list
+is created using square brackets. For example, an empty list would be
+initialized like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=List Definition 1,language={Python},
+xleftmargin=15pt, label=lst:listdefinition1]
+spam = []
+\end{lstlisting}
+
+The values of the list are separated by commas. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=List Definition 2,language={Python},
+xleftmargin=15pt, label=lst:listdefinition2]
+spam = ["bacon", "eggs", 42]
+\end{lstlisting}
+
+Lists may contain objects of varying types. It may hold both the strings "eggs"
+and "bacon" as well as the number 42.  Like characters in a string, items in a
+list can be accessed by indexes starting at 0. To access a specific item in a
+list, you refer to it by the name of the list, followed by the item's number in
+the list inside brackets. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=List Definition 3,language={Python},
+xleftmargin=15pt, label=lst:listdefinition3]
+>>> spam
+['bacon', 'eggs', 42]
+>>> spam[0]
+'bacon'
+>>> spam[1]
+'eggs'
+>>> spam[2]
+42
+\end{lstlisting}
+
+You can also use negative numbers, which count backwards from the end of the list:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=List negativ Index,language={Python},
+xleftmargin=15pt, label=lst:listnegativindex]
+>>> spam[-1]
+42
+>>> spam[-2]
+'eggs'
+>>> spam[-3]
+'bacon'
+\end{lstlisting}
+
+The len() function also works on lists, returning the number of items in the array:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=len Function List,language={Python},
+xleftmargin=15pt, label=lst:lenfunctionlist]
+>>> len(spam)
+3
+\end{lstlisting}
+
+Note that the len() function counts the number of item inside a list, so the
+last item in spam (42) has the index (len(spam) - 1).  The items in a list can
+also be changed, just like the contents of an ordinary variable:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=List access,language={Python},
+xleftmargin=15pt, label=lst:listaccess]
+>>> spam = ["bacon", "eggs", 42]
+>>> spam
+['bacon', 'eggs', 42]
+>>> spam[1]
+'eggs'
+>>> spam[1] = "ketchup"
+>>> spam
+['bacon', 'ketchup', 42]
+\end{lstlisting}
+
+(Strings, being immutable, are impossible to modify.) As with strings, lists may be sliced:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=List Slice 1,language={Python},
+xleftmargin=15pt, label=lst:listslice1]
+>>> spam[1:]
+['eggs', 42]
+>>> spam[:-1]
+['bacon', 'eggs']
+\end{lstlisting}
+
+It is also possible to add items to a list. There are many ways to do it, the
+easiest way is to use the append() method of list:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=List append,language={Python},
+xleftmargin=15pt, label=lst:listappend]
+>>> spam.append(10)
+>>> spam
+['bacon', 'eggs', 42, 10]
+\end{lstlisting}
+
+Note that you cannot manually insert an element by specifying the index outside
+of its range. The following code would fail:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=List out of bound,language={Python},
+xleftmargin=15pt, label=lst:listoutofbound]
+>>> spam[4] = 10
+IndexError: list assignment index out of range
+\end{lstlisting}
+
+Instead, you must use the insert() function. If you want to insert an item
+inside a list at a certain index, you may use the insert() method of list, for
+example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=List insert,language={Python},
+xleftmargin=15pt, label=lst:listinsert]
+>>> spam.insert(1, 'and')
+>>> spam
+['bacon', 'and', 'eggs', 42, 10]
+\end{lstlisting}
+
+You can also delete items from a list using the del statement:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=delete Operation on List,language={Python},
+xleftmargin=15pt, label=lst:deleteoperationonlist]
+>>> spam
+['bacon', 'and', 'eggs', 42, 10]
+>>> del spam[1]
+>>> spam
+['bacon', 'eggs', 42, 10]
+>>> spam[0]
+'bacon'
+>>> spam[1]
+'eggs'
+>>> spam[2]
+42
+>>> spam[3]
+10
+\end{lstlisting}
+
+As you can see, the list re-orders itself, so there are no gaps in the
+numbering.  For further explanation on list, see Data Structure/Lists
+
+\section{Tuples}
+Tuples are similar to lists, except they are immutable. Once you have set a
+tuple, there is no way to change it whatsoever: you cannot add, change, or
+remove elements of a tuple. Otherwise, tuples work identically to lists.  To
+declare a tuple, you use commas: unchanging = "rocks", 0, "the universe" It is
+often necessary to use parentheses to differentiate between different tuples,
+such as when doing multiple assignments on the same line:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Tuple Definition 1,language={Python},
+xleftmargin=15pt, label=lst:tupledefinition1]
+foo, bar = "rocks", 0, "the universe" # An error: 2 elements on left, 3 on right
+foo, bar = "rocks", (0, "the universe")
+\end{lstlisting}
+
+Unnecessary parenthesis can be used without harm, but nested parentheses denote
+nested tuples:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Tuple Definition 2,language={Python},
+xleftmargin=15pt, label=lst:tupledefinitio2]
+>>> var = "me", "you", "us", "them"
+>>> var = ("me", "you", "us", "them")
+\end{lstlisting}
+both produce:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Tuple Definition 3,language={Python},
+xleftmargin=15pt, label=lst:tupledefinition3]
+>>> print var 
+('me', 'you', 'us', 'them')
+but:
+>>> var = ("me", "you", ("us", "them"))
+>>> print(var)
+('me', 'you', ('us', 'them')) # A tuple of 3 elements, the last of which is itself a tuple.
+\end{lstlisting}
+
+For further explanation on tuple, see Data Structure/Tuples
+
+\section{Dictionaries}
+Dictionaries are also like lists, and they are mutable -- you can add, change,
+and remove elements from a dictionary. However, the elements in a dictionary are
+not bound to numbers, the way a list is. Every element in a dictionary has two
+parts: a key, and a value. Calling a key of a dictionary returns the value
+linked to that key. You could consider a list to be a special kind of
+dictionary, in which the key of every element is a number, in numerical order.
+Dictionaries are declared using curly braces, and each element is declared first
+by its key, then a colon, and then its value. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Dictionary Definition,language={Python},
+xleftmargin=15pt, label=lst:dictonarydefinition]
+>>> definitions = {"guava": "a tropical fruit", "python": "a programming language", "the answer": 42}
+>>> definitions
+{'python': 'a programming language', 'the answer': 42, 'guava': 'a tropical fruit'}
+>>> definitions["the answer"]
+42
+>>> definitions["guava"]
+'a tropical fruit'
+>>> len(definitions)    
+3
+\end{lstlisting}
+
+Also, adding an element to a dictionary is much simpler: simply declare it as you would a variable.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Dictionary Insert,language={Python},
+xleftmargin=15pt, label=lst:dictionaryinsert]
+>>> definitions["new key"] = "new value"
+>>> definitions
+{'python': 'a programming language', 'the answer': 42, 'guava': 'a tropical fruit', 'new key': 'new value'}
+For further explanation on dictionary, see Data Structure/Dictionaries
+\end{lstlisting}
+
+\section{Sets}
+Sets are just like list, except that it is unordered and it does not allow
+duplicate values. Elements of a set are neither bound to a number (like list and
+tuple) nor to a key (like dictionary). The reason for using set over other data
+types is that set is much faster for huge number of items than a list or tuple
+and sets provide fast data insertion, deletion, and fast membership testing.
+Sets also support mathematical set operations such as testing for subsets and
+finding the union or intersection of two sets.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Set Definition,language={Python},
+xleftmargin=15pt, label=lst:setdefinition]
+>>> mind = set([42, 'a string', (23, 4)])
+>>> mind
+set([(23, 4), 42, 'a string'])
+
+>>> mind = set([42, 'a string', 40, 41])
+>>> mind
+set([40, 41, 42, 'a string'])
+>>> mind = set([42, 'a string', 40, 0])
+>>> mind
+set([40, 0, 42, 'a string'])
+>>> mind.add('hello')
+>>> mind
+set([40, 0, 42, 'a string', 'hello'])
+\end{lstlisting}
+
+Note that sets are unordered, items you add into sets will end up in an
+indeterminable position, and it may also change from time to time.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Set Insert,language={Python},
+xleftmargin=15pt, label=lst:setinsert]
+>>> mind.add('duplicate value')
+>>> mind.add('duplicate value')
+>>> mind
+set([0, 'a string', 40, 42, 'hello', 'duplicate value'])
+\end{lstlisting}
+
+Sets cannot contain a single value more than once. Unlike lists, which can
+contain anything, the types of data that can be included in sets is restricted.
+A set can only contain hashable, immutable data types. Integers, strings, and
+tuples are hashable; lists, dictionaries, and other sets (except frozensets, see
+below) are not.
+
+\section{Frozenset}
+The relationship between frozenset and set is like the relationship between
+tuple and list. Frozenset is an immutable version of set. An example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Frozenset Definition,language={Python},
+xleftmargin=15pt, label=lst:frozensetdefinition]
+>>> frozen=frozenset(['life','universe','everything'])
+>>> frozen
+frozenset({'universe', 'life', 'everything'})
+\end{lstlisting}
+
+\section{Other data types}
+Python also has other types of arrays, although these are less frequently used
+and they need to be imported from the standard library before used. We will only
+brush on them here.  array
+\begin{itemize}
+	\item typed-list, an array may only contain homogeneous values.
+	\item collections.defaultdict A dictionary that, when an element is not
+found, returns a default value instead of error.
+	\item collections.deque A double ended queue, allows fast manipulation on
+both sides of the queue.
+	\item heapq A priority queue.
+\item Queue A thread-safe multi-producer, multi-consumer queue for use with
+multi-threaded programs. Note that a list can also be used as queue in a
+single-threaded code.
+\end{itemize}
+
+For further explanation on set, see Data Structure/Sets

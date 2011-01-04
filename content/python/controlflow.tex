@@ -1,0 +1,928 @@
+\section{Controlflow}
+Python, like many other computer programming languages, uses Boolean logic for
+its decision control. That is, the Python interpreter compares one or more
+values in order to decide whether to execute a piece of code or not, given the
+proper syntax and instructions.  Decision control is then divided into two major
+categories, conditional and repetition. Conditional logic simply uses the
+keyword if and a Boolean expression to decide whether or not to execute a code
+block. Repetition builds on the conditional constructs by giving us a simple
+method in which to repeat a block of code while a Boolean expression evaluates
+to true.
+\subsection{Boolean Expressions}
+Here is a little example of boolean expressions (you don't have to type it in):
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Controlflow 1,language={Python},
+xleftmargin=15pt, label=lst:controlflow1]
+a = 6
+b = 7
+c = 42
+print (1, a == 6)
+print (2, a == 7)
+print (3, a == 6 and b == 7)
+print (4, a == 7 and b == 7)
+print (5, not a == 7 and b == 7)
+print (6, a == 7 or b == 7)
+print (7, a == 7 or b == 6)
+print (8, not (a == 7 and b == 6))
+print (9, not a == 7 and b == 6)
+\end{lstlisting}
+With the output being:
+\scriptsize
+\begin{verbatim}
+1 True
+2 False
+3 True
+4 False
+5 True
+6 True
+7 False
+8 True
+9 False
+\end{verbatim}
+\normalsize
+What is going on? The program consists of a bunch of funny looking print
+statements. Each print statement prints a number and an expression. The number
+is to help keep track of which statement I am dealing with. Notice how each
+expression ends up being either True or False; these are built-in Python values.
+The lines:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Controlflow 2,language={Python},
+xleftmargin=15pt, label=lst:controlflow2]
+print (1, a == 6)
+print (2, a == 7)
+\end{lstlisting}
+print out True and False respectively, just as expected, since the first is true
+and the second is false. The third print, print (3, a == 6 and b == 7), is a
+little different. The operator and means if both the statement before and the
+statement after are true then the whole expression is true otherwise the whole
+expression is false. The next line, print (4, a == 7 and b == 7), shows how if
+part of an and expression is false, the whole thing is false. The behavior of
+and can be summarized as follows:
+
+\begin{tabular}{|c|c|}
+\hline
+expression&	result\\
+\hline
+true and true	&true\\
+\hline
+true and false	&false\\
+\hline
+false and true	&false\\
+\hline
+false and false	&false\\
+\hline
+\end{tabular}
+
+Note that if the first expression is false Python does not check the second
+expression since it knows the whole expression is false.  The next line, print
+(5, not a == 7 and b == 7), uses the not operator. not just gives the opposite
+of the expression (The expression could be rewritten as print (5, a != 7 and b
+== 7)). Here's the table:
+
+\begin{tabular}{|c|c|}
+\hline
+expression	&result\\
+\hline
+not true	&false\\
+\hline
+not false	&true\\
+\hline
+\end{tabular}
+
+The two following lines, print (6, a == 7 or b == 7) and print (7, a == 7 or b
+== 6), use the or operator. The or operator returns true if the first expression
+is true, or if the second expression is true or both are true. If neither are
+true it returns false. Here's the table:
+
+\begin{tabular}{|c|c|}
+\hline
+expression&	result\\
+\hline
+true or true	&true\\
+\hline
+true or false	&true\\
+\hline
+false or true	&true\\
+\hline
+false or false	&false\\
+\hline
+\end{tabular}
+
+Note that if the first expression is true Python doesn't check the second
+expression since it knows the whole expression is true. This works since or is
+true if at least one half of the expression is true. The first part is true so
+the second part could be either false or true, but the whole expression is still
+true.  The next two lines, print (8, not (a == 7 and b == 6)) and print (9, not
+a == 7 and b == 6), show that parentheses can be used to group expressions and
+force one part to be evaluated first. Notice that the parentheses changed the
+expression from false to true. This occurred since the parentheses forced the
+not to apply to the whole expression instead of just the a == 7 portion.
+Here is an example of using a boolean expression:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Controlflow 3,language={Python},
+xleftmargin=15pt, label=lst:controlflow3]
+list = ["Life","The Universe","Everything","Jack","Jill","Life","Jill"]
+ 
+# Make a copy of the list.
+copy = list[:]
+# Sort the copy
+copy.sort()
+prev = copy[0]
+del copy[0]
+ 
+count = 0
+ 
+# Go through the list searching for a match
+while count < len(copy) and copy[count] != prev:
+    prev = copy[count]
+    count = count + 1
+ 
+# If a match was not found then count can't be < len
+# since the while loop continues while count is < len
+# and no match is found
+if count < len(copy):
+    print ("First Match:",prev)
+\end{lstlisting}
+See the Lists chapter to explain what [:] means on the first line.
+Here is the output:
+\scriptsize
+\begin{verbatim}
+First Match: Jill
+\end{verbatim}
+\normalsize
+This program works by continuing to check for match while count $<$ len(copy) and
+copy[count]. When either count is greater than the last index of copy or a match
+has been found the and is no longer true so the loop exits. The if simply checks
+to make sure that the while exited because a match was found.  The other 'trick'
+of and is used in this example. If you look at the table for and notice that the
+third entry is "false and won't check". If count $>=$ len(copy) (in other words
+count $<$ len(copy) is false) then copy[count] is never looked at. This is because
+Python knows that if the first is false then they both can't be true. This is
+known as a short circuit and is useful if the second half of the and will cause
+an error if something is wrong. I used the first expression ( count $<$ len(copy))
+to check and see if count was a valid index for copy. (If you don't believe me
+remove the matches `Jill' and `Life', check that it still works and then reverse
+the order of count $<$ len(copy) and copy[count] != prev to copy[count] != prev
+and count $<$ len(copy).) Boolean expressions can be used when you need to check
+two or more different things at once.
+
+\subsection{Decision}
+A Decision is when a program has more than one choice of actions depending on a
+variable's value. Think of a traffic light. When it is green, we continue our
+drive. When we see the light turn yellow, we proceed to reduce our speed, and
+when it is red, we stop. These are logical decisions that depend on the value of
+the traffic light. Luckily, Python has a decision statement to help us when our
+application needs to make such decision for the user.
+
+\subsubsection{If statement}
+Here is a warm-up exercise - a short program to compute the absolute value of a
+number:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=absoval.py,language={Python},
+xleftmargin=15pt, label=lst:absoval]
+n = raw_input("Integer? ")#Pick an integer.  And remember, if raw_input is not
+supported by your OS, use input()
+n = int(n)#Defines n as the integer you chose. (Alternatively, you can define n
+yourself)
+if n < 0:
+    print ("The absolute value of",n,"is",-n)
+else:
+    print ("The absolute value of",n,"is",n)
+\end{lstlisting}
+
+Here is the output from the two times that I ran this program:
+\scriptsize
+\begin{verbatim}
+Integer? -34
+The absolute value of -34 is 34
+Integer? 1
+The absolute value of 1 is 1
+\end{verbatim}
+\normalsize
+
+What does the computer do when it sees this piece of code? First it prompts the
+user for a number with the statement "n = raw\_input("Integer? ")". Next it reads
+the line "if n $<$ 0:". If n is less than zero Python runs the line "print "The
+absolute value of",n,"is",-n". Otherwise python runs the line "print "The
+absolute value of",n,"is",n".
+More formally, Python looks at whether the expression n $<$ 0 is true or false. An
+if statement is followed by an indented block of statements that are run when
+the expression is true. After the if statement is an optional else statement and
+another indented block of statements. This 2nd block of statements is run if the
+expression is false.
+Expressions can be tested several different ways. Here is a table of all of
+them:
+\begin{tabular}{|c|c|}
+\hline
+operator&	function\\
+\hline
+$<$	&less than\\
+\hline
+$<=$	&less than or equal to\\
+\hline
+$>$	&greater than\\
+\hline
+$>=$	&greater than or equal to\\
+\hline
+$==$	&equal\\
+\hline
+$!=$	&not equal\\
+\hline
+\end{tabular}
+
+Another feature of the if command is the elif statement. It stands for "else
+if," which means that if the original if statement is false and the elif
+statement is true, execute the block of code following the elif statement.
+Here's an example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=ifloop.py,language={Python},
+xleftmargin=15pt, label=lst:ifloop]
+a = 0
+while a < 10:
+    a = a + 1
+    if a > 5:
+        print (a,">",5)
+    elif a <= 7:
+        print (a,"<=",7)
+    else:
+        print ("Neither test was true")
+\end{lstlisting}
+and the output:
+\scriptsize
+\begin{verbatim}
+1 <= 7
+2 <= 7
+3 <= 7
+4 <= 7
+5 <= 7
+6 > 5
+7 > 5
+8 > 5
+9 > 5
+10 > 5
+\end{verbatim}
+\normalsize
+
+Notice how the elif a <= 7 is only tested when the if statement fails to be
+true. elif allows multiple tests to be done in a single if statement.
+\subsubsection{If Examples}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=High\_low.py,language={Python},
+xleftmargin=15pt, label=lst:highlow]
+#Plays the guessing game higher or lower 
+# (originally written by Josh Cogliati, improved by Quique)
+ 
+#This should actually be something that is semi random like the
+# last digits of the time or something else, but that will have to
+# wait till a later chapter.  (Extra Credit, modify it to be random
+# after the Modules chapter)
+ 
+#This is for demonstration purposes only. 
+# It is not written to handle invalid input like a full program would.
+number = 78
+guess = 0
+ 
+while guess != number : 
+    guess = raw_input("Guess an integer: ")
+    guess = int(guess)
+    if guess > number :
+        print ("Too high")
+ 
+    elif guess < number :
+        print ("Too low")
+    else:
+        print ("Just right" )
+\end{lstlisting}
+
+Sample run:
+\scriptsize
+\begin{verbatim}
+Guess an integer:100
+Too high
+Guess an integer:50
+Too low
+Guess an integer:75
+Too low
+Guess an integer:87
+Too high
+Guess an integer:81
+Too high
+Guess an integer:78
+Just right
+\end{verbatim}
+\normalsize
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=even.py,language={Python},
+xleftmargin=15pt, label=lst:even]
+#Asks for a number.
+#Prints if it is even or odd
+ 
+number = raw_input("Tell me a number: ")
+number = float(number)
+if number % 2 == 0:
+    print (number,"is even.")
+elif number % 2 == 1:
+    print (number,"is odd.")
+else:
+    print (number,"is very strange.")
+\end{lstlisting}
+
+Sample runs.
+\scriptsize
+\begin{verbatim}
+Tell me a number: 3
+3 is odd.
+
+Tell me a number: 2
+2 is even.
+
+Tell me a number: 3.14159
+3.14159 is very strange.
+\end{verbatim}
+\normalsize
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=average1.py,language={Python},
+xleftmargin=15pt, label=lst:average1]
+#keeps asking for numbers until 0 is entered.
+#Prints the average value.
+ 
+count = 0
+sum = 0.0
+number = 1.0  # set this to something that will not exit
+#               the while loop immediately.
+ 
+print ("Enter 0 to exit the loop")
+ 
+while number != 0:
+    number = raw_input("Enter a number: ")
+    number = float(number)
+    if number != 0:
+       count = count + 1
+       sum = sum + number
+ 
+print "The average was:",sum/count
+\end{lstlisting}
+
+Sample runs
+\scriptsize
+\begin{verbatim}
+Enter 0 to exit the loop
+Enter a number:3
+Enter a number:5
+Enter a number:0
+The average was: 4.0
+
+Enter 0 to exit the loop
+Enter a number:1
+Enter a number:4
+Enter a number:3
+Enter a number:0
+The average was: 2.66666666667
+\end{verbatim}
+\normalsize
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=average2.py,language={Python},
+xleftmargin=15pt, label=lst:average2]
+#keeps asking for numbers until count have been entered.
+#Prints the average value.
+ 
+sum = 0.0
+ 
+print ("This program will take several numbers, then average them.")
+count = raw_input("How many numbers would you like to sum:")
+count = int(count)
+current_count = 0
+ 
+while current_count < count:
+    current_count = current_count + 1
+    print ("Number",current_count)
+    number = input("Enter a number: ")
+    sum = sum + number
+ 
+print "The average was:",sum/count
+\end{lstlisting}
+Sample runs
+\scriptsize
+\begin{verbatim}
+This program will take several numbers, then average them.
+How many numbers would you like to sum:2
+Number 1
+Enter a number:3
+Number 2
+Enter a number:5
+The average was: 4.0
+
+This program will take several numbers, then average them.
+How many numbers would you like to sum:3
+Number 1
+Enter a number:1
+Number 2
+Enter a number:4
+Number 3
+Enter a number:3
+The average was: 2.66666666667
+\end{verbatim}
+\normalsize
+
+\subsubsection{Conditional Statements}
+Many languages (like Java and PHP) have the concept of a one-line conditional
+(called The Ternary Operator), often used to simplify conditionally accessing a
+value. For instance (in Java):
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Ternary Operator Java,language={Java},
+xleftmargin=15pt, label=lst:ternaryoperatorjava]
+int in= ; // read from program input
+ 
+// a normal conditional assignment
+int res;
+if(number < 0)
+  res = -number;
+else
+  res = number;
+ 
+// this can be simplified to
+int res2 = (number < 0) ? -number : number;
+\end{lstlisting}
+
+For many years Python did not have the same construct natively, however you
+could replicate it by constructing a tuple of results and calling the test as
+the index of the tuple, like so:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Ternary Operator 1,language={Python},
+xleftmargin=15pt, label=lst:ternaryoperator1]
+number = int(raw_input("Enter a number to get its absolute value:"))
+res = (-number, number)[number > 0]
+\end{lstlisting}
+
+It is important to note that, unlike a built in conditional statement, both the
+true and false branches are evaluated before returning, which can lead to
+unexpected results and slower executions if you're not careful. To resolve this
+issue, and as a better practice, wrap whatever you put in the tuple in anonymous
+function calls (lambda notation) to prevent them from being evaluated until the
+desired branch is called:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Ternary Operator Lambda,language={Python},
+xleftmargin=15pt, label=lst:ternaryoperatorlambda]
+number = int(raw_input("Enter a number to get its absolute value:"))
+res = (lambda: number, lambda: -number)[number < 0]()
+\end{lstlisting}
+
+Since Python 2.5 however, there has been an equivalent operator to The Ternary
+Operator (though not called such, and with a totally different syntax):
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Ternary Operator Python,language={Python},
+xleftmargin=15pt, label=lst:ternaryoperatorpython]
+number = int(raw_input("Enter a number to get its absolute value:"))
+res = -number if number < 0 else number
+\end{lstlisting}
+
+\subsubsection{Switch}
+
+A switch is a control statement present in most computer programming languages
+to minimize a bunch of If - elif statements. Sadly Python doesn't officially
+support this statement, but with the clever use of an array or dictionary, we
+can recreate this Switch statement that depends on a value.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Switch Case,language={Python},
+xleftmargin=15pt, label=lst:switchcase]
+x = 1
+ 
+def hello():
+  print ("Hello")
+ 
+def bye():
+  print ("Bye")
+ 
+def hola():
+  print ("Hola is Spanish for Hello")
+ 
+def adios():
+  print ("Adios is Spanish for Bye")
+ 
+# Notice that our switch statement is a regular variable, only that we added the
+# function's name inside
+# and there are no quotes
+menu = [hello,bye,hola,adios]
+ 
+# To call our switch statement, we simply make reference to the array with a
+# pair of parentheses
+# at the end to call the function
+menu[3]()   # calls the adios function since is number 3 in our array.
+ 
+menu[0]()   # Calls the hello function being our first element in our array.
+ 
+menu[x]()   # Calls the bye function as is the second element on the array x = 1
+\end{lstlisting}
+This works because Python stores a reference of the function in the array at its
+particular index, and by adding a pair of parentheses we are actually calling
+the function. Here the last line is equivalent to:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Swicht Case Function,language={Python},
+xleftmargin=15pt, label=lst:swichtcasefunction]
+if x==0:
+    hello()
+elif x==1:
+    bye()
+elif x==2:
+    hola()
+else:
+    adios()
+\end{lstlisting}
+\subsubsection{Another way}
+Another way is to use lambdas. Code pasted here without permissions.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Switch Case Lambda,language={Python},
+xleftmargin=15pt, label=lst:switchcaselambda]
+result = {
+  'a': lambda x: x * 5,
+  'b': lambda x: x + 7,
+  'c': lambda x: x - 2
+}[value](x)
+\end{lstlisting}
+
+\subsubsection{While loops}
+This is our first control structure. Ordinarily the computer starts with the
+first line and then goes down from there. Control structures change the order
+that statements are executed or decide if a certain statement will be run. As a
+side note, decision statements (e.g., if statements) also influence whether or
+not a certain statement will run. Here's the source for a program that uses the
+while control structure:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={Python},
+xleftmargin=15pt, label=lst:]
+a = 0
+while a < 10 :
+    a += 1
+    print (a)
+\end{lstlisting}
+
+And here is the output:
+\scriptsize
+\begin{verbatim}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+\end{verbatim}
+\normalsize
+
+So what does the program do? First it sees the line a = 0 and makes a zero. Then
+it sees while a < 10: and so the computer checks to see if a < 10. The first
+time the computer sees this statement a is zero so it is less than 10. In other
+words while a is less than ten the computer will run the tabbed in statements.
+Here is another example of the use of while:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={Python},
+xleftmargin=15pt, label=lst:]
+a = 1
+s = 0
+print ('Enter Numbers to add to the sum.')
+print ('Enter 0 to quit.')
+while a != 0:
+    print ('Current Sum: ', s)
+    a = raw_input('Number? ')
+    a = float(a)
+    s += a
+print ('Total Sum = ',s)
+\end{lstlisting}
+
+Enter Numbers to add to the sum.
+\scriptsize
+\begin{verbatim}
+Enter 0 to quit.
+Current Sum: 0
+Number? 200
+Current Sum: 200
+Number? -15.25
+Current Sum: 184.75
+Number? -151.85
+Current Sum: 32.9
+Number? 10.00
+Current Sum: 42.9
+Number? 0
+Total Sum = 42.9
+\end{verbatim}
+\normalsize
+
+Notice how print 'Total Sum =',s is only run at the end. The while statement
+only affects the lines that are tabbed in (a.k.a. indented). The  != means does
+not equal so while a != 0 : means until a is zero run the tabbed in statements
+that are afterwards.  Now that we have while loops, it is possible to have
+programs that run forever. An easy way to do this is to write a program like
+this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={Python},
+xleftmargin=15pt, label=lst:]
+while 1 == 1:
+    print ("Help, I'm stuck in a loop.")
+\end{lstlisting}
+
+This program will output Help, I'm stuck in a loop. until the heat death of the
+universe or you stop it. The way to stop it is to hit the Control (or Ctrl)
+button and `c' (the letter) at the same time. This will kill the program. (Note:
+sometimes you will have to hit enter after the Control C.)
+
+\paragraph{Examples}~
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Fibonacci.py,language={Python},
+xleftmargin=15pt, label=lst:fibonacci]
+#This program calculates the Fibonacci sequence
+a = 0
+b = 1
+count = 0
+max_count = 20
+while count < max_count:
+    count = count + 1
+    #we need to keep track of a since we change it
+    old_a = a
+    old_b = b
+    a = old_b
+    b = old_a + old_b
+    #Notice that the , at the end of a print statement keeps it
+    # from switching to a new line
+    print (old_a,)
+print()
+\end{lstlisting}
+
+Output:
+\scriptsize
+\begin{verbatim}
+0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181
+\end{verbatim}
+\normalsize
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Password.py,language={Python},
+xleftmargin=15pt, label=lst:password]
+# Waits until a password has been entered.  Use control-C to break out without
+# the password.
+ 
+# Note that this must not be the password so that the 
+# while loop runs at least once.
+password = "foobar"
+ 
+#note that != means not equal
+while password != "unicorn":
+    password = raw_input("Password: ")
+print ("Welcome in")
+\end{lstlisting}
+
+Sample run:
+\scriptsize
+\begin{verbatim}
+Password:auo
+Password:y22
+Password:password
+Password:open sesame
+Password:unicorn
+Welcome in
+\end{verbatim}
+\normalsize
+
+\subsubsection{For Loops}
+This is another way of using loops:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=For Loop Range 1,language={Python},
+xleftmargin=15pt, label=lst:forlooprange1]
+onetoten = range(1,11)
+for count in onetoten:
+    print (count)
+\end{lstlisting}
+
+The output:
+\scriptsize
+\begin{verbatim}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+\end{verbatim}
+\normalsize
+
+The output looks very familiar, but the program code looks different. The first
+line uses the range function. The range function uses two arguments like this
+range(start,finish). start is the first number that is produced. finish is one
+larger than the last number. Note that this program could have been done in a
+shorter way:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=For Loop Range 2,language={Python},
+xleftmargin=15pt, label=lst:forlooprange2]
+for count in range(1,11):
+    print (count)
+\end{lstlisting}
+
+Here are some examples to show what happens with the range command:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Range Command 1,language={Python},
+xleftmargin=15pt, label=lst:rangecommand1]
+>>> range(1,10)
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> range(-32, -20)
+[-32, -31, -30, -29, -28, -27, -26, -25, -24, -23, -22, -21]
+>>> range(5,21)
+[5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+>>> range(21,5)
+[]
+\end{lstlisting}
+
+Another way to use the range() function in a for loop is to supply only one argument:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Range Command 2,language={Python},
+xleftmargin=15pt, label=lst:rangecommand2]
+for a in range(10):
+    print a,
+\end{lstlisting}
+
+The above code acts exactly the same as:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Range Command 3,language={Python},
+xleftmargin=15pt, label=lst:rangecommand3]
+for a in range(0, 10):
+    print a,
+\end{lstlisting}
+
+with 0 implied as the starting point. The output is
+\scriptsize
+\begin{verbatim}
+0 1 2 3 4 5 6 7 8 9
+\end{verbatim}
+\normalsize
+
+The code would cycle through the for loop 10 times as expected, but starting
+with 0 instead of 1.  The next line for count in onetoten: uses the for control
+structure. A for control structure looks like for variable in list:. list is
+gone through starting with the first element of the list and going to the last.
+As for goes through each element in a list it puts each into variable. That
+allows variable to be used in each successive time the for loop is run through.
+Here is another example to demonstrate:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=For Loop List 1,language={Python},
+xleftmargin=15pt, label=lst:forlooplist1]
+demolist = ['life',42, 'the universe', 6,'and',7,'everything']
+for item in demolist:
+    print ("The Current item is: %s" % item)
+\end{lstlisting}
+
+The output is:
+\scriptsize
+\begin{verbatim}
+The Current item is: life
+The Current item is: 42
+The Current item is: the universe
+The Current item is: 6
+The Current item is: and
+The Current item is: 7
+The Current item is: everything
+\end{verbatim}
+\normalsize
+
+Notice how the for loop goes through and sets item to each element in the list.
+(Notice how if you don't want print to go to the next line add a comma at the
+end of the statement (i.e. if you want to print something else on that line). )
+So, what is for good for? The first use is to go through all the elements of a
+list and do something with each of them. Here a quick way to add up all the
+elements:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=For Loop List 2,language={Python},
+xleftmargin=15pt, label=lst:forlooplist2]
+list = [2,4,6,8]
+sum = 0
+for num in list:
+    sum = sum + num
+print ("The sum is: %d" % sum)
+\end{lstlisting}
+
+with the output simply being:
+\scriptsize
+\begin{verbatim}
+The sum is:  20
+\end{verbatim}
+\normalsize
+
+Or you could write a program to find out if there are any duplicates in a list like this program does:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=For Loop List 3,language={Python},
+xleftmargin=15pt, label=lst:forlooplist3]
+list = [4, 5, 7, 8, 9, 1,0,7,10]
+list.sort()
+prev = list[0]
+del list[0]
+for item in list:
+    if prev == item:
+        print ("Duplicate of ",prev," Found")
+    prev = item
+\end{lstlisting}
+
+and for good measure:
+\scriptsize
+\begin{verbatim}
+Duplicate of  7  Found
+\end{verbatim}
+\normalsize
+
+How does it work? Here is a special debugging version:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=For Loop List 3 Debug,language={Python},
+xleftmargin=15pt, label=lst:forlooplist3debug]
+l = [4, 5, 7, 8, 9, 1,0,7,10]
+print ("l = [4, 5, 7, 8, 9, 1,0,7,10]","\tl:",l)
+l.sort()
+print ("l.sort()","\tl:",l)
+prev = l[0]
+print ("prev = l[0]","\tprev:",prev)
+del l[0]
+print ("del l[0]","\tl:",l)
+for item in l:
+    if prev == item:
+        print ("Duplicate of ",prev," Found")
+    print ("if prev == item:","\tprev:",prev,"\titem:",item)
+    prev = item
+    print ("prev = item","\t\tprev:",prev,"\titem:",item)
+\end{lstlisting}
+
+with the output being:
+\scriptsize
+\begin{verbatim}
+l = [4, 5, 7, 8, 9, 1,0,7,10]   l: [4, 5, 7, 8, 9, 1, 0, 7, 10]
+l.sort()        l: [0, 1, 4, 5, 7, 7, 8, 9, 10]
+prev = l[0]     prev: 0
+del l[0]        l: [1, 4, 5, 7, 7, 8, 9, 10]
+if prev == item:        prev: 0         item: 1
+prev = item             prev: 1         item: 1
+if prev == item:        prev: 1         item: 4
+prev = item             prev: 4         item: 4
+if prev == item:        prev: 4         item: 5
+prev = item             prev: 5         item: 5
+if prev == item:        prev: 5         item: 7
+prev = item             prev: 7         item: 7
+Duplicate of  7  Found
+if prev == item:        prev: 7         item: 7
+prev = item             prev: 7         item: 7
+if prev == item:        prev: 7         item: 8
+prev = item             prev: 8         item: 8
+if prev == item:        prev: 8         item: 9
+prev = item             prev: 9         item: 9
+if prev == item:        prev: 9         item: 10
+prev = item             prev: 10        item: 10
+\end{verbatim}
+\normalsize
+
+Note: The reason there are so many print statements is because print statements
+can show the value of each variable at different times, and help debug the
+program. First the program starts with a old list. Next the program sorts the
+list. This is so that any duplicates get put next to each other. The program
+then initializes a prev(ious) variable. Next the first element of the list is
+deleted so that the first item is not incorrectly thought to be a duplicate.
+Next a for loop is gone into. Each item of the list is checked to see if it is
+the same as the previous. If it is a duplicate was found. The value of prev is
+then changed so that the next time the for loop is run through prev is the
+previous item to the current. Sure enough, the 7 is found to be a duplicate.
+The other way to use for loops is to do something a certain number of times.
+Here is some code to print out the first 9 numbers of the Fibonacci series:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Fibonacci For Loop,language={Python},
+xleftmargin=15pt, label=lst:fibonacciforloop]
+a = 1
+b = 1
+for c in range(1,10):
+    print (a)
+    n = a + b
+    a = b
+    b = n
+print ("")
+\end{lstlisting}
+
+with the surprising output:
+\scriptsize
+\begin{verbatim}
+1
+1
+2
+3
+5
+8
+13
+21
+34
+\end{verbatim}
+\normalsize
+
+Everything that can be done with for loops can also be done with while loops but
+for loops give a easy way to go through all the elements in a list or to do
+something a certain number of times.

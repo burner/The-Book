@@ -1,0 +1,180 @@
+\section{Strings}
+A string is simply a list of characters in order. A character is anything you
+can type on the keyboard in one keystroke, like a letter, a number, or a
+backslash. For example, "hello" is a string. It is five characters long
+- h, e, l, l, o. Strings can also have spaces: "hello world" contains 11
+characters, including the space between "hello" and "world". There are no limits
+to the number of characters you can have in a string - you can have
+anywhere from one to a million or more. You can even have a string that has 0
+characters, which is usually called "the empty string." There are three ways you
+can declare a string in Python: single quotes ('), double quotes ("), and triple
+quotes ("""). In all cases, you start and end the string with your chosen string
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=String 1,language={Python},
+xleftmargin=15pt, label=lst:string1]
+declaration. For example:
+>>> print ('I am a single quoted string')
+I am a single quoted string
+>>> print ("I am a double quoted string")
+I am a double quoted string
+>>> print ("""I am a triple quoted string""")
+\end{lstlisting}
+
+I am a triple quoted string You can use quotation marks within strings by
+placing a backslash directly before them, so that Python knows you want to
+include the quotation marks in the string, instead of ending the string there.
+Placing a backslash directly before another symbol like this is known as
+escaping the symbol. Note that if you want to put a backslash into the string,
+you also have to escape the backslash, to tell Python that you want to include
+the backslash, rather than using it as an escape character.
+\lstset{basicstyle=\scriptsize, numbers=left,breaklines=true, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=String 2,language={Python},
+xleftmargin=15pt, label=lst:string2]
+>>> print ("So I said, "You don't know me! You'll never understand me!"")
+So I said, "You don't know me! You'll never understand me!"
+>>> print ('So I said, "You don't know me! You'll never understand me!"')
+So I said, "You don't know me! You'll never understand me!"
+>>> print ("This will result in only three backslashes: \\ \\ \\")
+This will result in only three backslashes: \ \ \
+>>> print ("""The double quotation mark (") is used to indicate direct quotations.""")
+\end{lstlisting}
+
+The double quotation mark (") is used to indicate direct quotations.  As you can
+see from the above examples, only the specific character used to quote the
+string needs to be escaped. This makes for more readable code.  To see how to
+use strings, let's go back for a moment to an old, familiar program:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b,breaklines=true, tabsize=4}
+\begin{lstlisting}[caption=String 3,language={Python},
+xleftmargin=15pt, label=lst:string3]
+>>> print("Hello, world!")
+Hello, world!
+\end{lstlisting}
+
+Look at that! You've been using strings since the beginning! You can also add
+two strings together using the + operator: this is called concatenating them.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b,breaklines=true, tabsize=4}
+\begin{lstlisting}[caption=String 4,language={Python},
+xleftmargin=15pt, label=lst:string4]
+>>> print ("Hello, " + "world!")
+Hello, world! 
+\end{lstlisting}
+
+Notice that there is a space at the end of the first string. If you don't put
+that in, the two words will run together, and you'll end up with Hello,world!
+You can also repeat strings by using the * operator, like so:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b,breaklines=true, tabsize=4}
+\begin{lstlisting}[caption=String 5,language={Python},
+xleftmargin=15pt, label=lst:string5]
+>>> print ("bouncy, " * 10)
+\end{lstlisting}
+bouncy, bouncy, bouncy, bouncy, bouncy, bouncy, bouncy, bouncy, bouncy, bouncy,
+
+If you want to find out how long a string is, we use the len() function, which
+simply takes a string and counts the number of characters in it. (len stands for
+"length.") Just put the string that you want to find the length of, inside the
+parentheses of the function. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b,breaklines=true, tabsize=4}
+\begin{lstlisting}[caption=String 6,language={Python},
+xleftmargin=15pt, label=lst:string6]
+>>> print (len("Hello, world!"))
+13
+\end{lstlisting}
+
+\section{Strings and Variables}
+Now that you've learned about variables and strings separately, lets see how
+they work together.  Variables can store much more than just numbers. You can
+also use them to store strings! Here's how:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=String 7,language={Python},
+xleftmargin=15pt, label=lst:string7]
+question = "What did you have for lunch?"
+print (question)
+\end{lstlisting}
+In this program, we are creating a variable called question, and storing the
+string "What did you have for lunch?" in it. Then, we just tell Python to print
+out whatever is inside the question variable. Notice that when we tell Python to
+print out question, there are no quotation marks around the word question: this
+is to signify that we are using a variable, instead of a string. If we put in
+quotation marks around question, Python would treat it as a string, and simply
+print out question instead of What did you have for lunch?.  Let's try something
+different. Sure, it's all fine and dandy to ask the user what they had for
+lunch, but it doesn't make much difference if they can't respond! Let's edit
+this program so that the user can type in what they ate.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=String 8,language={Python},
+xleftmargin=15pt, label=lst:string8]
+question = "What did you have for lunch?"
+print (question)
+answer = raw_input()
+ 
+print ("You had " + answer + "! That sounds delicious!")
+\end{lstlisting}
+
+To ask the user to write something, we used a function called input(), which
+waits until the user writes something and presses enter, and then returns what
+the user wrote. Don't forget the parentheses! Even though there's nothing inside
+of them, they're still important, and Python will give you an error if you don't
+put them in. You can also use a different function called input(), which works
+in nearly the same way. We will learn the differences between these two
+functions later.
+
+\section{Combining Numbers and Strings}
+Take a look at this program, and see if you can figure out what it's supposed to do.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=String 9,language={Python},
+xleftmargin=15pt, label=lst:string9]
+
+print ("Please give me a number: ",)
+number = raw_input()
+ 
+plusTen = number + 10
+print ("If we add 10 to your number, we get " + plusTen)
+\end{lstlisting}
+
+This program should take a number from the user, add 10 to it, and print out the
+result. But if you try running it, it won't work! You'll get an error that looks
+like this:
+\scriptsize
+\begin{verbatim}
+Traceback (most recent call last):
+  File "test.py", line 7, in <module>
+    print "If we add 10 to your number, we get " + plusTen
+TypeError: cannot concatenate 'str' and 'int' objects
+\end{verbatim}
+\normalsize
+
+What's going on here? Python is telling us that there is a TypeError, which
+means there is a problem with the types of information being used. Specifically,
+Python can't figure out how to reconcile the two types of data that are being
+used simultaneously: integers and strings. For example, Python thinks that the
+number variable is holding a string, instead of a number. If the user enters 15,
+then number will contain a string that is two characters long: a 1, followed by
+a 5. So how can we tell Python that 15 should be a number, instead of a string?
+Also, when printing out the answer, we are telling Python to concatenate
+together a string ("If we add 10 to your number, we get ") and a number
+(plusTen). Python doesn't know how to do that -- it can only concatenate strings
+together. How do we tell Python to treat a number as a string, so that we can
+print it out with another string?  Luckily, there are two functions that are
+perfect solutions for these problems. The int() function will take a string and
+turn it into an integer, while the str() function will take an integer and turn
+it into a string. In both cases, we put what we want to change inside the
+parentheses. Therefore, our modified program will look like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=String 10,language={Python},
+xleftmargin=15pt, label=lst:string10]
+
+print ("Please give me a number:",)
+response = raw_input()
+ 
+number = int(response) 
+plusTen = number + 10
+\end{lstlisting}
+ 
+Another way of doing the same is to add a comma after the string part and then
+the number variable, like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=String 11,language={Python},
+xleftmargin=15pt, label=lst:string11]
+print ("If we add 10 to your number, we get " + str(plusTen))
+print ("If we add 10 to your number, we get ", plusTen)
+\end{lstlisting}

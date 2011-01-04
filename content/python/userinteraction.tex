@@ -1,0 +1,246 @@
+\section{User Interaction}
+Scripts don't normally take user input since they are usually designed to
+perform small useful tasks. However, there are times where user input is really
+important. There are two ways to retrieve user input: the first is using the
+console window (Command Line Interface) and the second is using the Graphical
+User Interface (GUI).
+
+\subsection{Console Windows}
+
+Python has two built in functions to retrieve users input on a console; the
+first is input() and the second one is raw\_input(). These two functions have
+different purposes and both accept a string argument which is displayed on the
+terminal before accepting the user input.
+\textit{These examples are Python 2.5 specific. In Python 3.0, the input()
+function will behave as raw\_input(). To use the original behavior in Python 3.0
+use eval(input()).}
+The input() function expects a python instruction as the user input. This means
+that the user response must be python coded - strings must include quotes or
+double quotes. Once this function is called, the input entered by the user will
+be evaluated, and return the result to the application. This can make it a
+security risk in some cases, unless you're planning to be the only user of the
+application.  While the raw\_input() function expects any type of input and
+returns a python string, this second function fits more of our current needs.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=raw\_input example,language={Python},
+xleftmargin=15pt, label=lst:rawinputexample]
+# Ask user for his name and stores
+name = raw_input("Please enter your name:")
+# Display the name entered by the user.
+print name
+\end{lstlisting}
+
+If the information entered by the user needs to be numeric to perform some
+calculation the return value most be converted using the float() or int()
+conversion function.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Get Age,language={Python},
+xleftmargin=15pt, label=lst:getage]
+# Retrieve user age
+age = int(raw_input("Please enter your age:"))
+print age
+\end{lstlisting}
+
+As you may expect coding all the input for a big application and all the
+validation will increase the file size. To make steps simpler we can create an
+object (using a Class) that handles retrieving the data and validating.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Input Validation,language={Python},
+xleftmargin=15pt, label=lst:inputvalidation]
+class ainput:   # We can't use input as it is a existent function name, so we use AInput for Advance Input
+   ''' This class will create a object with a simpler coding interface to retrieve console input'''
+   def __init__(self,msg=""):
+      ''' This will create a instance of ainput object'''
+      self.data = ""   # Initialize a empty data variable
+      if not msg == "":
+         self.ask(msg)
+ 
+   def ask(self,msg, req=0):
+      ''' This will display the prompt and retrieve the user input.'''
+      if req == 0:
+         self.data = raw_input(msg)   # Save the user input to a local object variable
+      else:
+         self.data = raw_input(msg + " (Require)")
+ 
+      # Verify that the information was entered and its not empty. This will accept a space character. Better Validation needed
+      if req == 1 and self.data == "":
+         self.ask(msg,req)
+ 
+   def getString(self):
+      ''' Returns the user input as String'''
+      return self.data
+ 
+   def getInteger(self):
+      ''' Returns the user input as a Integer'''
+      return int(self.data)
+ 
+   def getNumber(self):
+      ''' Returns the user input as a Float number'''
+      return float(self.data)
+\end{lstlisting}
+\textit{Notice we only validate if the prompt is required and it is not empty.
+Also notice that if a prompt is required and the user just hit <ENTER> it can
+fall in a infinite loop. You probably need a more advanced validation and error
+verification method, but it's up to you.}
+With this tool at our disposal displaying, retrieving and validating user input
+is a breeze. The use of the code will run like this. For this example we are
+using a single line to display the call and retrieve the information.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Retrive and Validate Input,language={Python},
+xleftmargin=15pt, label=lst:retriveandvalidateinput]
+# import is not imported
+name = ainput("Please enter your first name:").getString()
+age = ainput("Now enter your age:").getInteger()
+print name, age
+To test this code copy the following to a python script file (e.g. userInteraction.py)
+class ainput:   # We can't use input as it is a existent function name, so we use AInput for Advance Input
+   ''' This class will create a object with a simpler coding interface to retrieve console input'''
+   def __init__(self,msg=""):
+      ''' This will create a instance of ainput object'''
+      self.data = ""   # Initialize a empty data variable
+      if not msg == "":
+         self.ask(msg)
+ 
+   def ask(self,msg, req=0):
+      ''' This will display the prompt and retrieve the user input.'''
+      if req == 0:
+         self.data = raw_input(msg)   # Save the user input to a local object variable
+      else:
+         self.data = raw_input(msg + " (Require)")
+ 
+      # Verify that the information was entered and its not empty. This will accept a space character. Better Validation needed
+      if req == 1 and self.data == "":
+         self.ask(msg,req)
+ 
+   def getString(self):
+      ''' Returns the user input as String'''
+      return self.data
+ 
+   def getInteger(self):
+      ''' Returns the user input as a Integer'''
+      return int(self.data)
+ 
+   def getNumber(self):
+      ''' Returns the user input as a Float number'''
+      return float(self.data)
+ 
+def main():
+	# import is not imported
+	name = ainput("Please enter your first name:").getString()
+	age = ainput("Now enter your age:").getInteger()
+	print name, age
+ 
+if __name__ == '__main__':
+	main()
+\end{lstlisting}
+
+\subsection{Graphical User Interface (GUI)}
+Python has many different GUI toolkits, of which the most standard is Tkinter
+which comes with Python. This section will be limited to basic Tkinter
+programming fundamentals, a more detailed reference can be found in GUI
+Programming Modules of this wikibook.  Lets proceed by creating a classic
+developer Hello World example with the following code.
+import Tkinter
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Tkinter Example,language={Python},
+xleftmargin=15pt, label=lst:tkinterexample]
+# Define input retrieve function for application input
+def retrieve_text():
+  print app_entry.get()
+
+if __name__ == "__main__":
+
+  # Create Window Object or Window Form
+  app_win = Tkinter.Tk()
+
+  # Create label object
+  app_label = Tkinter.Label(app_win,text="Hello World")
+  app_label.pack()
+
+  # Create User Input Object
+  app_entry = Tkinter.Entry(app_win)
+  app_entry.pack()
+
+  # Create Button Object
+  app_button = Tkinter.Button(app_win,text="Print Value",command=retrieve_text)
+  app_button.pack()
+
+  # Initialize Graphical Loop
+  app_win.mainloop()
+\end{lstlisting}
+On the first line we actually import the Tkinter library in use by using import
+Tkinter. Next a function is created to retrieve the value from the input object
+use in the GUI. For the moment the value will be print to the console.  Next we
+create a windows object where all the GUI components (or widgets as the Tkinter
+toolkit calls them) are place. Think of it like a painting canvas where we draw
+our application interface.  Having define the windows we proceed to create a
+Label widget. Notice the first argument on Label object call is the variable
+holding the window object this is for binding purpose, the next argument is the
+label text. The next line binds the Label object to the Window object by using
+the pack method.
+\textit{The Tkinter toolkit has two layout system: pack and grid, Pack is the
+simpler to use while Grid provides a table like layout. Only one layout can be
+in use for Window or Frame.}
+Next stop is the User Input Object, the Tkinter library provides the Entry
+Object (same as Textbox in other programming languages). Notice that again we
+need the Window object as first argument. The next lines bind the entry object
+with the window.  Next is the creation of the button object for the application.
+Like for all the other objects the Window object is the first argument. The
+button text value is filled much like we did with the label and the button's
+action is filled using the command argument. Notice that the command argument
+doesn't have quote as it is not a string text but a reference to the function.
+The next line proceeds to bind the button to the window.  On the last line a
+call to app\_win.mainloop() allows the Tkinter application to run.
+
+\subsection{Advanced OOP GUI}
+So far it seems tedious to create a GUI using Python, especially with so much
+code to write for such a simple program. But when you bring OOP concepts into
+the mix it is different. For a moment think of an application that requires a
+couple of inputs with labels to identify them. The OOP methodology has the
+advantage of letting us create a new object that presents the label and entry
+object at the same time, is reusable and can be called with one line of code.
+The code below does just that, it wraps a label and a entry object inside a
+Tkinter Frame Object. The object require windows object as first argument and
+the label text as the second, while the text function returns a string value for
+the user input. A more advanced text box can include validation and data
+retrieval.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=OO Tkinter,language={Python},
+xleftmargin=15pt, label=lst:ootkinter]
+# Import Tkinter Library
+import Tkinter
+ 
+# Define our Textbox Object
+class textbox(Tkinter.Frame):
+ 
+    # Object Initialize
+    def __init__(self,parent, msg):
+        # Initialize the Frame properties by explicit calling its Init method
+        Tkinter.Frame.__init__(self,parent)
+ 
+        # Create the Textbox Label on the Left side
+        self.g_label = Tkinter.Label(self,text=msg)
+        self.g_label.pack(side=Tkinter.LEFT,expand=False)
+ 
+        # Create the Textbox Entry on the Right side
+        self.g_entry = Tkinter.Entry(self)
+        self.g_entry.pack(side=Tkinter.LEFT, fill=Tkinter.X, expand=True)
+ 
+        # Proceed to pack the frame
+        self.pack(fill=Tkinter.X, anchor=Tkinter.NW, expand=True)
+ 
+    def text(self):
+        # Textbox text value retrieval
+        return self.gui['entry'].get()
+\end{lstlisting}
+
+Now on our multi-input application we can use this new object with one simple line for each instance:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=OO Tkinter usage,language={Python},
+xleftmargin=15pt, label=lst:ootkinterusage]
+name = textbox(win,"Name:")
+\end{lstlisting}
+Notice that we don't need to call the pack method as the text box object packs
+itself on the last line of the \_\_init\_\_. This is not practical on complex layout
+application since the object controls this function, but works wonders for small
+script GUI.

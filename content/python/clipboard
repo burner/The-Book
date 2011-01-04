@@ -1,0 +1,10 @@
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={Python},
+xleftmargin=15pt, label=lst:]
+
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+\end{verbatim}
+\normalsize

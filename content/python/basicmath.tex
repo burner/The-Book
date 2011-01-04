@@ -1,0 +1,82 @@
+\section{Basic Math}
+Now that we know how to work with numbers and strings, let's write a program
+that might actually be useful! Let's say you want to find out how much you weigh
+in stone. A concise program can make short work of this task. Since a stone is
+14 pounds, and there are about 2.2 pounds in a kilogram, the following formula
+should do the trick: $m_{stone} = \frac{m_{kg} \cdot 2.2}{14}$
+So, let's turn this formula into a program!
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Wight in Stone,language={Python},
+xleftmargin=15pt, label=lst:wightinstone]
+mass_kg = int(raw_input("What is your mass in kilograms?" ))
+mass_stone = mass_kg * 2.2 / 14
+print("You weigh", mass_stone, "stone.")
+\end{lstlisting}
+Run this program and get your weight in stone! 
+
+\subsection{Mathematical Operators}
+Here are some commonly used mathematical operators.
+\begin{tabular}{c c c}
+Syntax&	Math& Operation Name\\
+\hline
+a+b & $a+b$ &addition\\
+a-b & $a-b$ &subtraction\\
+a*b & $a \cdot b$ & multiplication\\
+a/b & $a \div b$ & division (see note below)\\
+a//b& $a \div b$ & floor division (e.g. 5/2=2)\\
+a\%b& $a\ mod\ b$ & modulo\\
+-a& $-a$ &	negation\\
+abs(a) &$|a|$ &	absolute value\\
+a**b & $a^b$ & exponent\\
+math.sqrt(a)& $\sqrt{a}$ &square root \\
+\end{tabular}
+
+Beware that due to the limitations of floating point arithmetic, rounding errors
+can cause unexpected results. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Basic Math 1,language={Python},
+xleftmargin=15pt, label=lst:basicmath1]
+>>> print(0.6/0.2)
+3.0
+>>> print(0.6//0.2)
+2.0
+\end{lstlisting}
+
+\subsection{Order of Operations}
+ Python uses the standard order of operations as taught in Algebra and Geometry
+classes at high school or secondary school. That is, mathematical expressions
+are evaluated in the following order (memorized by many as PEMDAS), which is
+also applied to parentheticals.
+Parentheses, Exponents, Multiplication, Division, Addition, Subtraction
+
+\subsection{Formatting Output}
+Wouldn't it be nice if we always worked with nice round numbers while doing
+math? Unfortunately, the real world is not quite so neat and tidy as we would
+like it to be. Sometimes, we end up with long, ugly numbers like the following:
+What is your mass in kilograms? 65
+You weigh 10.2142857143 stone.
+By default, Python's print statement prints numbers to 10 decimal places. But
+what if you only want one or two? We can use the round() function, which rounds
+a number to the number of decimal points you choose. round() takes two
+arguments: the number you want to round, and the number of decimal places to
+round it to. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Basic Math 2,language={Python},
+xleftmargin=15pt, label=lst:basicmath2]
+>>> print (round(3.14159265, 2))
+3.14
+\end{lstlisting}
+
+Now, let's change our program to only print the result to two decimal places.
+print ("You weigh", round(mass\_stone, 2), "stone.")
+This also demonstrates the concept of nesting functions. As you can see, you can
+place one function inside another function, and everything will still work
+exactly the way you would expect. If you don't like this, you can always use
+multiple variables, instead:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Basic Math 3,language={Python},
+xleftmargin=15pt, label=lst:basicmath3]
+twoSigFigs = round(mass_stone, 2)
+numToString = str(twoSigFigs)
+print ("You weigh " + numToString + " stone.")
+\end{lstlisting}

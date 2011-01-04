@@ -1,0 +1,48 @@
+\section{Introduction} 
+Python is a high-level, structured, open-source
+programming language that can be used for a wide variety of programming tasks.
+It is good for simple quick-and-dirty scripts, as well as complex and intricate
+applications.  It is an interpreted programming language that is automatically
+compiled into bytecode before execution (the bytecode is then normally saved to
+disk, just as automatically, so that compilation need not happen again until
+and unless the source gets changed). It is also a dynamically typed language
+that includes (but does not require one to use) object oriented features and
+constructs.  The most unusual aspect of Python is that whitespace is
+significant; instead of block delimiters (braces $\rightarrow \{\}$ in the C family of
+languages), indentation is used to indicate where blocks begin and end.  For
+example, the following Python code can be interactively typed at an interpreter
+prompt, to display the beginning values in the Fibonacci series:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Fibonacci,language={Python},
+xleftmargin=15pt, label=lst:fibonacci]
+>>> a,b = 0,1
+>>> while b < 100:
+...   a,b = b,(a+b)
+...   print(a, end=" ")
+...  1 1 2 3 5 8
+13 21 34 55 89 144
+\end{lstlisting}
+Another interesting aspect in Python is reflection and
+introspection. The dir() function returns the list of the names of objects in
+the current scope. However, dir(object) will return the names of the attributes
+of the specified object. The locals() routine returns a dictionary in which the
+names in the local namespace are the keys and their values are the objects to
+which the names refer. Combined with the interactive interpreter, this provides
+a useful environment for exploration and prototyping.  Python provides a
+powerful assortment of built-in types (e.g., lists, dictionaries and strings),
+a number of built-in functions, and a few constructs, mostly statements. For
+example, loop constructs that can iterate over items in a collection instead of
+being limited to a simple range of integer values. Python also comes with a
+powerful standard library, which includes hundreds of modules to provide
+routines for a wide variety of services including regular expressions and
+TCP/IP sessions.  Python is used and supported by a large Python Community that
+exists on the Internet. The mailing lists and news groups like the tutor list
+actively support and help new python programmers. While they discourage doing
+homework for you, they are quite helpful and are populated by the authors of
+many of the Python textbooks currently available on the market. It is named
+after Monty Python's Flying Circus comedy program, and created by Guido Van
+Rossum.
+
+In order to program in Python you need the Python interpreter. If it is not
+already installed or if the version you are using is obsolete, you will need to
+obtain and install Python

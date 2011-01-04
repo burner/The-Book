@@ -1,0 +1,86 @@
+\section{Variables}
+A variable is something with a value that may change. In simplest terms, a
+variable is just a box that you can put stuff in. You can use variables to store
+all kinds of stuff, but for now, we are just going to look at storing numbers in
+variables. Here is a program that uses a variable that holds a number:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Variable 1,language={Python},
+xleftmargin=15pt, label=lst:variable1]
+lucky = 7
+print (lucky)
+\end{lstlisting}
+In this program, we created a variable called lucky, and assigned to it the
+value of the integer number 7. Then, we just asked Python to tell us what was
+stored in the variable lucky, and it did.  In addition to putting things into
+variables, we can also change what is inside a variable. For example:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Variable 2,language={Python},
+xleftmargin=15pt, label=lst:variable2]
+changing = 3
+print (changing)
+ 
+changing = 9
+print (changing)
+ 
+different = 12
+print (different)
+print (changing)
+ 
+changing = 15
+print (changing)
+\end{lstlisting}
+
+In this program, we declared a variable called changing, put (using the
+assignment symbol =) the number 3 in it, and asked Python to tell us what was in
+the changing variable. Then, we put the number 9 into the changing variable, and
+asked Python what was in changing now. Python throws away the 3, and replaces it
+with the 9, and so it tells us that 9 is currently in changing. Next, we created
+a second variable, called different, and put 12 into it. We then ask Python what
+is in different and changing, and it tells us 12 and 9, respectively. As you can
+see, changing one variable does not make any changes in a different variable.
+However, when we change changing once again, from 9 to 15, it once again gets
+rid of the old number and puts in the new one, and it tells us that changing is
+now holding 15.  You can also assign the value of a variable to be the value of
+another variable. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Variable 3,language={Python},
+xleftmargin=15pt, label=lst:variable3]
+red = 5
+blue = 10
+print (red, blue)
+ 
+yellow = red
+print (yellow, red, blue)
+ 
+red = blue
+print (yellow, red, blue)
+\end{lstlisting}
+
+This program is more complicated. Just keep in mind that we always have the name
+of the variable on the left side of the equals sign (the assignment operator),
+and the value of the variable on the right side of the equals sign. First the
+name, then the value.  We start out declaring that red is 5, and blue is 10. As
+you can see, you can use commas in the print statement to tell it to print
+multiple things at the same time, separated by a space. When we ask it to,
+Python confirms that red is equal to 5, and blue is equal to 10.  Now we create
+a third variable, called yellow. To set its value, we tell Python that we want
+yellow to be whatever red is. (Remember: name to the left, value to the right.)
+Python knows that red is 5, so it also sets yellow to be 5. When we ask Python
+to tell us what the variables are, it confirms that yellow is 5, red is 5, and
+blue is still 10.
+Now we're going to take the red variable, and set it to the value of the blue
+variable. Don't get confused - name on the left, value on the right.
+Python looks up to see what the value of the blue variable is, and remembers
+that it's 10. So, Python throws away red's old value (5), and replaces it with
+blue's value. When we ask Python what's going on, it says that yellow is 5, red
+is 10, and blue is 10.  But didn't we say that yellow should be whatever value
+red is? The reason that yellow is still 5 when red is 10, is because we only
+said that yellow should be whatever red is at that instant that we told it to.
+Once we have figured out what red is and set that value to yellow, then yellow
+doesn't care about red any more. yellow has a value now, and that value is going
+to stay the same no matter what happens to red.  That's all you need to know
+about variables right now, but we'll get back to them in a minute. Just keep in
+mind: whenever you're declaring variables or changing their values, you always
+have the name of the variable you're working with to the left of the equals sign
+(the assignment operator), and the value you're setting it to on the right.
