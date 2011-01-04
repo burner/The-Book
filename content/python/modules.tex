@@ -1,50 +1,50 @@
-\section{Modules}
-Modules are libraries that can be called from other scripts. For example, a
-popular module is the time module. You can call it using:
-\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=Basic Import,language={Python},
-xleftmargin=15pt, label=lst:basicimport]
-import time
-\end{lstlisting}
+	\section{Modules}
+	Modules are libraries that can be called from other scripts. For example, a
+	popular module is the time module. You can call it using:
+	\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+	\begin{lstlisting}[caption=Basic Import,language={Python},
+	xleftmargin=15pt, label=lst:basicimport]
+	import time
+	\end{lstlisting}
 
-Then, create a new python file, you can name it anything (except time.py, since
-it'd mess up python's module importing, you'll see why later):
-\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=Name imported Module 1,language={Python},
-xleftmargin=15pt, label=lst:nameimportedmodule1]
-import time
- 
-def main():
-    #define the variable 'current_time' as a tuple of time.localtime()
-    current_time = time.localtime() 
-    print(current_time) # print the tuple
-    # if the year is 2009 (first value in the current_time tuple)
-    if current_time[0] == 2009: 
-        print('The year is 2009') # print the year
- 
-if __name__ == '__main__': # if the function is the main function ...
-    main() # ...call it
-\end{lstlisting}
+	Then, create a new python file, you can name it anything (except time.py, since
+	it'd mess up python's module importing, you'll see why later):
+	\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+	\begin{lstlisting}[caption=Name imported Module 1,language={Python},
+	xleftmargin=15pt, label=lst:nameimportedmodule1]
+	import time
+	 
+	def main():
+		#define the variable 'current_time' as a tuple of time.localtime()
+		current_time = time.localtime() 
+		print(current_time) # print the tuple
+		# if the year is 2009 (first value in the current_time tuple)
+		if current_time[0] == 2009: 
+			print('The year is 2009') # print the year
+	 
+	if __name__ == '__main__': # if the function is the main function ...
+		main() # ...call it
+	\end{lstlisting}
 
-Modules can be called in a various number of ways. For example, we could import
-the time module as t: import time as t \# import the time module and call it 't'
-\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=Name imported Module 2,language={Python},
-xleftmargin=15pt, label=lst:nameimportedmodule2]
-def main():
-    current_time = t.localtime() 
-    print(current_time)
-    if current_time[0] == 2009: 
-        print('The year is 2009')
- 
-if __name__ == '__main__': 
-    main()
-\end{lstlisting}
+	Modules can be called in a various number of ways. For example, we could import
+	the time module as t: import time as t \# import the time module and call it 't'
+	\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+	\begin{lstlisting}[caption=Name imported Module 2,language={Python},
+	xleftmargin=15pt, label=lst:nameimportedmodule2]
+	def main():
+		current_time = t.localtime() 
+		print(current_time)
+		if current_time[0] == 2009: 
+			print('The year is 2009')
+	 
+	if __name__ == '__main__': 
+		main()
+	\end{lstlisting}
 
-It is not necessary to import the whole module, if you only need a certain
-function or class. To do this, you can do a from-import. Note that a from-import
-would import the name directly into the global namespace, so when invoking the
-imported function, it is unnecessary (and wrong) to call the module again:
+	It is not necessary to import the whole module, if you only need a certain
+	function or class. To do this, you can do a from-import. Note that a from-import
+	would import the name directly into the global namespace, so when invoking the
+	imported function, it is unnecessary (and wrong) to call the module again:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Select Import,language={Python},
 xleftmargin=15pt, label=lst:selectimport]
@@ -75,3 +75,63 @@ def main():
 if __name__ == '__main__': 
     main()
 \end{lstlisting}
+
+\subsection{Creating a Module}
+\subsubsection{From a File}
+The easiest way to create a module by having a file called mymod.py either in a
+directory recognized by the PYTHONPATH variable or (even easier) in the same
+directory where you are working. If you have the following file mymod.py
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Module File,language={Python},
+xleftmargin=15pt, label=lst:modulefile]
+class Object1:
+        def __init__(self):
+                self.name = 'object 1'
+\end{lstlisting}
+
+you can already import this "module" and create instances of the object Object1.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Use of selfmade Module,language={Python},
+xleftmargin=15pt, label=lst:useofselfmademodule]
+import mymod
+myobject = mymod.Object1()
+from mymod import *
+myobject = Object1()
+\end{lstlisting}
+
+\subsubsection{From a Directory}
+It is not feasible for larger projects to keep all classes in a single file. It
+is often easier to store all files in directories and load all files with one
+command. Each directory needs to have a \_\_init\_\_.py file which contains python
+commands that are executed upon loading the directory.  Suppose we have two more
+objects called Object2 and Object3 and we want to load all three objects with
+one command. We then create a directory called mymod and we store three files
+called Object1.py, Object2.py and Object3.py in it. These files would then
+contain one object per file but this not required (although it adds clarity). We
+would then write the following \_\_init\_\_.py file:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Module from Dir,language={Python},
+xleftmargin=15pt, label=lst:modulefromdir]
+from Object1 import *
+from Object2 import *
+from Object3 import *
+ 
+__all__ = ["Object1", "Object2", "Object3"]
+\end{lstlisting}
+
+The first three commands tell python what to do when somebody loads the module.
+The last statement defining \_\_all\_\_ tells python what to do when somebody
+executes from mymod import *. Usually we want to use parts of a module in other
+parts of a module, e.g. we want to use Object1 in Object2. We can do this easily
+with an from . import * command as the following file Object2.py shows:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Import current Dir,language={Python},
+xleftmargin=15pt, label=lst:importcurrentdir]
+from . import *
+ 
+class Object2:
+        def __init__(self):
+                self.name = 'object 2'
+                self.otherObject = Object1()
+\end{lstlisting}
+We can now start python and import mymod as we have in the previous section.

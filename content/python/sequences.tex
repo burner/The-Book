@@ -1,4 +1,5 @@
-\section{Strings}
+\section{Sequences}
+\subsection{Strings}
 We already covered strings, but that was before you knew what a sequence is. In
 other languages, the elements in arrays and sometimes the characters in strings
 may be accessed with the square brackets, or subscript operator. This works in
@@ -65,7 +66,7 @@ xleftmargin=15pt, label=lst:sliceoperation1]
 \end{lstlisting}
 As demonstrated above, if either number is omitted it is assumed to be the beginning or end of the sequence.
 
-\section{Lists}
+\subsection{Lists}
 A list is just what it sounds like: a list of values, organized in order. A list
 is created using square brackets. For example, an empty list would be
 initialized like this:
@@ -198,7 +199,7 @@ xleftmargin=15pt, label=lst:deleteoperationonlist]
 As you can see, the list re-orders itself, so there are no gaps in the
 numbering.  For further explanation on list, see Data Structure/Lists
 
-\section{Tuples}
+\subsection{Tuples}
 Tuples are similar to lists, except they are immutable. Once you have set a
 tuple, there is no way to change it whatsoever: you cannot add, change, or
 remove elements of a tuple. Otherwise, tuples work identically to lists.  To
@@ -235,7 +236,7 @@ but:
 
 For further explanation on tuple, see Data Structure/Tuples
 
-\section{Dictionaries}
+\subsection{Dictionaries}
 Dictionaries are also like lists, and they are mutable -- you can add, change,
 and remove elements from a dictionary. However, the elements in a dictionary are
 not bound to numbers, the way a list is. Every element in a dictionary has two
@@ -268,7 +269,7 @@ xleftmargin=15pt, label=lst:dictionaryinsert]
 For further explanation on dictionary, see Data Structure/Dictionaries
 \end{lstlisting}
 
-\section{Sets}
+\subsection{Sets}
 Sets are just like list, except that it is unordered and it does not allow
 duplicate values. Elements of a set are neither bound to a number (like list and
 tuple) nor to a key (like dictionary). The reason for using set over other data
@@ -311,7 +312,7 @@ A set can only contain hashable, immutable data types. Integers, strings, and
 tuples are hashable; lists, dictionaries, and other sets (except frozensets, see
 below) are not.
 
-\section{Frozenset}
+\subsection{Frozenset}
 The relationship between frozenset and set is like the relationship between
 tuple and list. Frozenset is an immutable version of set. An example:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
@@ -322,7 +323,7 @@ xleftmargin=15pt, label=lst:frozensetdefinition]
 frozenset({'universe', 'life', 'everything'})
 \end{lstlisting}
 
-\section{Other data types}
+\subsection{Other data types}
 Python also has other types of arrays, although these are less frequently used
 and they need to be imported from the standard library before used. We will only
 brush on them here.  array

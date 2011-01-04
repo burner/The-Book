@@ -1,0 +1,219 @@
+\section{Regular Expression}
+Python includes a module for working with regular expressions on strings. For
+more information about writing regular expressions and syntax not specific to
+Python, see the regular expressions wikibook. Python's regular expression syntax
+is similar to Perl's To start using regular expressions in your Python scripts,
+just import the "re" module:
+
+\subsection{Pattern objects}
+If you're going to be using the same regexp more than once in a program, or if
+you just want to keep the regexps separated somehow, you should create a pattern
+object, and refer to it later when searching/replacing.  To create a pattern
+object, use the compile function.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Pattern objects,language={Python},
+xleftmargin=15pt, label=lst:patternobjects]
+import re
+foo = re.compile(r'foo(.{,5})bar', re.I+re.S)
+\end{lstlisting}
+
+The first argument is the pattern, which matches the string "foo", followed by
+up to 5 of any character, then the string "bar", storing the middle characters
+to a group, which will be discussed later. The second, optional, argument is the
+flag or flags to modify the regexp's behavior. The flags themselves are simply
+variables referring to an integer used by the regular expression engine. In
+other languages, these would be constants, but Python does not have constants.
+Some of the regular expression functions do not support adding flags as a
+parameter when defining the pattern directly in the function, if you need any of
+the flags, it is best to use the compile function to create a pattern object.
+The r preceding the expression string indicates that it should be treated as a
+raw string. This should normally be used when writing regexps, so that
+backslashes are interpreted literally rather than having to be escaped.
+The different flags are:\\
+\begin{tabular}{|c|c|p{3.6cm}|}
+\hline
+Abbr& Full name&	Description\\
+\hline
+re.I	&re.IGNORECASE&	Makes the regexp case-insensitive\\
+\hline
+re.L	&re.LOCALE&	Makes the behavior of some special sequences (\textbackslash
+w, \textbackslash W, \textbackslash b,
+\textbackslash B, \textbackslash s, \textbackslash S) dependant on the current locale\\
+\hline
+re.M	&re.MULTILINE	&Makes the \^ and \$ characters match at the beginning and
+end of each line, rather than just the beginning and end of the string\\
+\hline
+re.S	&re.DOTALL&	Makes the . character match every character including
+newlines.\\
+\hline
+re.U	&re.UNICODE&	Makes \textbackslash w, \textbackslash W, \textbackslash
+b, \textbackslash B, \textbackslash d, \textbackslash D, \textbackslash s,
+\textbackslash S dependent on
+Unicode character properties\\
+\hline
+re.X	&re.VERBOSE&	Ignores whitespace except when in a character class or
+preceded by an non-escaped backslash, and ignores \# (except when in a character
+class or preceded by an non-escaped backslash) and everything after it to the
+end of a line, so it can be used as a comment. This allows for cleaner-looking
+regexps.\\
+\hline
+\end{tabular}
+
+\subsection{Matching and searching}
+One of the most common uses for regular expressions is extracting a part of a
+string or testing for the existence of a pattern in a string. Python offers
+several functions to do this.  The match and search functions do mostly the same
+thing, except that the match function will only return a result if the pattern
+matches at the beginning of the string being searched, while search will find a
+match anywhere in the string.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Matching and searching,language={Python},
+xleftmargin=15pt, label=lst:matchingandsearching]
+>>> import re
+>>> foo = re.compile(r'foo(.{,5})bar', re.I+re.S)
+>>> st1 = 'Foo, Bar, Baz'
+>>> st2 = '2. foo is bar'
+>>> search1 = foo.search(st1)
+>>> search2 = foo.search(st2)
+>>> match1 = foo.match(st1)
+>>> match2 = foo.match(st2)
+\end{lstlisting}
+
+In this example, match2 will be None, because the string st2 does not start with
+the given pattern. The other 3 results will be Match objects (see below).  You
+can also match and search without compiling a regexp:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Search without compile 1,language={Python},
+xleftmargin=15pt, label=lst:searchwithoutcompile1]
+>>> search3 = re.search('oo.*ba', st1, re.I)
+\end{lstlisting}
+
+Here we use the search function of the re module, rather than of the pattern
+object. For most cases, its best to compile the expression first. Not all of the
+re module functions support the flags argument and if the expression is used
+more than once, compiling first is more efficient and leads to cleaner looking
+code.  The compiled pattern object functions also have parameters for starting
+and ending the search, to search in a substring of the given string. In the
+first example in this section, match2 returns no result because the pattern does
+not start at the beginning of the string, but if we do:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Search without compile 2,language={Python},
+xleftmargin=15pt, label=lst:seachwithoutcompile2]
+>>> match3 = foo.match(st2, 3)
+\end{lstlisting}
+
+it works, because we tell it to start searching at character number 3 in the
+string.  What if we want to search for multiple instances of the pattern? Then
+we have two options. We can use the start and end position parameters of the
+search and match function in a loop, getting the position to start at from the
+previous match object (see below) or we can use the findall and finditer
+functions. The findall function returns a list of matching strings, useful for
+simple searching. For anything slightly complex, the finditer function should be
+used. This returns an iterator object, that when used in a loop, yields Match
+objects. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Search return Iterator,language={Python},
+xleftmargin=15pt, label=lst:searchreturniterator]
+>>> str3 = 'foo, Bar Foo. BAR FoO: bar'
+>>> foo.findall(str3)
+[', ', '. ', ': ']
+>>> for match in foo.finditer(str3):
+...     match.group(1)
+...
+', '
+'. '
+': '
+\end{lstlisting}
+
+If you're going to be iterating over the results of the search, using the
+finditer function is almost always a better choice.
+
+\subsection{Match objects}
+Match objects are returned by the search and match functions, and include
+information about the pattern match.  The group function returns a string
+corresponding to a capture group (part of a regexp wrapped in ()) of the
+expression, or if no group number is given, the entire match. Using the search1
+variable we defined above:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Match function,language={Python},
+xleftmargin=15pt, label=lst:matchfunction]
+>>> search1.group()
+'Foo, Bar'
+>>> search1.group(1)
+', '
+\end{lstlisting}
+	
+Capture groups can also be given string names using a special syntax and
+referred to by matchobj.group('name'). For simple expressions this is
+unnecessary, but for more complex expressions it can be very useful.  You can
+also get the position of a match or a group in a string, using the start and end
+functions:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Capture groups,language={Python},
+xleftmargin=15pt, label=lst:capturegroups]
+>>> search1.start()
+0
+>>> search1.end()
+8
+>>> search1.start(1)
+3
+>>> search1.end(1)
+5
+\end{lstlisting}
+
+This returns the start and end locations of the entire match, and the start and
+end of the first (and in this case only) capture group, respectively.
+
+\subsection{Replacing}
+Another use for regular expressions is replacing text in a string. To do this in
+Python, use the sub function.  sub takes up to 3 arguments: The text to replace
+with, the text to replace in, and, optionally, the maximum number of
+substitutions to make. Unlike the matching and searching functions, sub returns
+a string, consisting of the given text with the substitution(s) made.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Replacing,language={Python},
+xleftmargin=15pt, label=lst:replacing]
+>>> import re
+>>> mystring = 'This string has a q in it'
+>>> pattern = re.compile(r'(a[n]? )(\w) ')
+>>> newstring = pattern.sub(r"\1'\2' ", mystring)
+>>> newstring
+"This string has a 'q' in it"
+\end{lstlisting}
+
+This takes any single alphanumeric character (\\w in regular expression syntax)
+preceded by "a" or "an" and wraps in in single quotes. The \\1 and \\2 in the
+replacement string are backreferences to the 2 capture groups in the expression;
+these would be group(1) and group(2) on a Match object from a search.  The subn
+function is similar to sub, except it returns a tuple, consisting of the result
+string and the number of replacements made. Using the string and expression from
+before:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Replace alphanumeric,language={Python},
+xleftmargin=15pt, label=lst:replacealphanumeric]
+>>> subresult = pattern.subn(r"\1'\2' ", mystring)
+>>> subresult
+("This string has a 'q' in it", 1)
+\end{lstlisting}
+
+\subsection{Other functions}
+The re module has a few other functions in addition to those discussed above.
+The split function splits a string based on a given regular expression:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Split,language={Python},
+xleftmargin=15pt, label=lst:split]
+>>> import re
+>>> mystring = '1. First part 2. Second part 3. Third part'
+>>> re.split(r'\d\.', mystring)
+['', ' First part ', ' Second part ', ' Third part']
+\end{lstlisting}
+
+The escape function escapes all non-alphanumeric characters in a string. This is
+useful if you need to take an unknown string that may contain regexp
+metacharacters like ( and . and create a regular expression from it.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Escape,language={Python},
+xleftmargin=15pt, label=lst:escape]
+>>> re.escape(r'This text (and this) must be escaped with a "\" to use in a regexp.')
+'This\\ text\\ \\(and\\ this\\)\\ must\\ be\\ escaped\\ with\\ a\\ \\"\\\\\\"\\ to\\ use\\ in\\ a\\ regexp\\.'
+\end{lstlisting}

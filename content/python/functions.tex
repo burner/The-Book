@@ -1,0 +1,225 @@
+\section{Function calls}
+A callable object is an object that can accept some arguments (also called
+parameters) and possibly return an object (often a tuple containing multiple
+objects).  A function is the simplest callable object in Python, but there are
+others, such as classes or certain class instances.
+
+\subsection{Defining functions}
+A function is defined in Python by the following format:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Basic Function Usage,language={Python},
+xleftmargin=15pt, label=lst:basicfunctionusage]
+def functionname(arg1, arg2, ...):
+    statement1
+    statement2
+    ...
+>>> def functionname(arg1,arg2):
+...     return arg1+arg2
+...
+>>> t = functionname(24,24) # Result: 48
+\end{lstlisting}
+
+If a function takes no arguments, it must still include the parentheses, but
+without anything in them:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Function Template,language={Python},
+xleftmargin=15pt, label=lst:functiontemplate]
+def functionname():
+    statement1
+    statement2
+    ...
+\end{lstlisting}
+
+The arguments in the function definition bind the arguments passed at function
+invocation (i.e. when the function is called), which are called actual
+parameters, to the names given when the function is defined, which are called
+formal parameters. The interior of the function has no knowledge of the names
+given to the actual parameters; the names of the actual parameters may not even
+be accessible (they could be inside another function).  A function can 'return'
+a value, like so
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Return values,language={Python},
+xleftmargin=15pt, label=lst:returnvalues]
+def square(x):
+    return x*x
+\end{lstlisting}
+
+A function can define variables within the function body, which are considered
+'local' to the function. The locals together with the arguments comprise all the
+variables within the scope of the function. Any names within the function are
+unbound when the function returns or reaches the end of the function body.
+
+\subsection{Declaring Arguments}
+\subsubsection{Default Argument Values}
+If any of the formal parameters in the function definition are declared with the
+format "arg = value," then you will have the option of not specifying a value
+for those arguments when calling the function. If you do not specify a value,
+then that parameter will have the default value given when the function
+executes.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Default Arguments,language={Python},
+xleftmargin=15pt, label=lst:]
+>>> def display_message(message, truncate_after = 4):
+...     print(message[:truncate_after])
+...
+>>> display_message("message")
+mess
+>>> display_message("message", 6)
+messag
+\end{lstlisting}
+
+\subsubsection{Variable-Length Argument Lists}
+Python allows you to declare two special arguments which allow you to create
+arbitrary-length argument lists. This means that each time you call the
+function, you can specify any number of arguments above a certain number.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Var Args Function,language={Python},
+xleftmargin=15pt, label=lst:varargsfunction]
+def function(first,second,*remaining):
+    statement1
+    statement2
+    ...
+\end{lstlisting}
+
+When calling the above function, you must provide value for each of the first
+two arguments. However, since the third parameter is marked with an asterisk,
+any actual parameters after the first two will be packed into a tuple and bound
+to "remaining."
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Var Args Usage,language={Python},
+xleftmargin=15pt, label=lst:varargsusage]
+>>> def print_tail(first,*tail):
+...     print tail
+...
+>>> print_tail(1, 5, 2, "omega")
+(5, 2, 'omega')
+\end{lstlisting}
+
+If we declare a formal parameter prefixed with two asterisks, then it will be
+bound to a dictionary containing any keyword arguments in the actual parameters
+which do not correspond to any formal parameters. For example, consider the
+function:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Formal Parameter,language={Python},
+xleftmargin=15pt, label=lst:formalparameter]
+def make_dictionary(max_length = 10, **entries):
+    return dict([(key, entries[key]) for i, key in enumerate(entries.keys()) if i < max_length])
+\end{lstlisting}
+
+If we call this function with any keyword arguments other than max\_length, they
+will be placed in the dictionary "entries." If we include the keyword argument
+of max\_length, it will be bound to the formal parameter max\_length, as usual.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Formal Parameter usage,language={Python},
+xleftmargin=15pt, label=lst:formalparameterusage]
+>>> make_dictionary(max_length = 2, key1 = 5, key2 = 7, key3 = 9)
+{'key3': 9, 'key2': 7}
+\end{lstlisting}
+
+\subsubsection{Calling functions}
+A function can be called by appending the arguments in parentheses to the
+function name, or an empty matched set of parentheses if the function takes no
+arguments.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Calling Function,language={Python},
+xleftmargin=15pt, label=lst:callingfunction]
+foo()
+square(3)
+bar(5, x)
+A function's return value can be used by assigning it to a variable, like so:
+x = foo()
+y = bar(5,x)
+\end{lstlisting}
+
+As shown above, when calling a function you can specify the parameters by name
+and you can do so in any order
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Var Args Specific,language={Python},
+xleftmargin=15pt, label=lst:varargsspecific]
+def display_message(message, start=0, end=4):
+   print(message[start:end])
+ 
+display_message("message", end=3)
+\end{lstlisting}
+
+This above is valid and start will be the default value of 0. A restriction
+placed on this is after the first named argument then all arguments after it
+must also be named. The following is not valid
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Invalid use,language={Python},
+xleftmargin=15pt, label=lst:invaliduse]
+display_message(end=5, start=1, "my message")
+\end{lstlisting}
+because the third argument ("my message") is an unnamed argument.
+
+\subsubsection{Closure}
+Closure, also known as nested function definition, is a function defined inside
+another function. Perhaps best described with an example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Closures,language={Python},
+xleftmargin=15pt, label=lst:]
+>>> def outer(outer_argument):
+...     def inner(inner_argument):
+...         return outer_argument + inner_argument
+...     return inner
+...
+>>> f = outer(5)
+>>> f(3)
+8
+>>> f(4)
+9
+\end{lstlisting}
+
+Closure is possible in python because function is a first-class object, that
+means a function is merely an object of type function. Being an object means it
+is possible to pass function object (an uncalled function) around as argument or
+as return value or to assign another name to the function object. A unique
+feature that makes closure useful is that the enclosed function may use the
+names defined in the parent function's scope.
+
+\subsubsection{lambda}
+lambda is an anonymous (unnamed) function, it is used primarily to write very
+short functions that is a hassle to define in the normal way. A function like
+this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=lambda usecase,language={Python},
+xleftmargin=15pt, label=lst:lambdausecase]
+>>> def add(a, b):
+...    return a + b
+...
+>>> add(4, 3)
+7
+\end{lstlisting}
+
+may also be defined using lambda
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=lamdba example,language={Python},
+xleftmargin=15pt, label=lst:lamdbaexample]
+>>> print( (lambda a, b: a + b)(4, 3) )
+7
+\end{lstlisting}
+
+Lambda is often used as an argument to other functions that expects a function
+object, such as sorted()'s 'key' argument.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Sort with lambda,language={Python},
+xleftmargin=15pt, label=lst:sortwithlambda]
+>>> sorted([[3, 4], [3, 5], [1, 2], [7, 3]], key=lambda x: x[1])
+[[1, 2], [7, 3], [3, 4], [3, 5]]
+\end{lstlisting}
+
+The lambda form is often useful to be used as closure, such as illustrated in
+the following example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=lambda Closure,language={Python},
+xleftmargin=15pt, label=lst:lambdaclosure]
+>>> def attribution(name):
+...    return lambda x: x + ' -- ' + name
+...
+>>> pp = attribution('John')
+>>> pp('Dinner is in the fridge')
+\end{lstlisting}
+
+'Dinner is in the fridge -- John' note that the lambda function can use the
+values of variables from the scope in which it was created (like pre and post).
+This is the essence of closure.

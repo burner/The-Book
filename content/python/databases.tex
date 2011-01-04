@@ -1,0 +1,66 @@
+\section{Databases}
+Python has some support for working with databases. Modules included with Python
+include modules for SQLite and Berkeley DB. Modules for MySQL and PostgreSQL and
+others are available as third-party modules. The latter have to be downloaded
+and installed before use. The package MySQLdb can be installed, for example,
+using the debain package "python-mysqldb".
+
+\subsection{MySQL}
+An Example with MySQL would look like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=MySQL example,language={Python},
+xleftmargin=15pt, label=lst:mysqlexample]
+import MySQLdb
+db = MySQLdb.connect("host machine", "dbuser", "password", "dbname")
+cursor = db.cursor()
+query = """SELECT * FROM sampletable"""
+lines = cursor.execute(query)
+data = cursor.fetchall()
+db.close()
+\end{lstlisting}
+
+On the first line, the Module MySQLdb is imported. Then a connection to the
+database is set up and on line 4, we save the actual SQL statement to be
+executed in the variable query. On line 5 we execute the query and on line 6 we
+fetch all the data. After the execution of this piece of code, lines contains
+the number of lines fetched (e.g. the number of rows in the table sampletable).
+The variable data contains all the actual data, e.g. the content of sampletable.
+In the end, the connection to the database would be closed again. If the number
+of lines are large, it is better to use row = cursor.fetchone() and process the
+rows individually:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=retrive row,language={Python},
+xleftmargin=15pt, label=lst:retriverow]
+  #first 5 lines are the same as above
+  while True:
+    row = cursor.fetchone()
+    if row == None: break
+    #do something with this row of data
+  db.close()
+\end{lstlisting}
+
+Obviously, some kind of data processing has to be used on row, otherwise the
+data will not be stored. The result of the fetchone() command is a Tuple.  In
+order to make the initialization of the connection easier, a configuration file
+can be used:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Connection file,language={Python},
+xleftmargin=15pt, label=lst:connectionfile]
+import MySQLdb
+db = MySQLdb.connect(read_default_file="~/.my.cnf")
+...
+Here, the file .my.cnf in the home directory contains the necessary configuration information for MySQL.
+\end{lstlisting}
+
+\subsection{Postgres}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Postgres Example,language={Python},
+xleftmargin=15pt, label=lst:postgresexample]
+import psycopg2
+conn = psycopg2.connect("dbname=test")
+cursor = conn.cursor()
+cursor.execute("select * from test");
+for i in cursor.next():
+    print i
+conn.close()
+\end{lstlisting}

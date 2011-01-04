@@ -1,0 +1,133 @@
+\section{Decorators}
+Decorator in Python is a syntax sugar for high-level function.  Minimal Example
+of property decorator:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Minimal Example,language={Python},
+xleftmargin=15pt, label=lst:minimalexample]
+>>> class Foo(object):
+...     @property
+...     def bar(self):
+...         return 'baz'
+...
+>>> F = Foo()
+>>> print(F.bar)
+baz
+\end{lstlisting}
+
+The above example is really just a syntax sugar for codes like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Different Style,language={Python},
+xleftmargin=15pt, label=lst:differentstyle]
+>>> class Foo(object):
+...     def bar(self):
+...         return 'baz'
+...     bar = property(bar)
+...
+>>> F = Foo()
+>>> print(F.bar)
+baz
+\end{lstlisting}
+
+Minimal Example of generic decorator:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Generic Decorator,language={Python},
+xleftmargin=15pt, label=lst:genericdecorator]
+>>> def decorator(f):
+...     def called(*args, **kargs):
+...         print('A function is called somewhere')
+...         return f(*args, **kargs)
+...     return called
+...
+>>> class Foo(object):
+...     @decorator
+...     def bar(self):
+...         return 'baz'
+...
+>>> F = Foo()
+>>> print(F.bar())
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+A function is called somewhere
+baz
+\end{verbatim}
+\normalsize
+A good use for the decorators is to allow you to refactor your code so that
+common features can be moved into decorators. Consider for example, that you
+would like to trace all calls to some functions and print out the values of all
+the parameters of the functions for each invocation. Now you can implement this
+in a decorator as follows
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Refactoring,language={Python},
+xleftmargin=15pt, label=lst:refactoring]
+#define the Trace class that will be 
+#invoked using decorators
+class Trace(object):
+    def __init__(self, f):
+        self.f =f
+ 
+    def __call__(self, *args, **kwds):
+        print("entering function " + self.f.__name__)
+        i=0
+        for arg in args:
+            print "arg {0}: {1}".format(i, arg)
+            i =i+1
+ 
+        return self.f(*args, **kwds)
+\end{lstlisting}
+
+Then you can use the decorator on any function that you defined by
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Trace,language={Python},
+xleftmargin=15pt, label=lst:Trace]
+@Trace
+def sum(a, b):
+    print("inside sum")
+    return a + b
+\end{lstlisting}
+
+On running this code you would see output like
+\scriptsize
+\begin{verbatim}
+>>> sum(3,2)
+entering function sum
+arg 0: 3
+arg 1: 2
+inside sum
+\end{verbatim}
+\normalsize
+
+Alternately instead of creating the decorator as a class you could have use a function as well.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Different usage,language={Python},
+xleftmargin=15pt, label=lst:differentusage]
+def Trace(f):
+    def my_f(*args, **kwds):
+        print("entering " +  f.__name__)
+        result= f(*args, **kwds)
+        print("exiting " +  f.__name__)
+        return result
+    my_f.__name = f.__name__
+    my_f.__doc__ = f.__doc__
+    return my_f
+ 
+#An example of the trace decorator
+@Trace
+def sum(a, b):
+    print("inside sum")
+    return a + b
+\end{lstlisting}
+
+if you run this you should see
+\scriptsize
+\begin{verbatim}
+>>> sum(3,2)
+entering sum
+inside sum
+exiting sum
+10: 5
+\end{verbatim}
+\normalsize
+remember it is good practice to return the function or a sensible decorated
+replacement for the function. So that decorators can be chained.

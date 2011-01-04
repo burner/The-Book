@@ -1,0 +1,47 @@
+\section{Scope}
+Variables in Python are automatically declared by assignment. Variables are
+always references to objects, and are never typed. Variables exist only in the
+current scope or global scope. When they go out of scope, the variables are
+destroyed, but the objects to which they refer are not (unless the number of
+references to the object drops to zero).  Scope is delineated by function and
+class blocks. Both functions and their scopes can be nested. So therefore
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Scope Example,language={Python},
+xleftmargin=15pt, label=lst:scopeexample]
+def foo():
+    def bar():
+        x = 5 # x is now in scope
+        return x + y # y is defined in the enclosing scope later
+    y = 10
+    return bar() # now that y is defined, bar's scope includes y
+\end{lstlisting}
+
+Now when this code is tested,
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Scope Error,language={Python},
+xleftmargin=15pt, label=lst:scopeerror]
+>>> foo()
+15
+>>> bar()
+Traceback (most recent call last):
+  File "<pyshell#26>", line 1, in -toplevel-
+    bar()
+NameError: name 'bar' is not defined
+\end{lstlisting}
+
+The name 'bar' is not found because a higher scope does not have access to the
+names lower in the hierarchy.  It is a common pitfall to fail to lookup an
+attribute (such as a method) of an object (such as a container) referenced by a
+variable before the variable is assigned the object. In its most common form:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Another Scope Error,language={Python},
+xleftmargin=15pt, label=lst:anotherscopeerror]
+>>> for x in range(10):
+         y.append(x) # append is an attribute of lists
+ 
+Traceback (most recent call last):
+  File "<pyshell#46>", line 2, in -toplevel-
+    y.append(x)
+NameError: name 'y' is not defined
+\end{lstlisting}
+Here, to correct this problem, one must add y = [] before the for loop.

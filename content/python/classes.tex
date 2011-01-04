@@ -1,0 +1,387 @@
+\section{Classes}
+\subsection{Defining a Class}
+To define a class, use the following format:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Class Definition,language={Python},
+xleftmargin=15pt, label=lst:classdefinition]
+class ClassName:
+    ...
+    ...
+\end{lstlisting}
+
+The capitalization in this class definition is the convention, but is not
+required by the language.
+
+\subsection{Instance Construction}
+The class is a callable object that constructs an instance of the class when
+called. To construct an instance of a class, "call" the class object:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Instancing a Class,language={Python},
+xleftmargin=15pt, label=lst:instancingaclass]
+f = Foo()
+\end{lstlisting}
+
+This constructs an instance of class Foo and creates a reference to it in f.
+
+\subsection{Class Members}
+In order to access the member of an instance of a class, use the syntax <class
+instance>.<member>. It is also possible to access the members of the class
+definition with <class name>.<member>.
+
+\subsection{Methods}
+A method is a function within a class. The first argument (methods must always
+take at least one argument) is always the instance of the class on which the
+function is invoked. For example
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Defining member Functions,language={Python},
+xleftmargin=15pt, label=lst:definigmemberfunctions]
+>>> class Foo:
+...     def setx(self, x):
+...         self.x = x
+...     def bar(self):
+...         print self.x
+\end{lstlisting}
+
+If this code were executed, nothing would happen, at least until an instance of
+Foo were constructed, and then bar were called on that instance.
+
+\subsection{Invoking Member Methods}
+Calling a method is much like calling a function, but instead of passing the
+instance as the first parameter like the list of formal parameters suggests, use
+the function as an attribute of the instance.
+>>> f.setx(5)
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Calling Member Functions,language={Python},
+xleftmargin=15pt, label=lst:callingmemberfunctions]
+>>> f.bar()
+\end{lstlisting}
+
+This will output
+\scriptsize
+\begin{verbatim}
+5
+\end{verbatim}
+\normalsize
+
+It is possible to call the method on an arbitrary object, by using it as an
+attribute of the defining class instead of an instance of that class, like so:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Call on arbitrary object,language={Python},
+xleftmargin=15pt, label=lst:callonarbitraryobject]
+>>> Foo.setx(f,5)
+>>> Foo.bar(f)
+\end{lstlisting}
+
+This will have the same output.
+
+\subsection{Dynamic Class Structure}
+As shown by the method setx above, the members of a Python class can change
+during runtime, not just their values, unlike classes in languages like C or
+Java. We can even delete f.x after running the code above.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Delete class Member,language={Python},
+xleftmargin=15pt, label=lst:deleteclassmember]
+>>> del f.x
+>>> f.bar()
+
+Traceback (most recent call last):
+  File "<stdin>", line 1, in ?
+  File "<stdin>", line 5, in bar
+AttributeError: Foo instance has no attribute 'x'
+\end{lstlisting}
+
+Another effect of this is that we can change the definition of the Foo class
+during program execution. In the code below, we create a member of the Foo class
+definition named y. If we then create a new instance of Foo, it will now have
+this new member.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Add member to Class,language={Python},
+xleftmargin=15pt, label=lst:addmembertoclass]
+>>> Foo.y = 10
+>>> g = Foo()
+>>> g.y
+10
+\end{lstlisting}
+
+\subsection{Viewing Class Dictionaries}
+At the heart of all this is a dictionary that can be accessed by
+"vars(ClassName)"
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Dictionary as Heart of all Things,language={Python},
+xleftmargin=15pt, label=lst:dictionaryasheartofallthings]
+>>> vars(g)
+{}
+\end{lstlisting}
+
+At first, this output makes no sense. We just saw that g had the member y, so
+why isn't it in the member dictionary? If you remember, though, we put y in the
+class definition, Foo, not g.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Variable of a Class 1,language={Python},
+xleftmargin=15pt, label=lst:variableofaclass1]
+>>> vars(Foo)
+{'y': 10, 'bar': <function bar at 0x4d6a3c>, '__module__': '__main__',
+ 'setx': <function setx at 0x4d6a04>, '__doc__': None}
+\end{lstlisting}
+
+And there we have all the members of the Foo class definition. When Python
+checks for g.member, it first checks g's vars dictionary for "member," then Foo.
+If we create a new member of g, it will be added to g's dictionary, but not
+Foo's.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Variable of a Class 2,language={Python},
+xleftmargin=15pt, label=lst:variableofaclass2]
+>>> g.setx(5)
+>>> vars(g)
+{'x': 5}
+\end{lstlisting}
+
+Note that if we now assign a value to g.y, we are not assigning that value to
+Foo.y. Foo.y will still be 10, but g.y will now override Foo.y
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Variable of a Class 3,language={Python},
+xleftmargin=15pt, label=lst:variableofaclass3]
+>>> g.y = 9
+>>> vars(g)
+{'y': 9, 'x': 5}
+>>> vars(Foo)
+{'y': 10, 'bar': <function bar at 0x4d6a3c>, '__module__': '__main__',
+ 'setx': <function setx at 0x4d6a04>, '__doc__': None}
+Sure enough, if we check the values:
+>>> g.y
+9
+>>> Foo.y
+10
+\end{lstlisting}
+
+Note that f.y will also be 10, as Python won't find 'y' in vars(f), so it will
+get the value of 'y' from vars(Foo).  Some may have also noticed that the
+methods in Foo appear in the class dictionary along with the x and y. If you
+remember from the section on lambda forms, we can treat functions just like
+variables. This means that we can assign methods to a class during runtime in
+the same way we assigned variables. If you do this, though, remember that if we
+call a method of a class instance, the first parameter passed to the method will
+always be the class instance itself.
+
+\subsection{Changing Class Dictionaries}
+We can also access the members dictionary of a class using the \_\_dict\_\_
+member of the class.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Changing Class Dicts,language={Python},
+xleftmargin=15pt, label=lst:changingclassdicts]
+>>> g.__dict__
+{'y': 9, 'x': 5}
+\end{lstlisting}
+
+If we add, remove, or change key-value pairs from g.\_\_dict\_\_, this has the same
+effect as if we had made those changes to the members of g.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Remove class Member,language={Python},
+xleftmargin=15pt, label=lst:removeclassmember]
+>>> g.__dict__['z'] = -4
+>>> g.z
+-4
+\end{lstlisting}
+
+\subsection{New Style Classes}
+New style classes were introduced in python 2.2. A new-style class is a class
+that has a built-in as its base, most commonly object. At a low level, a major
+difference between old and new classes is their type. Old class instances were
+all of type instance. New style class instances will return the same thing as
+x.\_\_class\_\_ for their type. This puts user defined classes on a level playing
+field with built-ins. Old/Classic classes are slated to disappear in Python
+3000. With this in mind all development should use new style classes. New Style
+classes also add constructs like properties and static methods familiar to Java
+programmers.
+Old/Classic Class
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=New Style Classes,language={Python},
+xleftmargin=15pt, label=lst:newstyleclasses]
+>>> class ClassicFoo:
+...     def __init__(self):
+...         pass
+New Style Class
+>>> class NewStyleFoo(object):
+...     def __init__(self):
+...         pass
+\end{lstlisting}
+
+\subsection{Properties}
+Properties are attributes with getter and setter methods.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Property Example,language={Python},
+xleftmargin=15pt, label=lst:propertyexample]
+>>> class SpamWithProperties(object):
+...     def __init__(self):
+...         self.__egg = "MyEgg"
+...     def getEgg(self):
+...         return self.__egg
+...     def setEgg(self,egg):
+...         self.__egg = egg
+...     egg = property(getEgg,setEgg)
+ 
+>>> sp = SpamWithProperties()
+>>> sp.egg
+'MyEgg'
+>>> sp.egg = "Eggs With Spam"
+>>> sp.egg
+'Eggs With Spam'
+>>>
+\end{lstlisting}
+
+\subsection{Static Methods}
+Static methods in Python are just like their counterparts in C++ or Java. Static
+methods have no "self" argument and don't require you to instantiate the class
+before using them. They can be defined using staticmethod()
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Static Methode,language={Python},
+xleftmargin=15pt, label=lst:staticmethode]
+>>> class StaticSpam(object):
+...     def StaticNoSpam():
+...         print "You can't have have the spam, spam, eggs and spam without any spam... that's disgusting"
+...     NoSpam = staticmethod(StaticNoSpam)
+ 
+>>> StaticSpam.NoSpam()
+'You can't have have the spam, spam, eggs and spam without any spam... that's disgusting'
+\end{lstlisting}
+
+They can also be defined using the function decorator @staticmethod.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Another Static Methode,language={Python},
+xleftmargin=15pt, label=lst:anotherstaticmethode]
+>>> class StaticSpam(object):
+...     @staticmethod
+...     def StaticNoSpam():
+...         print "You can't have have the spam, spam, eggs and spam without any spam... that's disgusting"
+\end{lstlisting}
+
+\subsection{Inheritance}
+Like all object oriented languages, Python provides for inheritance. Inheritance
+is a simple concept by which a class can extend the facilities of another class,
+or in Python's case, multiple other classes. Use the following format for this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Inheritance,language={Python},
+xleftmargin=15pt, label=lst:inheritance]
+class ClassName(superclass1,superclass2,superclass3,...):
+    ...
+\end{lstlisting}
+
+The subclass will then have all the members of its superclasses. If a method is
+defined in the subclass and in the superclass, the member in the subclass will
+override the one in the superclass. In order to use the method defined in the
+superclass, it is necessary to call the method as an attribute on the defining
+class, as in Foo.setx(f,5) above:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Inheritance Example,language={Python},
+xleftmargin=15pt, label=lst:inheritanceexample]
+>>> class Foo:
+...     def bar(self):
+...         print "I'm doing Foo.bar()"
+...     x = 10
+...
+>>> class Bar(Foo):
+...     def bar(self):
+...         print "I'm doing Bar.bar()"
+...         Foo.bar(self)
+...     y = 9
+...
+>>> g = Bar()
+>>> Bar.bar(g)
+I'm doing Bar.bar()
+I'm doing Foo.bar()
+>>> g.y
+9
+>>> g.x
+10
+\end{lstlisting}
+
+Once again, we can see what's going on under the hood by looking at the class
+dictionaries.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Inherited Member,language={Python},
+xleftmargin=15pt, label=lst:]
+>>> vars(g)
+{}
+>>> vars(Bar)
+{'y': 9, '__module__': '__main__', 'bar': <function bar at 0x4d6a04>,
+ '__doc__': None}
+>>> vars(Foo)
+{'x': 10, '__module__': '__main__', 'bar': <function bar at 0x4d6994>,
+ '__doc__': None}
+\end{lstlisting}
+
+When we call g.x, it first looks in the vars(g) dictionary, as usual. Also as
+above, it checks vars(Bar) next, since g is an instance of Bar. However, thanks
+to inheritance, Python will check vars(Foo) if it doesn't find x in vars(Bar).
+
+\subsection{Special Methods}
+There are a number of methods which have reserved names which are used for
+special purposes like mimicking numerical or container operations, among other
+things. All of these names begin and end with two underscores. It is convention
+that methods beginning with a single underscore are 'private' to the scope they
+are introduced within.
+
+\subsection{Initialization and Deletion}
+\subsubsection{\_\_init\_\_}
+One of these purposes is constructing an instance, and the special name for this
+is '\_\_init\_\_'. \_\_init\_\_() is called before an instance is returned (it is not
+necessary to return the instance manually). As an example,
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Init Methode,language={Python},
+xleftmargin=15pt, label=lst:initmethode]
+class A:
+    def __init__(self):
+        print 'A.__init__()'
+a = A()
+\end{lstlisting}
+
+output:
+\scriptsize
+\begin{verbatim}
+A.__init__()
+\end{verbatim}
+\normalsize
+\_\_init\_\_() can take arguments, in which case it is necessary to pass arguments
+to the class in order to create an instance. For example,
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Init Arguments,language={Python},
+xleftmargin=15pt, label=lst:initarguments]
+class Foo:
+    def __init__ (self, printme):
+        print printme
+foo = Foo('Hi!')
+\end{lstlisting}
+
+output:
+\scriptsize
+\begin{verbatim}
+Hi!
+\end{verbatim}
+\normalsize
+
+Here is an example showing the difference between using \_\_init\_\_() and not using
+\_\_init\_\_():
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Difference,language={Python},
+xleftmargin=15pt, label=lst:difference]
+class Foo:
+    def __init__ (self, x):
+         print x
+foo = Foo('Hi!')
+class Foo2:
+    def setx(self, x):
+        print x
+f = Foo2()
+Foo2.setx(f,'Hi!')
+\end{lstlisting}
+output:
+\scriptsize
+\begin{verbatim}
+Hi!
+Hi!
+\end{verbatim}
+\normalsize
+
+\subsubsection{\_\_del\_\_}
+Similarly, '\_\_del\_\_' is called when an instance is destroyed; e.g. when it
+is no longer referenced.
