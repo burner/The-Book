@@ -1,0 +1,115 @@
+Almost all books like this one have a section on (or very similar to) "why you
+should use the shell/program flavor/language/etc. discussed in this book and
+not any of the others that perform the same tasks in a slightly different way".
+It seems to be pretty well mandatory.
+
+However, this book will not do that. We'll talk a bit about "why Bourne Shell"
+of course. But you'll soon see that doesn't preclude other shells at all. And
+there's no good reason not to use another shell either, as we will explain a
+little further down.
+
+\section{Bourne shell and other Unix command shells}
+There are many Unix command shells available today. Bourne Shell is just one
+drop in a very large ocean. How do all these shells relate? Do they do the same
+things? Is one better than the other? Let's take a look at what makes a shell
+and what that means for all the different shells out there.
+
+\subsection{How it all got started...}
+The Unix operating system has had a unique outlook on the world and the correct
+way of doing things ever since it was created back in the 1970s. One of the
+things that sets Unix apart from most other operating systems is that it has
+always been an OS whose primary focus was on what we call power users nowadays:
+people who want to squeeze every drop out of their system and know how. People
+who don't sit around and dream of what could have been, but crank up the
+compiler and start coding. Unix was meant to be programmed on. Unix is nothing
+if not a platform that you have to program on to use it. Unix doesn't have a
+user's interface - Unix has a stable OS kernel and a C library. If you're not
+trying to do actual hard-core programming but rather are trying to do
+day-to-day tasks (or even just want to put a little program together quickly),
+pure Unix is a tremendous pain in the backside.
+
+In other words, it was clear from the start that a tool would be needed that
+would allow a user to make use of the functions offered him by the coding
+library and kernel without actually doing serious programming work. A tool in
+other words that could pass small commands on to the lower-level system quickly
+and easily. Without the need for a compiler or other fancy editor, but with the
+ability to tap into the enormous power of the underlying system. Stephen Bourne
+set himself to the task and came up with what he called a \textit{shell}: a
+small, on-the-fly compiler that could take one command at a time, translate it
+into the sequence of bits understood by the machine and have that command
+carried out. We tend to call such a program an :interpreter|interpreter
+nowadays, but back then shell seemed a better word (since it was a shell over
+the underlying system for the user). Stephen's shell was small, slim, fast, a
+bit unwieldy at times and it oozed raw power that is still the envy of many an
+operating system's command-line interface. Since it was designed by Stephen
+Bourne, this shell is called the Bourne Shell. Its executable was called simply
+\textit{sh} and use of this shell in scripting is still so ubiquitous that
+there isn't a Unix-based system on this earth that doesn't offer a shell whose
+executable can be reached under the name sh.
+
+\subsection{...And how it ended up}
+Of course, everyone's a critic. The Bourne Shell saw tremendous use (indeed, it
+still does) and as a result, it became the de facto standard among Unix shells.
+But all sorts of people almost immediately (as well as with use) wanted new
+features in the shell, or a more familiar way of expressing commands, or
+something else. Many people built new shells that they felt continued where
+Bourne Shell ended. Some were completely compatible with Bourne Shell, others
+were less so. Some became famous, others flopped. But pretty much all of them
+look fondly upon Bourne Shell, the shell they call "Dad..."
+
+A number of these shells can be run in sh-like mode, to more closely emulate
+that very first sh, though most people tend just to run their shells in the
+default mode, which provides more power than the minimum sh.
+
+\subsection{It's Bourne Shell, but not as we know it....}
+So there are a lot of shells around but you can find Bourne Shell everywhere,
+right? Good old \textit{sh}, just sitting there faithfully until the end of
+time....
+
+Well, no, not really. Most of the sh exectuables out there nowadays aren't
+really the Bourne Shell anymore. Through a bit of Unix magic called a link
+(which allows one file to masquerade as another) the sh executable you find on
+any Unix system is likely actually to be one of the shells that is based on the
+Bourne shell. One of the most frequently used shells nowadays (with the ascent
+of free and open-source operating systems like Linux and FreeBSD) is a heavily
+extended form of the Bourne Shell produced by the Free Software Foundation,
+called :Bash (Unix shell)|Bash. Bash hasn't forgotten its roots, though: it
+stands for the \textbf{B'\textit{ourne }'A'\textit{gain }'SH}ell.
+
+Another example of a descendant shell standing in for its ancestor is the Korn
+Shell (ksh). Also an extension shell, it is completely compatible with sh -- it
+simply adds some features. Much the same is true for zsh.
+
+Finally, a slightly different category is formed by the C Shell (csh) and its
+descendant tcsh. These shells do break compatibility to some extent, using
+different syntax for many commands. Systems that use these shells as standard
+shells often provide a real Bourne Shell executable to run generic Bourne Shell
+scripts.
+
+Having read the above, you will understand why this book doesn't have to
+convince you to use Bourne Shell instead of any other shell: in most cases,
+there's no noticeable difference. Bourne Shell and its legacy have become so
+ingrained in the heart and soul of the Unix environment that you are using
+Bourne Shell when you are using practically any shell available to you.
+
+\section{Why Bourne Shell} 
+So only one real question remains: now that you find yourself on your own, cozy
+slice of a Unix system, with your own shell and all its capabilities, is there
+any real reason to use Bourne Shell rather than using the whole range of your
+shells capabilities?
+
+Well, it depends. Probably, there isn't. For the most part of course, you
+\textit{are} using Bourne Shell by using the whole potential of your shell --
+your shell is probably \textit{that} similar to the Bourne Shell. But there is
+one thing you might want to keep in mind: someday, you might want to write a
+script that you might want to pass around to other people. Of course you can
+write your script using the full range of options that your shell offers you;
+but then it might not work on another machine with another shell. This is where
+the role of Bourne Shell as the Latin of Unix command shells comes in -- and
+also where it is useful to know how to write scripts targeted specifically at
+the Bourne Shell. If you write your scripts for the Bourne Shell and nothing
+but the Bourne Shell, chances are far better than equal that your script will
+run straight out of the mail attachment (don't tell me you're still using boxes
+to ship things -- come on, get with the program) on any command shell out
+there.
+
