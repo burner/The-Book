@@ -1,0 +1,1061 @@
+\subsection{The Environments}
+When discussing a Unix shell, you often come across the term "environment".
+This term is used to describe the context in which a program executes and is
+usually meant to mean a set of "environment variables" (we'll get to those
+shortly). But in fact there are two different terms that are somehow a
+program's environment and which often get mixed up together in "environment".
+The simpler one of these really is the collection of environment variables and
+actually is called the "environment". The second is a much wider collection of
+resources that influence the execution of a program and is called the
+\textit{command execution environment}.
+
+\subsubsection{The command execution environment}
+Each running program, either started directly by the user from the shell or
+indirectly by another process, operates within a collection of global resources
+called its \textbf{command execution environment} (CEE).
+
+A program's CEE contains important information such as the source and
+destination of data upon which the program can operate (also known as the
+../Files and streams|standard input, ../Files and streams|standard output and
+../Files and streams|standard error handles). In addition, variables are
+defined that list the identity and home directory of the user or process that
+started the program, the hostname of the machine and the kind of terminal used
+to start the program. There are other variables too, but that's just some of
+the main ones. The environment also provides working space for the program, as
+well as a simple way of communicating with other, future programs, that will be
+run in the same environment. 
+
+The complete list of resources included in the shell's CEE is:
+\begin{itemize}
+\item Open files held in the parent process that started the shell. These files
+are inherited. This list of files includes the files accessed through
+redirection (such as standard input, output and error files).
+\item The current working directory: the "current" directory of the shell.
+\item The file creation mode:The default set of file permissions set when a new
+file is created.
+\item The active |traps.
+\item Shell parameters and variables set during the call to the shell or
+inherited from the parent process.
+\item Shell |functions inherited from the parent process.
+\item Shell options set by \textit{set} or \textit{shopts}, or as command line
+options to the shell executable.
+\item Shell aliases (if available in your shell).
+\item The process id of the shell and of some processes started by the parent
+process.
+\end{itemize}
+
+Whenever the shell executes a command that starts a child process, that command
+is executed it its own CEE. This CEE inherits a copy of part of the CEE of its
+parent, but not the entire parent CEE. The inherited copy includes:
+
+\begin{itemize}
+\item Open files.
+\item The working directory.
+\item The file creation mode mask.
+\item Any shell variables and functions that are marked to be exported to child processes.
+\item Traps set by the shell
+\end{itemize}.
+
+\paragraph{The 'set' command}
+The 'set' command allows you to set or disable a number of options that are
+part of the CEE and influence the behavior of the shell. To set an option, set
+is called with a command line argument of '-' followed by one or more flags. To
+disable the option, set is called with '+' and then the same flag. You probably
+won't use these options very often; the most common use of 'set' is the call
+without any arguments, which produces a list of all defines names in the
+environment (variables and functions). Here are some of the options you might
+get some use out of:
+
+\begin{description}
+\item[+/-a]:When set, automatically mark all newly created or redefined variables for export.
+\item[+/-f]When set, ignore filename \_Shell\_Scripting/ Control\_flow \#Regular\_expressions\_and\_metacharacters | metacharacters.
+\item[+/-n]When set, only read commands but do not execute them.
+\item[+/-v]When set, causes the shell to print commands as they are read from input (verbose debugging flag).
+\item[+/-x]When set, causes the shell to print commands as they will be executed (debugging flag).
+\end{description}
+
+Again, you'll probably mostly use set without arguments, to inspect the list of
+defined variables.
+
+\subsubsection{The environment and environment variables}
+Part of the CEE is something that is simply called the \textit{environment}.
+The environment is a collection of name/value pairs called \textit{environment variables}.
+These variables technically also contain the shell |functions, but
+we'll discuss those in a |separate module.
+
+An environment variable is a piece of labelled storage in the environment,
+where you can store anything you like as long as it fits. These spaces are
+called variables because you can vary what you put in them. All you need to
+know is the name (the label) that you used for storing the content. The Bourne
+shell also makes use of these "environment variables". You can make scripts
+that examine these variables, and those scripts can make decisions based on the
+values stored in the variables.
+
+An environment variable is a name/value pair of the form
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[language={bash},
+xleftmargin=15pt]
+name=variable
+\end{lstlisting}
+
+which is also the way of creating a variable. There are several ways of using a
+variable which we will discuss in the module on |substitution, but for now we
+will limit ourselves to the simple way: if you prepend a variable name with a
+\$-character, the shell will substitute the value for the variable. So, for
+example:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Simple use of a variable,language={bash},
+xleftmargin=15pt, label=lst:simpleuseofavariable]
+VAR=Hello
+$ echo $VAR
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+Hello
+\end{verbatim}
+\normalsize
+As you can see from the example above, an environment variable is sort of like
+a bulletin board: anybody can post any kind of value there for everybody to
+read (as long as they have access to the board). And whatever is posted there
+can be interpreted by any reader in whatever way they like. This makes the
+environment variable a very general mechanism for passing data along from one
+place to another. And as a result environment variables are used for all sorts
+of things. For instance, for setting global parameters that a program can use
+in its execution. Or for setting a value from one shell script to be picked up
+by another. There are even a number of environment variables that the shell
+itself uses in its configuration. Some typical examples:
+
+\begin{description}
+\item[IFS]This variable lists the characters that the shell considers to be whitespace characters.
+\item[PATH]This variable is interpreted as a list of directories (separated by colons on a Unix system). Whenever you type the name of an executable for the shell to execute but do not include the full path of that executable, the shell will look in all of these directories \textit{in order} to find the executable.
+\item[PS1]This variable lists a set of codes. These codes instruct your shell about what the command-line prompt in the interactive shell should look like.
+\item[PWD]The value of this variable is always the path of the working directory.
+\end{description}
+
+The absolute beauty of environment variables, as mentioned above, is that they
+just contain random strings of characters without an immediate meaning. The
+meaning of any variable is to be interpreted by whatever program or process
+reads the variable. So a variable can hold literally any kind of information
+and be used practically anywhere. For instance, consider the following example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Environment variables are more flexible than you thought...,language={bash},
+xleftmargin=15pt, label=lst:environmentvariables]
+$ echo $CMD
+
+$ CMD=ls
+$ echo $CMD
+ls
+$ $CMD
+bin  booktemp  Documents  Mail  mbox  public_html  sent
+\end{lstlisting}
+
+There's nothing wrong with setting a variable to the name of an executable,
+then executing that executable by calling the variable as a command.
+
+\subsubsection{Different kinds of environment variables}
+Although you use all environment variables the same way, there are a couple of
+different kinds of variables. In this section we discuss the differences
+between them and their uses.
+
+\paragraph{Named variables}
+The simplest and most straightforward environment variable is the named
+variable. We saw it earlier: it's just a name with a value, which can be
+retrieved by prepending a \$ to the name. You create and define a named
+variable in one go, by typing the name, an equals sign and then something that
+results in a string of characters.
+
+Earlier we saw the following, simple example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Assigning a simple value to a variable,language={bash},
+xleftmargin=15pt,label=lst:Assigningasimplevaluetoavariable1]
+$ VAR=Hello
+\end{lstlisting}
+
+This just assigns a simple value. Once a variable has been defined, we can also
+redefine it:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Assigning a simple value to a variable,language={bash},
+xleftmargin=15pt,label=lst:Assigningasimplevaluetoavariable2]
+$ VAR=Goodbye
+\end{lstlisting}
+
+
+We aren't limited to straightforward strings either. We can just as easily
+assign the value of one variable to another:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Assigning a simple value to a variable,language={bash},
+xleftmargin=15pt,label=lst:Assigningasimplevaluetoavariable3]
+$ VAR=$PATH
+\end{lstlisting}
+
+
+We can even go all-out and combine several commands to come up with a value:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Assigning a combined value to a variable,language={bash},
+xleftmargin=15pt,label=lst:Assigningacombinedvaluetoavariable4]
+$ PS1= "`whoami`@`hostname -s` `pwd` 
+$ "
+\end{lstlisting}
+
+
+In this case, we're taking the output of the three commands 'whoami',
+'hostname', and 'pwd', then we add the '\$' symbol, and some spacing and other
+formatting just to pad things out a bit. Whew. All that, just in one piece of
+labeled space. As you can see environment variables can hold quite a bit,
+including the output of entire commands.
+
+There are usually lots of named variables defined in your environment, even if
+you are not aware of them. Try the 'set' command and have a look.
+
+\paragraph{Positional variables}
+Most of the environment variables in the shell are named variables, but there
+are also a couple of "special" variables. Variables that you don't set, but
+whose values are automatically arranged and maintained by the shell. Variables
+which exist to help you out, to discover information about the shell or from
+the environment.
+
+The most common of these are the positional or argument variables. Any command
+you execute in the shell (in interactive mode or in a script) can have
+command-line arguments. Even if the command doesn't actually use them, they can
+still be there. You pass command-line arguments to a command simply by typing
+them after the command, like so:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[language={bash},
+xleftmargin=15pt]
+\textit{command} \textit{arg0} \textit{arg1} ...
+\end{lstlisting}
+
+This is allowed for any command. Even your own shell scripts. But say that you
+do this (create a shell script, then execute it with arguments); how do you
+access the command-line arguments from your script? This is where the
+positional variables come in. When the shell executes a command, it
+automatically assigns any command-line arguments, in order, to a set of
+positional variables. And these variables have numbers for names: 1 through 9,
+accessed through \$1 through \$9. Well, actually zero though nine; \$0 is the
+name of the command that was executed. For example, consider a script like
+this:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=WithArgs.sh: A script that uses command-line arguments,language={bash},
+xleftmargin=15pt,label=lst:WithArgs.sh:Ascriptthatusescommand-linearguments]
+#!/bin/sh
+
+echo \$0
+echo \$1
+echo \$2
+\end{lstlisting}
+
+And a call to this script like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Calling the script,language={bash},
+xleftmargin=15pt,label=lst:Callingthescript]
+$ WithArgs.sh Hello World
+WithArgs.sh
+\end{lstlisting}
+\scriptsize
+\begin{verbatim}
+Hello
+World
+\end{verbatim}
+\normalsize
+
+As you can see, the shell automatically assigned the values 'Hello' and 'World'
+to \$1 and \$2 (okay, technically to the variables called 1 and 2, but it's
+less confusing in written text to call them \$1 and \$2). What happens if we
+call this script with more than two arguments?
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Calling the script with more arguments,language={bash},
+xleftmargin=15pt, label=lst:Calling the script with more arguments]
+\$ WithArgs.sh Hello World Mouse Cheese
+\end{lstlisting}
+\scriptsize
+\begin{verbatim}
+WithArgs.sh
+Hello
+World
+Did the mouse eat the cheese?
+\end{verbatim}
+\normalsize
+This is no problem whatsoever - the extra arguments get assigned to \$3 and
+\$4. But we didn't use those variables in the script, so those command-line
+arguments are ignored. What about the opposite case (too few arguments)?
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Calling the script with too few arguments...,language={bash},
+xleftmargin=15pt,label=lst:Callingthescriptwithtoofewarguments...]
+$ WithArgs.sh Hello
+\end{lstlisting}
+\scriptsize
+\begin{verbatim}
+WithArgs.sh
+Hello
+\end{verbatim}
+\normalsize
+
+Again, no problem. When the script accesses \$2, the shell simply substitutes
+the value of \$2 for \$2. That value is nothing in this case, so we print
+exactly that. In this case it's not a problem, but if your script has mandatory
+arguments you should check whether or not they are actually there.
+
+What about if we want 'Hello' and 'World' to be treated as one command-line
+argument to be passed to the script? I.e. 'Hello World' rather than 'Hello' and
+'World'? We'll get deeply into that when we start talking about
+\_Shell\_Scripting/Control\_flow quoting, but for now just surround the
+words with single quotes:
+
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Calling the script with multi-word arguments,language={bash},
+xleftmargin=15pt,label=lst:Calling the script with multi-word arguments]
+$ WithArgs.sh 'Hello World' 'Mouse Cheese'
+\end{lstlisting}
+\scriptsize
+\begin{verbatim}
+WithArgs.sh
+Hello World
+Mouse Cheese
+\end{verbatim}
+\normalsize
+
+\paragraph{Shifting}
+So what happens if you have more than nine command line arguments? Then your
+script is too complicated. No, but seriously: then you have a little problem.
+It's allowed to pass more than nine arguments, but there are only nine
+positional variables (in Bourne Shell at least). To deal with this situation
+the shell includes the \textbf{shift} command:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[language={bash},xleftmargin=15pt]
+shift [n]
+\end{lstlisting}
+
+\textbf{Shift} causes the positional arguments to shift left. That is, the
+the value of \$1 becomes the old value of \$2, the value of \$2 becomes the old
+value of \$3 and so on. Using shift, you can access all the command-line
+arguments (even if there are more than nine). The optional integer argument to
+shift is the number of positions to shift (so you can shift as many positions
+in one go as you like). There are a couple of things to keep in mind though:
+
+\begin{itemize}
+\item No matter how often you shift, \$0 always remains the original command.
+\item If you shift n positions, n must be lower than the number of arguments.
+If n is greater than the number of arguments, no shifting occurs.
+\item If you shift n positions, the first n arguments are lost. So make sure
+you have them stored elsewhere or you don't need them anymore!
+\item You cannot shift back to the right.
+\end{itemize}
+
+\subsection{Other, special variables}
+In addition to the positional variables the Bourne Shell includes a number of
+other, special variables with special information about the shell. You'll
+probably not use these as often, but it's good to know they're there. These
+variables are
+\begin{description}
+	\item[\$\#]The number of command-line arguments to the current command (changes after a use of the \textbf{shift} command!).
+	\item[\$-]The shell options currently in effect (see \#The \_ .27set. 27\_ command|the 'set' command).
+	\item[\$?]The exit status of the last command executed (0 if it succeeded, non-zero if there was an error).
+	\item[\$\$]The process id of the current process.
+	\item[\$!]The process id of the last background command.
+	\item[\$*]All the command-line arguments. When \_Shell\_ Scripting/Control\_ flow \#Quoting | quoted, expands to all command-line arguments as a single word (i.e. "\$*" = "\$1 \$2 \$3 ...").
+	\item[\$@]All the command-line arguments. When \_Shell \_ Scripting /Control \_ flow \#Quoting | quoted, expands to all command-line arguments quoted individually (i.e. "\$@" = "\$1" "\$2" "\$3" ...).
+\end{description}
+
+\subsubsection{Exporting variables to a subprocess}
+We've mentioned it a couple of times before: Unix is a multi-user,
+multiprocessing operating system. And that fact is very much supported by the
+Bourne Shell, which allows you to start up new processes right from inside a
+running shell. In fact, you can even run multiple processes simultaneously next
+to eachother (but we'll get to that a little later). Here's a simple example of
+starting a subprocess: 
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Starting a new shell from the shell,language={bash},
+xleftmargin=15pt, label=lst:Starting a new shell from the shell]
+\$ sh
+\end{lstlisting}
+
+We've also talked about the Command Execution Environment and the Environment
+(the latter being a collection of variables). These environments can affect how
+programs run, so it's very important that they cannot inadvertently affect one
+another. After all, you wouldn't want the screen in your shell to go blue with
+yellow letters simply because somebody started Midnight Commander in another
+process, right? 
+
+One of the things that the shell does to avoid processes inadvertently
+affecting one another, is environment separation. Basically this means that
+whenever a new (sub)process is started, it has its own CEE and environment. Of
+course it would be damned inconvenient if the environment of a subprocess of
+your shell were \textit{completely} empty; your subprocess wouldn't have a PATH
+variable or the settings you chose for the format of your prompt. On the other
+hand there is usually a good reason NOT to have certain variables in the
+environment of your subprocess, and it usually has something to do with not
+handing off too much environment data to a process if it doesn't need that
+data. This was particularly true when running copies of MS-DOS and versions of
+DOS under Windows. You only HAD a limited amount of environment space, so you
+had to use it carefully, or ask for more space on startup. These days in a UNIX
+environment the space issues aren't the same, but if all your existing
+variables ended up in the environment of your subprocess you might still
+adversely affect the running of the program that you started in that subprocess
+(there's really something to be said for keeping your environment lean and
+clean in the case of subprocesses).
+
+The compromise between the two extremes that Stephen Bourne and others came up
+with is this: a subprocess has an environment which contains \textit{copies} of
+the variables in the environment of its parent process - but only those
+variables that are marked to be \textit{exported} (i.e. copied to
+subprocesses). In other words, you can have any variable copied into the
+environment of your subprocesses, but you have to let the shell know that's
+what you want first. Here's an example of the distinction:
+
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Exported and non-exported variables,language={bash},
+xleftmargin=15pt,label=lst:Exported and non-exported variables]
+<source lang="bash">
+$ echo $PATH
+/usr/local/bin:/usr/bin:/bin
+$ VAR=value
+$ echo $VAR
+value
+$ sh
+$ echo $PATH
+gusr/local/bin:/usr/bin:/bin
+$ echo $VAR
+
+$
+\end{lstlisting}
+
+In the example above, the PATH variable (which is marked for export by default)
+gets copied into the environment of the shell that is started within the shell.
+But the VAR variable is \textit{not} marked for export, so the environment of
+the second shell doesn't get a copy.
+
+In order to mark a variable for export you use the \textbf{export} command,
+like so:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[language={bash},
+xleftmargin=15pt]
+export VAR0 [VAR1 VAR2 ...]
+\end{lstlisting}
+
+As you can see, you can export as many variables as you like in one go. You can
+also issue the \textbf{export} command without any arguments, which will print
+a list of variables in the environment marked for export. Here's an example of
+exporting a variable:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Exporting a variable,language={bash},
+xleftmargin=15pt,label=lst:Exporting a variable]
+$ VAR=value $ echo
+$VAR
+value
+$ sh
+$ echo $VAR
+
+$ exit #Quitting the inner shell
+$ export VAR #This is back in the outer shell
+$ sh
+$ echo $VAR
+value
+\end{lstlisting}
+
+More modern shells like Korn Shell and Bash have more extended forms of
+\textbf{export}. A common extension is to allow for definition and export of a
+variable in one single command. Another is to allow you to \textit{remove} the
+export marking from a variable. However, Bourne Shell only supports exporting
+as explained above.
+
+\subsubsection{Your profile} In the previous sections we've discussed the
+runtime environment of every program and command you run using the shell. We've
+talked about the command execution environment and at some length about the
+piece of it simply called "the environment", which contains environment
+variables. We've seen that you can define your own variables and that the
+system usually already has quite a lot of variables to start out with.
+
+Here's a question about those variables that the system starts out with: where
+do they come from? Do they descend like manna from heaven? And on a related
+note: what do you do if you want to create some variables automatically every
+time your shell starts? Or run a program every time you log in?
+
+Those readers who have done some digging around on other operating systems will
+know what I'm getting at: there's usually some way of having a set of commands
+executed every time you log in (or every time the system starts at least). In
+MS-DOS for instance there is a file called autoexec.bat, which is executed
+every time the system boots. In older versions of MS-Windows there was
+system.ini. The Bourne Shell has something similar: a file in every user's home
+directory called \textit{.profile}. The \$HOME/.profile (HOME is a default
+variable whose value is your home directory) file is a shell script like any
+other, which is executed automatically right after you login to a new shell
+session. You can edit the script to have it execute any login-commands that you
+like.
+
+Each specific Unix system has its own default implementation of the .profile
+script (including none - it's allowed not to have a .profile script). But all
+of them start with some variation of this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=A basic (but typical) HOME profile,language={bash},
+xleftmargin=15pt,label=lst:A basic (but typical) HOME profile]
+#!/bin/sh
+
+if [ -f /etc/profile ]; then
+ . /etc/profile
+fi
+PS1= "`whoami`@`hostname -s` `pwd` \$ "
+export PS1
+\end{lstlisting}
+
+This .profile might surprise you a bit: where are all those variables that get
+set? Most of the variables that get set for you on a typical Unix system, also
+get set for all other users. In order to make that possible and easily
+maintainable, the common solution is to have each \$HOME/.profile script start
+by executing another shell script: /etc/profile. This script is a
+systemwide script whose contents are maintained by the system administrator
+(the user who logs in with username \textit{root}). This script sets all sorts
+of variables and calls scripts that set even more variables and generally does
+everything that is necessary to provide each user with a comfortable working
+environment.
+
+As you can see from the example above, you can add any personal configuration
+you want or need to the .profile script in your directory. The call to execute
+the system profile script doesn't have to be first, but you probably don't want
+to remove it altogether.
+
+\subsection{Multitasking and job control}
+With the arrival of fast computers, CPUs that can switch between multiple tasks
+in a very small amount of time, CPUs that can actually do multiple things at
+the same time and networks of multiple CPUs, having the computer perform
+multiple tasks at the same time has become common. Fast task switching provides
+the illusion that the computer really is running multiple tasks simultaneously,
+making it possible to effectively serve multiple users at once. And the ability
+to switch to a new CPU task while an old task is waiting for a peripheral
+device makes CPU use vastly more efficient.
+
+In order to make use of multitasking abilities as a user, you need a command
+environment that supports multitasking. For example, the ability to set one
+program to a task, then move on and start a new program \textit{while the old
+one is still running}. This kind of ability allows you as a user to do multiple
+things at once on the same machine, as long as those programs do not interfere.
+Of course, you cannot always treat each program as a "fire and forget" affair;
+you might have to input a password, or the program might be finished and want
+to tell you its results. A multitasking environment must allow you to switch
+between the multiple programs you have running and allow those programs to send
+you some sort of message if your attention is needed.
+
+To make things a little more tangible think of something like downloading
+files. Usually, while you're downloading files, you want to do other stuff as
+well - otherwise you're going to be sitting at the keyboard twiddling your
+thumbs a really long time when you want to download a whole CD worth of data.
+So, you start up your file downloader and feed it a list of files you want to
+grab. Once you've entered them, you can then tell it "Go!" and it will start
+off by downloading the first file and continue until it finishes the last one,
+or until there's a problem. The smarter ones will even try to work through
+common problems themselves, such as files not being available. Once it starts
+you get the standard shell prompt back, letting you know that you can start
+another program. 
+
+If you want to see how far the file downloader has gotten, simply checking the
+files in your system against what you have on your list will tell you. But
+another way to notify you is via the environment. The environment can include
+the files that you work with, and this can help provide information about the
+progress of currently running programs like that file downloader. Did it
+download all the files? If you check the status file, you'll see that it's
+downloaded 65\% of the files and is just working on the last three now.
+
+Other examples of programs that don't need their hand held are programs that
+play music. Quite often, once you start a program that plays music tracks, you
+don't WANT to tell the program "Okay, now play the next track". It should be
+able to do that for itself, given a list of songs to play. In fact, it should
+not even have to hold on to the monitor; it should allow you to start running
+other software right after you hit the "play" button.
+
+In this section we will explore multitasking support within the Unix shell. We
+will look at enabling support, at working with multiple tasks and at the
+utilities that a shell has available to help you.
+
+\subsubsection{Some terminology} Before we discuss the mechanics of
+multitasking in the shell, let's cover some terminology. This will help us
+discuss the subject clearly and you'll also know what is meant when you run
+across these terms elsewhere.
+
+First of all, when we start a program running on a system in a process of its
+own, that process with that one running instance of the program is called a
+\textit{job}. You'll also come across terms like process, task, instance or
+similar. But the term used in Unix shells is job. Second, the ability of the
+shell to influence and use multitasking (starting jobs and so on) is referred
+to as \textit{job control}.
+
+\begin{description}
+\item[Job] A process that is executing an instance of a computer program.
+\item[Job control] The ability to selectively stop (suspend) the execution of jobs and continue (resume) their execution at a later point.
+\end{description}
+
+Note that these terms are used this way for Unix shells. Other circumstances
+and other contexts might allow for different definitions. Here are some more
+terms you'll come across:
+
+\begin{description}
+\item[Job ID] An ID (usually an integer) that uniquely identifies a job. Can be used to refer to jobs for different tools and commands.
+\item[Process ID (or PID)] An ID (usually an integer) that uniquely identifies a process. Can be used to refer to processes for different tools and commands. Not the same as a Job ID.
+\item[Foreground job (or foreground process)] A job that has access to the terminal (i.e. can read from the keyboard and write to the monitor).
+\item[Background job (or background process)] A job that does not have access to the terminal (i.e. cannot read from the keyboard or write to the monitor).
+\item[Stop (or suspend)] Stop the execution of a job and return terminal control to the shell. A stopped job is not a \textit{terminated} job.
+\item[Terminate] Unload a program from memory and destroy the job that was running the program.
+\end{description}
+
+\subsubsection{Job control in the shell: what does it mean?}
+A job is a program you start within the shell. By default a new job will
+suspend the shell and take control over the input and output: every stroke you
+type at the keyboard will go to the job, as will every mouse movement. Nothing
+but the job will be able to write to the monitor. This is what we call a
+\textit{foreground} job: it's in the foreground, clearly visible to you as a
+user and obscuring all other jobs in the system from view.
+
+But sometimes that way of working is very clumsy and irritating. What if you
+start a long-running job that doesn't need your input (like a backup of your
+harddrive)? If this is a foreground process you have to wait until it's done
+before you can do anything else. In this situation you'd much rather start the
+program as a \textit{background process}: a process that is running, but that
+doesn't listen to the input devices and doesn't write to the monitor. Unix
+supports them and the shell (with job control) allows you to start any job as a
+background job.
+
+But what about a middle ground? Like that file downloader? You have to start
+it, log into a remote server, pick your files and start the download. Only
+after all that does it make sense for the job to be in the background. But how
+do you accomplish that if you've already started the program as a foreground
+job? Or how about this: you're busily writing a document in your favorite
+editor and you just want to step out to check your mail for a moment. Do you
+have to shut down the editor for that? And then, after you're done with your
+mail, restart it, re-open your file and find where you'd left off? That's
+inconvenient. No, a much better idea in both cases is simply to
+\textit{suspend} the program: just stop it from running any further and return
+to the shell. Once you're back in the shell, you can start another program
+(mail) and then resume the suspended program (editor) when you're done with
+that - and return to the program exactly where you left it. Conversely, you can
+also decide to let the suspended process (downloader) continue running, but now
+in the background.
+
+When we talk about job control in the shell, we are talking about the abilities
+described above: to start programs in the background, to suspend running
+programs and to resume suspended programs, either in the foreground or in the
+background.
+
+\subsubsection{Enabling job control}
+In order to do all the things we talked about in the previous section, you need
+two things:
+
+\begin{itemize}
+\item An operating system that supports job control.
+\item A shell that supports job control and has job control enabled.
+\end{itemize}
+
+Unix systems support multitasking and job control. Unix was designed from the
+ground up to support multitasking. If you come across a person claiming to be a
+Unix vendor but whose software doesn't support job control, call him a fraud.
+Then throw his install CDs away. Then throw \textit{him} away.
+
+Of course you've already guessed what comes next, right? I'm going to tell you
+Bourne Shell supports job control. And that you can rely on the same mechanisms
+to work in all compatible shells. Guess what: you're not correct. The original
+Bourne Shell has no job control support; it was a single-tasking shell. There
+was an extended version of the Bourne Shell though, called \textit{jsh} (guess
+what the 'j' stands for...) which had job control support. To have job control
+in the original Bourne Shell, you had to start this extended shell in
+interactive mode like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[language={bash},
+xleftmargin=15pt]
+jsh -i
+\end{lstlisting}
+
+Within that shell you had the job control tools we will discuss in the
+following sections.
+
+Pretty much every other shell written since incorporated job control straight
+into the basic shell and the POSIX 1003 standard has standardized the job
+control utilities. So you can pretty much rely on job control being available
+nowadays and usually also enabled by default in interactive mode (some older
+shells like Korn shell had support but required you to enable that support
+specifically). But just in case, remember that you might have to do some extra
+stuff on your system to use job control. There is one gotcha though: in shell
+scripts, you usually include an interpreter hint that calls for a Bourne Shell
+(i.e. \textit{\#!/bin/sh}). Since the original Bourne Shell doesn't have job
+control, several modern shells turn off job control by default in
+non-interactive mode as a compatibility feature.
+
+\subsubsection{Creating a job and moving it around}
+We've already talked at length about how to create a foreground job: type a
+command or executable name at the prompt, hit enter, there's your job. Been
+there, done that, bought the T-shirt.
+
+We've also already ../Running\_Commands \#A\_useful \_thing \_to \_know:
+\_background\_processes | mentioned how to start a background job: by adding an
+ampersand at the end of the command.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Creating a background job,language={bash},
+xleftmargin=15pt,label=lst:creatingabackgroundjob]
+$ ls * > /dev/null &
+[1] 4808
+$
+\end{lstlisting}
+
+But that suddenly looks different that when we issued commands previously;
+there's a "[1]" and some number there. The "[1]" is the \textit{job ID} and the
+number is the \textit{process ID}. We can use these numbers to refer to the
+process and the job that we just created, which is useful for using tools that
+work with jobs. When the task finishes, you will receive a notice similar to
+the following:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Job done,language={bash},
+xleftmargin=15pt, label=lst:Job done]
+[1]+  Done     ls * > /dev/null &
+\end{lstlisting}
+
+One of the tools that you use to manage jobs is the 'fg' command. This command
+takes a background job and places it in the foreground. For instance, consider
+a background job that actually takes some time to complete:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=A heftier job,language={bash},
+xleftmargin=15pt, label=lst:A heftier job]
+while [ $CNT -lt 200000 ];
+do echo $CNT >> outp.txt;
+CNT=$(expr $CNT + 1);
+done &
+\end{lstlisting}
+
+We haven't gotten into ../Control flow|flow control yet, but this writes
+200,000 integers to a file and takes some time. It also runs in the background.
+Say that we start this job:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Starting the job,language={bash},
+xleftmargin=15pt, label=lst:Starting the job]
+$ CNT=0
+$ while [ \$CNT -lt 200000 ];
+do echo $CNT >> outp.txt;
+CNT=$(expr $CNT + 1);
+done &
+[1] 11246
+\end{lstlisting}
+
+
+The job is given job ID 1 and process ID 11246. Let's move the process to the
+foreground:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Moving the job to the front,language={bash},
+xleftmargin=15pt, label=lst:Moving the job to the front]
+$ fg %1
+while [ \$CNT -lt 200000 ]; do
+    echo \$CNT >> outp.txt; CNT=\$(expr \$CNT + 1);
+done
+\end{lstlisting}
+
+
+The job is now running in the foreground, as you can tell from the fact that we
+are not returned a prompt. Now type the \textit{CTRL+Z} keyboard combination:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Stopping the job,language={bash},
+xleftmargin=15pt, label=lst:Stopping the job]
+'CTRL+Z'
+[1]+  Stopped 
+while [ $CNT -lt 200000 ]; do
+    echo $CNT >> outp.txt; CNT=$(expr $CNT + 1);
+done
+$
+\end{lstlisting}
+
+Did you notice the shell reports the job as stopped? Try using the 'cat'
+command to inspect the outp.txt file. Try it a couple of times; the contents
+won't change. The job is not a background job; it's not running at all! The job
+is suspended. Many programs recognize the \textit{CTRL+Z} combination to suspend.
+And even those that don't usually have some way of suspending themselves.
+
+\subsubsection{Moving to the background and stopping in the background}
+Once a job is suspended, you can resume it either in the foreground or the
+background. To resume in the foreground you use the 'fg' command discussed
+earlier. You use 'bg' for the background:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[language={bash},
+xleftmargin=15pt]
+\textbf{bg} \textit{jobId}
+\end{lstlisting}
+
+To resume our long-lasting job that writes numbers, we do the following:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Resuming the job in the background,language={bash},
+xleftmargin=15pt, label=lst:Resuming the job in the background]
+$ bg %1
+[1]+ while [ $CNT -lt 200000 ] do
+    echo $CNT >> outp.txt; CNT=`expr $CNT + 1`;
+done &
+$
+\end{lstlisting}
+
+
+The output indicates that the job is running again. In the background this
+time, since we are also returned a prompt.
+
+Can we also stop a process in the background? Sure, we can move it to the
+foreground and hit 'CTRL+Z'. But can we also do it directly? Well, there is no
+utility or command to do it. Mostly, you wouldn't \textit{want} to do it - the
+whole point of putting it in the background was to let it run without bothering
+anybody or requiring attention. But if you really want to, you can do it like
+this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[language={bash},
+xleftmargin=15pt]
+kill -SIGSTOP jobId
+\end{lstlisting}
+
+or 
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[language={bash},
+xleftmargin=15pt]
+kill -SIGSTOP processId
+\end{lstlisting}
+
+We'll get back to what this does exactly
+../Debugging \_and \_signal \_handling \#System \_signals | later, when we talk about
+signals.
+
+\subsubsection{Job control tools and job status}
+We mentioned before that the POSIX 1003.1 standard has standardized a number of
+the job control tools that were included for job control in the jsh shell and
+its successors. We've already looked at a couple of these tools; in this
+section we will cover the complete list.
+
+The standard list of job control tools consists of the following:
+
+\begin{description}
+\item[bg]Moves a job to the background.
+\item[fg]Moves a job to the foreground.
+\item[jobs]Lists the active jobs.
+\item[kill]Terminate a job or send a signal to a process.
+\item[CTRL+C]Terminate a job (same as 'kill' using the SIGTERM signal).
+\item[CRTL+Z]Suspend a foreground job.
+\item[wait]Wait for background jobs to terminate.
+\end{description}
+
+All of these commands can take a job specification as an argument. A job
+specification starts with a percent sign and can be any of the following:
+
+\begin{description}
+\item[\%n]A job ID (n is  number).
+\item[\%s]The job whose command-line started with the string s.
+\item[\%?s]The jobs whose command-lines \textit{contained} the string s.
+\item[\%\%]The current job (i.e. the most recent one that you managed using job control).
+\item[\%+]The current job (i.e. the most recent one that you managed using job control).
+\item[\%-]The previous job.
+\end{description}
+
+We've already looked at bg, fg, and CTRL+Z and we'll cover kill in a
+\_and\_signal\_handling\#Trap | later section. That leaves us with jobs and
+wait. Let's start with the simplest one:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=job wait,language={bash},
+xleftmargin=15pt,label=lst:jobwait]
+wait [job spec] ...
+\end{lstlisting}
+
+'Wait' is what you call a \textit{synchronization mechanism}: it causes the
+invoking process to suspend until all background jobs terminate. Or, if you
+include one or more job specifications, until the jobs you list have
+terminated. You use 'wait' if you have fired off multiple jobs (simply to make
+use of a system's parallel processing capabilities) and you cannot proceed
+safely until they're all done.
+
+The 'wait' command is used in quite advanced scripting. In other words, you
+might not use it all that often. Here's a command that you probably will use
+regularly though:
+
+Where 
+\begin{itemize}
+\item -l lists the process IDs as well as normal output
+\item -n limits the output to information about jobs whose status has changed since the last status report
+\item -p lists only the process ID of the jobs' process group leader
+\item -r limits output to data on running jobs
+\item -s limits output to data on stopped jobs
+\item job spec is a specification as listed above
+\end{itemize}
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=another wait,language={bash},
+xleftmargin=15pt,label=lst:anotherwait]
+$ CNT0=0
+$ while [ $CNT0 -lt 200000 ];
+do echo $CNT0 >> outtemp0.txt;
+CNT0=`expr $CNT0 + 1`; done&
+[1] 26859
+$ CNT1=0
+$ while [ $CNT1 -lt 200000 ];
+do echo $CNT1 >> outtemp1.txt; 
+CNT1=`expr $CNT1 + 1`; done&
+[2] 31331
+$ jobs
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+[1]-  Running                 while [ $CNT0 -lt 200000 ]; do
+    echo $CNT0 >> outtemp0.txt; CNT0=`expr $CNT0 + 1`;
+done &
+[2]+  Running                 while [ $CNT1 -lt 200000 ]; do
+    echo $CNT1 >> outtemp1.txt; CNT1=`expr $CNT1 + 1`;
+done &
+\end{verbatim}
+\normalsize
+The 'jobs' command reports the state of active commands, including the command
+line and job IDs. It also indicated the current job (with a +) and the last job
+(with a -).
+
+The \textit{jobs} command reports information and status about active jobs
+(don't confuse active with running!). It is important to remember though, that
+this command reports on jobs and not processes. Since a job is local to a
+shell, the 'jobs' command cannot see across shells. The 'jobs' command is a
+primary source of information on jobs that you can apply job control to; for
+starters, you'll use this command to retrieve job IDs if you don't remember
+them. For example, consider the following:
+
+The 'jobs' command reports the state of active commands, including the command
+line and job IDs. It also indicated the current job (with a +) and the last job
+(with a -).
+
+Speaking of state (which is reported by the 'jobs' command), this is a good
+time to talk about the different states we have. Jobs can be in any of several
+states, sometimes even in more than one state at the same time. The 'jobs'
+command reports on state directly after the job id and order. We recognize the
+following states:
+
+\begin{description}
+\item[Running] This is where the job is doing what it's supposed to do. You
+probably don't need to interrupt it unless you really want to give the program
+your personal attention (for example, to stop the program, or to find out how
+far through a file download has proceeded). You'll generally find that anything
+in the foreground that's not waiting for your attention is in this state,
+unless it's been put to sleep.
+\item[Sleeping] When programs need to retrieve input that's not yet available,
+there is no need for them to continue using CPU resources. As such, they will
+enter a sleep mode until another batch of input arrives. You will see more
+sleeping processes, since they are not as likely to be processing data at an
+exact moment of time.  
+\item[Stopped] The <b>stopped</b> state indicates that the program was stopped
+by the operating system.  This usually occurs when the user suspends a
+background job (e.g. pressing CTRL-Z) or if it receives SIGSTOP.  At that
+point, the job cannot actively consume CPU resources and aside from still being
+loaded in memory, won't impact the rest of the system.  It will resume at the
+point where it left off once it receives the SIGCONT signal or is otherwise
+resumed from the shell. The difference between sleeping and stopped is that
+"sleep" is a form of waiting until a planned event happens, whereas "stop" can
+be user-initiated and indefinite.
+\item[Zombie] A \textbf{zombie} process appears if the parent's program
+terminated before the child could provide its return value to the parent.
+These processes will get cleaned up by the \textit{init} process but sometimes
+a reboot will be required to get rid of them.
+\end{description}
+
+\subsubsection{Other job control related tools}
+In the \#Job\_control\_tools\_and\_job\_status|last section we discussed the
+standard facilities that are available for job control in the Unix shell.
+However, there are also a number of non-standard tools that you might come
+across. And even though the focus of this book is Bourne Shell scripting
+(particularly as the lingua franca of Unix shell scripting) these tools are so
+common that we would be remiss if we did not at least mention them.
+
+\paragraph{Shell commands you might come across}
+In addition to the tools previously discussed, there are two shell commands
+that are quite common: 'stop' and 'suspend'.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[language={bash},xleftmargin=15pt]
+stop job ID
+\end{lstlisting}
+
+The 'stop' command is a command that occurs in the shells of many System
+V-compatible Unix systems. It is used to suspend background processes - in
+other words, it is the equivalent of 'CTRL+Z' for background processes. It
+usually takes a job ID, like most of these commands. On systems that do not
+have a 'stop' command, you should be able to stop background processes by using
+the 'kill' command to send a SIGSTOP signal to the background process.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[language={bash},
+xleftmargin=15pt]
+suspend job ID 
+suspend [-f]
+\end{lstlisting}
+
+The other command you might come across is the the 'suspend' command. The
+'suspend' command is a little tricky though, since it doesn't always mean the
+same thing on all systems and all shells. There are two variations known to the
+authors at this time, both of which are shown above. The first, obvious one
+takes a job ID argument and suspends the indicated job; really it's just the
+same as 'CTRL+Z'. 
+
+The second variant of 'suspend' doesn't take a job ID at all, which is because
+it doesn't suspend any random job. Rather, it suspends the execution of the
+shell in which the command was issued. In this variant the -f argument
+indicates the shell should be suspended even if it is a login shell. To resume
+the shell execution, send it a SIGCONT signal using the 'kill' command.
+
+\paragraph{The process snapshot utility}
+The last tool we will discuss is the process snapshot utility, 'ps'. This
+utility is not a shell tool at all, but it occurs in some variant on pretty
+much every system and you will want to use it often. Possibly more often even
+than the 'jobs' tool.
+
+The 'ps' utility is meant to report on running processes in the system.
+Processes, not jobs - meaning it can see across shell instances. Here's an
+example of the 'ps' utility:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=process snapshot,language={bash},
+xleftmargin=15pt,label=lst:processsnapshot]
+$ ps x
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+PID    TTY     STAT  TIME    COMMAND
+32094  tty5    R     3:37:21 /bin/sh
+37759  tty5    S     0:00:00 /bin/ps
+\end{verbatim}
+\normalsize
+
+Typical process output includes the process ID, the ID of the terminal the
+process is connected to (or running on), the CPU time the process has taken and
+the command issued to start the process. Possibly you also get a process state.
+The process state is indicated by a letter code, but by-and-large the same
+states are reported as for job reports: \textbf{R'''unning,
+'\textit{S}'leeping, s'\textit{T}'opped and '''Z}ombie. Different 'ps'
+implementations may use different or more codes though.
+
+The main problem with writing about 'ps' is that it is not exactly
+standardized, so there are different command-line option sets available. You'll
+have to check the documentation on your system for specific details. Some
+options are quite common though, so we will list them here:
+
+\begin{description}
+\item[a]List all processes except group leader processes.
+\item[d]List all processes except session leaders.
+\item[e]List all processes, without taking into account user id and other access limits.
+\item[f]Produce a full listing as output (i.e. all reporting options).
+\item[-g list Limit] output to processes whose group leader process IDs are mentioned in \textit{list}.
+\item[-l]Produce a long listing.
+\item[-p list] Limit output to processes whose process IDs are mentioned in \textit{list}.
+\item[-s list] Limit output to processes whose session leader process IDs are mentioned in \textit{list}.
+\item[-t list] Limit output to processes running on terminals mentioned in \textit{list}.
+\item[-u list] Limit output to processes owned by user accounts mentioned in \textit{list}.
+\end{description}
+
+The 'ps' tool is useful for monitoring jobs across shell instances and for
+discovering process IDs for signal transmission.

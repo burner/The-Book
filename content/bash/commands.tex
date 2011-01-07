@@ -1,0 +1,378 @@
+\subsection{The easy way: the interactive session}
+Before we can start any kind of examination of the abilities of the Bourne
+Shell and how you can tap into its power, we have to cover some basic ground
+first: we have to discuss how to enter commands into the shell for execution by
+that shell.
+
+\subsubsection{Taking another look at what you've probably already seen}
+If you have access to a Unix-based machine (or an emulator on another operating
+system), you've probably been using the Bourne Shell -- or one of its
+descendants -- already, possibly without realising. Surprise: you've been doing
+shell scripting for a while already!
+
+In your Unix environment, go to a terminal; either a textual logon terminal, or
+a terminal-in-a-window if you're using the X Window System (look for something
+called \textit{xterm} or \textit{rxvt} or just \textit{terminal}, if you have
+actually not ever done this yet). You'll probably end up looking at a screen
+looking something like this:
+\scriptsize
+\begin{verbatim}
+Ben_Tels:Local_Machine:~>_
+\end{verbatim}
+\normalsize
+or
+ 
+The admin says: everybody, STOP TRYING TO CRASH THE SYSTEM Have a lot of fun!
+bzt:Another\_Machine:~>\_
+
+or even something as simple as
+\scriptsize
+\begin{verbatim}
+$_
+\end{verbatim}
+\normalsize
+
+That's it. That's your shell: your direct access to everything the system has
+to offer.
+
+\subsubsection{Using the shell in interactive mode}
+Specifically, the program you accessed a moment ago is your shell, running in
+\textit{interactive mode}: the shell is running in such a way that it displays
+a prompt and a cursor (the little, blinking line) and is waiting for you to
+enter a command for it to execute. You execute commands in interactive mode by
+typing them in, followed by a press of the \textbf{Enter} key. The shell then
+translates your command to something the operating system understands and
+passes off control to the operating system so that it can actually carry out
+the task you have sent it.  You'll notice that your cursor will disappear
+momentarily while the command is being carried out, and you cannot type anymore
+(at this point, the Bourne Shell program is no longer in control of your
+terminal -- the other program that you started  by executing your command is).
+At some point the operating system will be finished working on your command and
+the shell will bring up a new prompt and the cursor as well and will then start
+waiting again for you to enter another command. Give it a try: type the command
+\scriptsize
+\begin{verbatim}
+ls enter
+\end{verbatim}
+\normalsize
+
+After a short time, you'll see a list of files in the working directory (the
+directory that your shell considers the "current" directory), a new prompt and
+the cursor.
+
+This is the simplest way of executing shell commands: typing them in one at a
+time and waiting for each to complete in order. The shell is used in this way
+very often, both to execute commands that belong to the Bourne Shell
+programming language and simply to start running other programs (like the ls
+program from the example above).
+
+\subsubsection{A useful tidbit}
+Before we move on, we'll mention two useful key combinations when using the
+shell: the command to interrupt running programs and shell commands and the
+command to quit the shell (although, why you would ever want to \textit{stop}
+using the shell is beyond me....).
+
+To interrupt a running program or shell command, hit the Control and C keys at
+the same time. We'll get back to what this does exactly in a later chapter, but
+for now just remember this is the way to interrupt things.
+
+To quit the shell session, hit Control+d. This key combination produces the
+Unix end-of-file character -- we'll talk more later about why this also
+terminates your shell session. Some modern shells have disabled the use of
+Control+d in favor of the "exit" command (shame on them). If you're using such
+a shell, just type the word "exit" (like with any other command) and press
+Enter (from here on in, I'll leave the "Enter" out of examples).
+
+\subsection{The only slightly less easy way: the script}
+As we saw in the last section, you can very easily execute shell commands for
+all purposes by starting an interactive shell session and typing your commands
+in at the prompt. However, sometimes you have a set of commands that you have
+to repeat regularly, even at different times and in different shell sessions.
+Of course, in the programming-centric environment of a Unix system, you can
+write a program to get the same result (in the C language for instance). But
+wouldn't it be a lot easier to have the convenience of the shell for this same
+task? Wouldn't it be more convenient to have a way to replay a set of commands?
+And to be able to compose that set as easily as you can write the single
+commands that you type into the shell's interactive sessions?
+
+\subsubsection{The shell script}
+Fortunately, there \textit{is} such a way: the Bourne Shell's
+\textit{non-interactive} mode. In this mode, the shell doesn't have a prompt or
+wait for your commands. Instead, the shell reads commands from a text file
+(which tells the shell what to do, kind of like an actor gets commands from a
+script -- hence, shell script). This file contains a sequence of commands, just
+as you would enter them into the interactive session at the prompt. The file is
+read by the shell from top to bottom and commands are executed in that order.
+
+A shell script is very easy to write; you can use any text-editor you like (or
+even any wordprocessor or other editor, as long as you remember to save your
+script in plain text format). You write commands just as you would in the
+interactive shell. And you can run your script the moment you have saved it; no
+need to compile it or anything.
+
+\subsubsection{Running a shell script}
+To run a shell script (to have the shell read it and execute all the commands
+in the script), you enter a command at an interactive shell prompt as you would
+when doing anything else (if you're using a graphical user interface, you can
+probably also execute your scripts with a click of the mouse). In this case,
+the program you want to start is the shell program itself. For instance, to run
+a script called \textit{MyScript}, you'd enter this command in the interactive
+shell (assuming the script is in your working directory):
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Running a script,language={bash},
+xleftmargin=15pt, label=lst:Running a script]
+sh MyScript
+\end{lstlisting}
+
+Starting the shell program from inside the shell program may sound weird at
+first,  but it makes perfect sense if you think about it. After all, you're
+typing commands in an \textit{interactive mode} shell session. To run a script,
+you want to start a shell in \textit{non-interactive mode}. That's what's
+happening in the above command. You'll note that the Bourne Shell executable
+takes a single parameter in the example above: the name of the script to
+execute.
+
+If you happen to be using a POSIX 1003.1-compliant shell, you can also execute
+a single command in this new, non-interactive session. You have to use the -c
+command-line switch to tell the shell you're passing in a command instead of
+the name of a script:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Running a command in a new shell,language={bash},
+xleftmargin=15pt, label=lst:Running a command in a new shell]
+sh -c ls
+\end{lstlisting}
+
+We'll get to why you would want to do this (rather than simply enter your
+command directly into the interactive shell) a little further down.
+
+There is also another way to run a script from the interactive shell: you type
+the execute command (a single period) followed  by the name of the script:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Sourcing a script,language={bash},
+xleftmargin=15pt, label=lst:Sourcing a script]
+. MyScript
+\end{lstlisting}
+
+The difference between that and using the \textit{sh} command is that the
+\textit{sh} command starts a new process and the execute command does not.
+We'll look into this (and its importance) in the next section. By the way, this
+notation with the period is commonly referred to as \textit{sourcing} a script.
+
+\subsubsection{Running a shell script the other way}
+There is also another way to execute a shell script, by making more direct use
+of a feature of the Unix operating system: the executable mode.
+
+In Unix, each and every file has three different permissions (read, write and
+execute) that can be set for three different entities: the user who owns the
+file, the group that the file belongs to and "the world" (everybody else). Give
+the command
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[language={bash},
+xleftmargin=15pt]
+ls -l
+\end{lstlisting}
+
+in the interactive shell to see the permissions for all files in the working
+directory (the column with up to nine letters, r, w and x for read write and
+execute, the first three for the user, the middle ones for the group, the right
+ones for the world). Whenever one of those entities has the "execute"
+permission, that entity can simply run the file as a program. To make your
+scripts executable by everybody, use the command
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[language={bash},
+xleftmargin=15pt]
+chmod +x scriptname
+\end{lstlisting}
+
+as in 
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Making MyScript executable,language={bash},
+xleftmargin=15pt, label=lst:Making MyScript executable]
+chmod +x MyScript
+\end{lstlisting}
+
+You can then execute the script with a simple command like so (assuming it is
+in a directory that is in your PATH, the directories that the shell looks in
+for programs when you don't tell it exactly where to find the program):
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Running a command in a new shell,language={bash},
+xleftmargin=15pt, label=lst:Running a command in a new shell]
+MyScript
+\end{lstlisting}
+
+If this fails then the current directory is probably not in your PATH.  You can
+force the execution of the script using
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Making the shell look for your script in the current directory,language={bash},
+xleftmargin=15pt, label=lst:Making the shell look for your script in the current directory]
+./MyScript
+\end{lstlisting}
+
+At this command, the operating system examines the file, places it in memory
+and allows it to run like any other program. Of course, not every file makes
+\textit{sense} as a program; a binary file is not necessarily a set of commands
+that the computer will recognize and a text file cannot be read by a computer
+at all. So to make our scripts run like this, we have to do something extra.
+
+As we mentioned before, the Unix operating system starts by examining the
+program. If the program is a text file rather than a binary one (and cannot
+simply be executed), the operating system expects the first line of the file to
+name the interpreter that the operating system should start to interpret the
+rest of the file. The line the Unix operating system expects to find looks like
+this:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[language={bash},
+xleftmargin=15pt]
+#!full path and name of interpreter
+\end{lstlisting}
+
+In our case, the following line should work pretty much everywhere:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[language={bash},
+xleftmargin=15pt]
+#!/bin/sh
+\end{lstlisting}
+
+The Bourne Shell executable, to be found in the bin directory, which is right
+under the top of the filesystem tree. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Bourne shell script with an explicit interpreter,language={bash},
+xleftmargin=15pt, label=lst:Bourne shell script with an explicit interpreter]
+#!/bin/sh
+echo Hello World!
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+Hello World!
+\end{verbatim}
+\normalsize
+
+Executing shell scripts like this has several advantages. First it's less
+cumbersome than the other notations (it requires less typing). Second, it's an
+extra safety if you're going to pass your scripts around to others. Instead of
+relying on them to have the right shell, you can simply specify which shell
+they should use. If Bourne Shell is enough, that's what you ask for. If you
+absolutely need \textit{ksh} or \textit{bash}, you specify that instead (mind
+you, it's not foolproof - other people can ignore your interpreter
+specification by running your script with one of the other commands that we
+discussed above, even if the script probably won't work if they do that).
+
+Just as a sidenote, Unix doesn't limit this trick to shell scripts. Any script
+interpreter that expects its scripts to be plain-text can be specified in this
+way. You can use this same trick to make directly executable Perl scripts or
+Python, Ruby, etc. scripts as well as Bourne Shell scripts.
+
+\subsection{A little bit about Unix and multiprocessing}
+\subsubsection{Why you want to know about multiprocessing}
+While this is not directly a book about Unix, there are some aspects of the
+Unix operating system that we must cover to fully understand why the Bourne
+Shell works the way it does from time to time.
+One of the most important aspects of the Unix operating system - in fact, the
+main aspect that sets it apart from all other main-stream operating systems -
+is that the Unix Operating System is and always has been a multi-user,
+multi-processing operating system (this in contrast with other operating
+systems like MacOS and Microsoft's DOS/Windows operating systems). The Unix OS
+was always meant to run machines that would be used simultaneously by several
+users, who would all want to run at least one but possibly several programs at
+the same time. The ability of an operating system to divide the time of a
+machine's processor among several programs so that it seems to the user that
+they are all running at the same time is called \textit{multiprocessing}. The
+Unix Operating System was designed from the core up with this possibility in
+mind and it has an effect on the way your shell sessions behave.
+
+Whenever you start a new process (by running a program, for instance) on your
+Unix machine, the operating system provides that process with its very own
+operating environment. That environment includes some memory for the process to
+play in and it can also include certain predefined settings for all processes.
+Whenever you run the shell program, it is running in its own environment.
+
+Whenever you start a new process from another process (for instance by issuing
+a command to your shell program in interactive mode), the new process becomes
+what is called a \textit{child process} of the first process (the ls program
+runs as a child process of your shell, for instance). This is where it becomes
+important to know about multiprocessing and process interaction: a child
+process always starts with a \textit{copy} of the environment of the parent
+process. This means two things:
+
+A child process can \textit{never} make changes to the operating environment
+of its parent - it only has access to a copy of that environment if you
+actually do \textit{want} to make changes in the environment of your shell (or
+specifically want to avoid it), you have to know when a command runs as a child
+process and when it runs within your current shell; you might otherwise pick a
+variant that has the opposite effect of that which you want
+
+\subsubsection{What does what}
+We have seen several ways of running a shell command or script. With respect to
+multiprocessing, they run in the following way:
+Way of running Runs as
+
+\begin{tabular}{|p{4cm}|p{4cm}|}
+\hline
+Way of running & Runs as\\ \hline
+Interactive mode command & \begin{itemize}
+\item current environment for a shell command
+\item child process for a new program
+\end{itemize} \\ \hline
+Shell non-interactive mode &child process\\ \hline
+Dot-notation run command \textit{(. MyScript)} & current environment\\ \hline
+Through Unix executable permission with interpreter selection & child process\\
+\hline
+\end{tabular}
+
+\subsubsection{A useful thing to know: background processes}
+With the above, it may seem like multiprocessing is just a pain when doing
+shell scripting. But if that were so, we wouldn't \textit{have} multiprocessing
+-- Unix doesn't tend to keep things that aren't useful. Multiprocessing is a
+valuable tool in interacting with the rest of the system and one that you can
+use to work more efficiently. There are many books available on the benefits of
+multiprocessing in program development, but from the point of view of the
+Bourne Shell user and scripter the main one is the ability to hand off control
+of a process to the operating system \textit{and still keep on working while
+that child process is running}. The way to do this is to run your process as a
+\textit{background process}.
+
+Running a process as a background process means telling the operating system
+that you want to start a process, but that it should not attach itself to any
+of the interactive devices (keyboard, screen, etc.) that its parent process is
+using. And more than that, it also tells the operating system that the request
+to start this child process should return immediately and that the parent
+process should then be allowed to continue working without having to wait for
+its child process to end.
+
+This sounds complicated, but you have to keep in mind that this ability is
+completely ingrained in the Unix operating system and that the Bourne Shell was
+intended as an easy interface to the power of Unix. In other words: the Bourne
+Shell includes the ability to start a child process as a simple command of its
+own. Let's demonstrate how to do this and how useful the ability is at the same
+time, with an example. Give the following (rather pointless but still time
+consuming) command at the prompt:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+xleftmargin=15pt,label=lst:]
+N=0 &\& while [ $N -lt 10000 ];
+do date >> scriptout; N=`expr $N + 1`; done
+\end{lstlisting}
+
+We'll get into what this says in later chapters; for now, it's enough to know
+that this command asks the system for the date and time and writes the result
+to a file named "scriptout". Since it then repeats this process 10000 times, it
+may take a little time to complete.
+
+Now give the following command:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+xleftmargin=15pt,label=lst:]
+N=0 && while [ $N -lt 10000 ]; do date >>
+scriptout; N=`expr $N + 1`; done&
+\end{lstlisting}
+
+You'll notice that you can immediately resume using the shell (if you don't see
+this happening, hit Control+C and check that you have the extra ampersand at
+the end). After a while the background process will be finished and the
+scriptout file will contain another 10000 time reads.
+
+The way to start a background process in Bourne Shell is to append an ampersand
+(\&) to your command.

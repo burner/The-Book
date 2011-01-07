@@ -15,7 +15,7 @@
 	}
 
 #code example
-s/{{bcode\:Example|\(*\)}}$/\\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}\n\\begin{lstlisting}[language={bash},\nxleftmargin=15pt]\n\1\n\\end{lstlisting}/
+s/{{bcode\:Example|\([^}]*\)}}$/\\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}\n\\begin{lstlisting}[language={bash},\nxleftmargin=15pt]\n\1\n\\end{lstlisting}/
 	
 
 #label
@@ -32,13 +32,13 @@ s/<\/source>/\n\\end{lstlisting}\n/g
 s/|\([a-zA-Z ]*\)|}}/Output:\n\\scriptsize\n\\begin{verbatim}\n\1 \n\\end{verbatim}\n\\normalsize/g
 
 #subsubsection
-s/====\([a-zA-Z:\'. ]*\)====/\\subsubsection{\1}/g
+s/====\([a-zA-Z:\'. ]*\)====/\\paragraph{\1}/g
 
 #subsection
-s/===\([a-zA-Z:\'. ]*\)===/\\subsection{\1}/g
+s/===\([a-zA-Z:\'. ]*\)===/\\subsubsection{\1}/g
 
 #section
-s/==\([a-zA-Z:.\' ]*\)==/\\section{\1}/g
+s/==\([a-zA-Z:.\' ]*\)==/\\subsection{\1}/g
 
 #bolditalic
 s/'''''\([a-zA-Z0-9\:. _-!]*\)'''''/\\\textit{\\textbf{\1}}/g
@@ -65,5 +65,13 @@ s/&nbsp;/ /g
 s/&amp;/&/g
 s/\$/\\$/g
 
+#underscore
 s/\_/\\_/g
-s/\:\<tt>\(*\)<\/tt>/\\texttt{\1}/g
+
+#tt html tag
+s/:<tt>/\\texttt{/g
+s/<\/tt>/}/g
+
+#tabel
+#s/.{\| class=wikitable*$/\\begin{tabular}/g
+#s/\|\}/\\end{tabular}/g

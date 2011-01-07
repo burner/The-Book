@@ -1,6 +1,14 @@
 import os
+import re
+
+bold = re.compile("\'\'\'( [^}]* )\'\'\'", re.VERBOSE)
+#ital = re.compile("''[a-zA-Z]*''")
 
 def shortenString(line, ofile):
+	if len(line) <= 75:
+		ofile.write(line)
+		return
+		
 	output = ""	
 	outputtmp = ""
 	words = line.split(" ")
@@ -12,7 +20,20 @@ def shortenString(line, ofile):
 			outputtmp = ""
 			output = ""
 
-	ofile.write(output+"\n")
+	ofile.write(output)
+
+def form(line):
+	print(bold.sub(r'\textbf{\1}', line))
+
+def parseCode(ifile, ofile, line):
+	hidx = line.rfind("<source lang=\"bash\">")
+	if hidx != -1:
+		print("code ", lidx, " ",hidx)
+		cap += line[lidx:]
+		#print(line)
+	else:
+		return False
+	
 
 def convFile(url, name):
 	ifileStr = url[26:len(url)]
@@ -37,12 +58,11 @@ def convFile(url, name):
 			continue
 		if cnt == 1:
 			# the symbol < needs to be displayed
-			foo = foo.replace("&lt","<")
-
-			lidx = foo.find("=")
-			hidx = foo.rfind("=")
+			foo = foo.replace("&lt;","<")
+			form(foo)
+			#parseCode(ifile, mainfile, foo)
 			shortenString(foo, mainfile)	
-			#mainfile.write(foo)		
+			mainfile.write(foo)		
 		if cnt > 1:
 			break
 	
