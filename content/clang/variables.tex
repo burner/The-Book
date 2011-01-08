@@ -1,0 +1,532 @@
+\section{Variables}
+Like most programming languages, C is able to use and process named variables
+and their contents. \textbf{Variables} are simply names used to refer to some
+location in memory --- a location that holds a value with which we are working. 
+
+It may help to think of variables as a placeholder for a value. You can think
+of a variable as being equivalent to its assigned value. So, if you have a
+variable \emph{i} that is initialized (set equal) to 4, then it follows that
+\emph{i+1} will equal \emph{5}.
+
+Since C is a relatively low-level programming language, before a C program can
+utilize memory to store a variable it must claim the memory needed to store the
+values for a variable. This is done by \textbf{declaring} variables. Declaring
+variables is the way in which a C program shows the number of variables it
+needs, what they are going to be named, and how much memory they will need.
+
+Within the C programming language, when managing and working with variables, it
+is important to know the \emph{type} of variables and the \emph{size} of these
+types. Since C is a fairly low-level programming language, these aspects of its
+working can be hardware specific --- that is, how the language is made to work
+on one type of machine can be different from how it is made to work on another.
+
+\textbf{All} variables in C are ``typed''. That is, every variable declared
+must be assigned as a certain type of variable.
+
+\subsection{Declaring, Initializing, and Assigning Variables}
+Here is an example of declaring an integer, which we've called
+\texttt{some\_number}. (Note the semicolon at the end of the line; that is how
+your compiler separates one program \emph{statement} from another.)
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+int some_number;
+\end{lstlisting}
+
+This statement means we're declaring some space for a variable called
+some\_number, which will be used to store \texttt{int}eger data. Note that we
+must specify the type of data that a variable will store. There are specific
+keywords to do this --- we'll look at them in the next section.
+
+Multiple variables can be declared with one statement, like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+int anumber, anothernumber, yetanothernumber;
+\end{lstlisting}
+
+We can also declare \emph{and} assign some content to a variable at the same time.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+int some_number=3;
+\end{lstlisting}
+
+This is called \emph{initialization}.
+
+In early versions of C, variables must be declared at the beginning of a block.
+In C99 it is allowed to mix declarations and statements arbitrarily—but doing
+so is not usual, because it is rarely necessary, some compilers still don’t
+support C99 (portability), and it may, because it is uncommon yet, irritate
+fellow programmers (maintainability).
+
+After declaring variables, you can assign a value to a variable later on using a statement like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+some_number=3;
+\end{lstlisting}
+
+You can also assign a variable the value of another variable, like so:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+anumber = anothernumber;
+\end{lstlisting}
+
+Or assign multiple variables the same value with one statement:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+anumber = anothernumber = yetanothernumber = 3;
+\end{lstlisting}
+
+This is because the assignment \texttt{x = y} returns the value of the
+assignment. \texttt{x = y = z} is really shorthand for \texttt{x = (y = z)}.
+
+\subsubsection{Naming Variables}
+Variable names in C are made up of letters (upper and lower case) and digits.
+The underscore character (``\_'') is also permitted. Names must not begin with
+a digit. Unlike some languages (such as Perl and some BASIC dialects), C does
+not use any special prefix characters on variable names.
+
+Some examples of valid (but not very descriptive) C variable names:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+foo
+Bar
+BAZ
+foo_bar
+_foo42
+_
+QuUx
+\end{lstlisting}
+
+Some examples of invalid C variable names:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+2foo (must not begin with a digit)
+my foo (spaces not allowed in names)
+$foo ($ not allowed -- only letters, digits, and _)
+while (language keywords cannot be used as names)
+\end{lstlisting}
+
+As the last example suggests, certain words are reserved as keywords in the
+language, and these cannot be used as variable names.
+
+In addition there are certain sets of names that, while not language keywords,
+are reserved for one reason or another. For example, a C compiler might use
+certain names ``behind the scenes'', and this might cause problems for a
+program that attempts to use them. Also, some names are reserved for possible
+future use in the C standard library. The rules for determining exactly what
+names are reserved (and in what contexts they are reserved) are too complicated
+to describe here, and as a beginner you don't need to worry about them much
+anyway. For now, just avoid using names that begin with an underscore
+character.
+
+The naming rules for C variables also apply to naming other language constructs
+such as function names, struct tags, and macros, all of which will be covered
+later.
+
+\subsection{Literals}
+Anytime within a program in which you specify a value explicitly instead of
+referring to a variable or some other form of data, that value is referred to
+as a \textbf{literal}. In the initialization example above, 3 is a literal.
+Literals can either take a form defined by their type (more on that soon), or
+one can use hexadecimal (hex) notation to directly insert data into a variable
+regardless of its type
+. Hex numbers are always preceded with \emph{0x}. For now, though, you probably
+shouldn't be too concerned with hex.
+
+\subsection{The Four Basic Types}
+In Standard C there are four basic data types. They are \texttt{int},
+\texttt{char}, \texttt{float}, and \texttt{double}.
+
+We will briefly describe them here, then go into more detail in C
+Programming/Types.
+
+\subsubsection{The \texttt{int} type}
+The \texttt{int} type stores integers in the form of ``whole numbers''. An
+integer is typically the size of one machine word, which on most modern home
+PCs is 32 bits (4 octets). Examples of literals are whole numbers (integers)
+such as 1,2,3, 10, 100... When \texttt{int} is 32 bits (4 octets), it can store
+any whole number (integer) between -2147483648 and 2147483647. A 32 bit word
+(number) has the possibility of representing any one number out of 4294967296
+possibilities (2 to the power of 32).
+
+If you want to declare a new int variable, use the \texttt{int} keyword. For
+example:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+int numberOfStudents, i, j=5;
+\end{lstlisting}
+
+In this declaration we declare 3 variables, numberOfStudents, i and j, j here
+is assigned the literal 5.
+
+\subsubsection{The \texttt{char} type}
+The \texttt{char} type is capable of holding any member of the execution
+character set. It stores the same kind of data as an \texttt{int} (i.e.
+integers), but always has a size of one byte. The size of a byte is specified
+by the macro \texttt{CHAR\_BIT} which specifies the number of bits in a char
+(byte). In standard C it never can be less than 8 bits. A variable of type
+\texttt{char} is most often used to store character data, hence its name. Most
+implementations use the ASCII character set as the execution character set, but
+it's best not to know or care about that unless the actual values are
+important.
+
+Examples of character literals are a, b, 1, etc., as well as some special
+characters such as \texttt{\textbackslash{}0} (the null character) and
+\texttt{\textbackslash{}n} (newline, recall Hello, World). Note that the
+\texttt{char} value must be enclosed within single quotations.
+
+When we initialize a character variable, we can do it two ways. One is
+preferred, the other way is \textbf{\emph{bad}} programming practice.
+
+The first way is to write
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+char letter1 = 'a';
+\end{lstlisting}
+
+This is \emph{good} programming practice in that it allows a person reading
+your code to understand that letter1 is being initialized with the letter 'a'
+to start off with.
+
+The second way, which should \emph{not} be used when you are coding letter
+characters, is to write
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+char letter2 = 97; /* in ASCII, 97 = 'a' */
+\end{lstlisting}
+
+This is considered by some to be extremely \textbf{\emph{bad}} practice, if we
+are using it to store a character, not a small number, in that if someone reads
+your code, most readers are forced to look up what character corresponds with
+the number 97 in the encoding scheme. In the end, \texttt{letter1} and
+\texttt{letter2} store both the same thing -- the letter a, but the first
+method is clearer, easier to debug, and much more straightforward. 
+
+One important thing to mention is that characters for numerals are represented
+differently from their corresponding number, i.e.\ '1' is not equal to 1. 
+
+There is one more kind of literal that needs to be explained in connection with
+chars: the \textbf{string literal}. A string is a series of characters, usually
+intended to be displayed. They are surrounded by double quotations (`` '', not
+' '). An example of a string literal is the ``Hello, world!\textbackslash{}n''
+in the \"Hello, World\" example.
+
+\subsubsection{The \texttt{float} type}
+\texttt{float} is short for Floating Point. It stores real numbers also, but is
+only one machine word in size. Therefore, it is used when less precision than a
+double provides is required. \texttt{float} literals must be suffixed with F or
+f, otherwise they will be interpreted as doubles. Examples are: 3.1415926f,
+4.0f, 6.022e+23f. float variables can be declared using the \texttt{float}
+keyword.
+
+\subsubsection{The \texttt{double} type}
+The \texttt{double} and \texttt{float} types are very similar. The
+\texttt{float} type allows you to store single-precision floating point
+numbers, while the \texttt{double} keyword allows you to store double-precision
+floating point numbers --- real numbers, in other words, both integer and
+non-integer values. Its size is typically two machine words, or 8 bytes on most
+machines. Examples of \texttt{double} literals are 3.1415926535897932, 4.0,
+6.022e+23 (\href{http://en.wikipedia.org/wiki/Scientific\_notation}{scientific
+notation}). If you use 4 instead of 4.0, the 4 will be interpreted as an
+\texttt{int}.
+
+The distinction between floats and doubles was made because of the differing
+sizes of the two types. When C was first used, space was at a minimum and so
+the judicious use of a float instead of a double saved some memory. Nowadays,
+with memory more freely available, you do not really need to conserve memory
+like this --- it may be better to use doubles consistently. Indeed, some C
+implementations use doubles instead of floats when you declare a float
+variable.
+
+If you want to use a double variable, use the \texttt{double} keyword.
+
+\subsection{\texttt{sizeof}}
+If you have any doubts as to the amount of memory actually used by any type
+(and this goes for types we'll discuss later, also), you can use the
+\texttt{sizeof} operator to find out for sure. (For completeness, it is
+important to mention that \texttt{sizeof} is a compile-time unary operator, not
+a function.) Its syntax is:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+sizeof object
+sizeof(type)
+\end{lstlisting}
+
+The two expressions above return the size of the object and type specified, in
+bytes. The return type is \texttt{size\_t} (defined in the header
+\texttt{\textless{}stddef.h\textgreater{}}) which is an unsigned value. Here's
+an example usage:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+size_t size;
+int i;
+size = sizeof(i);
+\end{lstlisting}
+
+\texttt{size} will be set to 4, assuming \texttt{CHAR\_BIT} is defined as 8,
+and an integer is 32 bits wide. The value of \texttt{sizeof}'s result is the
+number of bytes.
+
+Note that when \texttt{sizeof} is applied to a \texttt{char}, the result is 1;
+that is:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+sizeof(char)
+\end{lstlisting}
+
+always returns 1.
+
+\subsection{Data type modifiers}
+One can alter the data storage of any data type by preceding it with certain
+modifiers.
+
+\texttt{long} and \texttt{short} are modifiers that make it possible for a data
+type to use either more or less memory. The \texttt{int} keyword need not
+follow the \texttt{short} and \texttt{long} keywords. This is most commonly the
+case. A \texttt{short} can be used where the values fall within a lesser range
+than that of an \texttt{int}, typically -32768 to 32767. A \texttt{long} can be
+used to contain an extended range of values. It is not guaranteed that a
+\texttt{short} uses less memory than an \texttt{int}, nor is it guaranteed that
+a \texttt{long} takes up more memory than an \texttt{int}. It is only
+guaranteed that sizeof(short) \textless{}= sizeof(int) \textless{}=
+sizeof(long). Typically a \texttt{short} is 2 bytes, an \texttt{int} is 4
+bytes, and a \texttt{long} either 4 or 8 bytes. Modern C compilers also provide
+\texttt{long long} which is
+typically an 8 byte integer. 
+
+In all of the types described above, one bit is used to indicate the sign
+(positive or negative) of a value. If you decide that a variable will never
+hold a negative value, you may use the \texttt{unsigned} modifier to use that
+one bit for storing other data, effectively doubling the range of values while
+mandating that those values be positive. The \texttt{unsigned} specifier also
+may be used without a trailing \texttt{int}, in which case the size defaults to
+that of an \texttt{int}. There is also a \textbf{signed} modifier which is the
+opposite, but it is not necessary, except for certain uses of \texttt{char},
+and seldom used since all types (except \texttt{char}) are signed by default.
+
+To use a modifier, just declare a variable with the data type and relevant modifiers:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+unsigned short int usi; /* fully qualified --- unsigned short int */
+short si; /* short int */
+unsigned long uli; /* unsigned long int */
+\end{lstlisting}
+
+\subsection{\texttt{const} qualifier}
+When the \textbf{const} qualifier is used, the declared variable must be
+initialized at declaration. It is then not allowed to be changed.
+
+While the idea of a variable that never changes may not seem useful, there are
+good reasons to use \texttt{const}. For one thing, many compilers can perform
+some small optimizations on data when it knows that data will never change. For
+example, if you need the value of \ensuremath{\pi} in your calculations, you
+can declare a const variable of \texttt{pi}, so a program or another function
+written by someone else cannot change the value of \texttt{pi}.
+
+Note that a Standard conforming compiler must issue a warning if an attempt is
+made to change a \texttt{cons}t variable --- but after doing so the compiler is
+free to ignore the \\texttt{onst} qualifier.
+
+\subsection{Magic numbers}
+When you write C programs, you may be tempted to write code that will depend on
+certain numbers. For example, you may be writing a program for a grocery store.
+This complex program has thousands upon thousands of lines of code. The
+programmer decides to represent the cost of a can of corn, currently 99 cents,
+as a literal throughout the code. Now, assume the cost of a can of corn changes
+to 89 cents. The programmer must now go in and manually change each entry of 99
+cents to 89. While this is not that big of a problem, considering the ``global
+find-replace'' function of many text editors, consider another problem: the
+cost of a can of green beans is also initially 99 cents. To reliably change the
+price, you have to look at every occurrence of the number 99.
+
+C possesses certain functionality to avoid this. This functionality is
+approximately equivalent, though one method can be useful in one circumstance,
+over another.
+
+\subsection{Using the \texttt{const} keyword}
+The \texttt{const} keyword helps eradicate \textbf{magic numbers}. By declaring
+a variable \texttt{const corn} at the beginning of a block, a programmer can
+simply change that const and not have to worry about setting the value
+elsewhere.
+
+There is also another method for avoiding magic numbers. It is much more
+flexible than \texttt{const}, and also much more problematic in many ways. It
+also involves the preprocessor, as opposed to the compiler. Behold...
+
+\subsubsection{\#define}
+When you write programs, you can create what is known as a \emph{macro}, so
+when the computer is reading your code, it will replace all instances of a word
+with the specified expression.
+
+Here's an example. If you write
+\begin{enumerate}
+	\item define PRICE\_OF\_CORN 0.99
+\end{enumerate}
+
+when you want to, for example, print the price of corn, you use the word
+\texttt{PRICE\_OF\_CORN} instead of the number 0.99 --- the preprocessor will
+replace all instances of \texttt{PRICE\_OF\_CORN} with 0.99, which the compiler
+will interpret as the literal \texttt{double} 0.99. The preprocessor performs
+substitution, that is, \texttt{PRICE\_OF\_CORN} is replaced by 0.99 so this
+means there is no need for a semicolon.
+
+It is important to note that \texttt{\#define} has basically the same
+functionality as the ``find-and-replace'' function in a lot of text
+editors/word processors. 
+
+For some purposes, \texttt{\#define} can be harmfully used, and it is usually
+preferable to use \texttt{const} if \texttt{\#define} is unnecessary. It is
+possible, for instance, to \texttt{\#define}, say, a macro \texttt{DOG} as the
+number 3, but if you try to print the macro, thinking that \texttt{DOG}
+represents a string that you can show on the screen, the program will have an
+error. \texttt{\#define} also has no regard for type. It disregards the
+structure of your program, replacing the text \emph{everywhere} (in effect,
+disregarding scope), which could be advantageous in some circumstances, but can
+be the source of problematic bugs.
+
+You will see further instances of the \texttt{\#define} directive later in the
+text. It is good convention to write \texttt{\#define}d words in all capitals,
+so a programmer will know that this is not a variable that you have declared
+but a \texttt{\#define}d macro.
+
+\subsection{Scope}
+In the Basic Concepts section, the concept of scope was introduced. It is
+important to revisit the distinction between local types and global types, and
+how to declare variables of each. To declare a local variable, you place the
+declaration at the beginning (i.e. before any non-declarative statements) of
+the block to which the variable is intended to be local. To declare a global
+variable, declare the variable outside of any block. If a variable is global,
+it can be read, and written, from anywhere in your program.
+
+Global variables are not considered good programming practice, and should be
+avoided whenever possible. They inhibit code readability, create naming
+conflicts, waste memory, and can create difficult-to-trace bugs. Excessive
+usage of globals is usually a sign of laziness and/or poor design. However, if
+there is a situation where local variables may create more obtuse and
+unreadable code, there's no shame in using globals.
+
+\subsection{Other Modifiers}
+Included here, for completeness, are more of the modifiers that standard C
+provides. For the beginning programmer, \emph{static} and \emph{extern} may be
+useful. \emph{volatile} is more of interest to advanced programmers.
+\emph{register} and \emph{auto} are largely deprecated and are generally not of
+interest to either beginning or advanced programmers.
+
+\textbf{static} is sometimes a useful keyword.  It is a common misbelief that
+the only purpose is to make a variable stay in memory. When you declare a
+function or global variable as \emph{static} it will become internal. You
+cannot access the function or variable through the extern (see below) keyword
+from other files in your project. When you declare a local variable as
+\emph{static}, it is created just like any other variable. However, when the
+variable goes out of scope (i.e. the block it was local to is finished) the
+variable stays in memory, retaining its value. The variable stays in memory
+until the program ends. While this behaviour resembles that of global
+variables, static variables still obey scope rules and therefore cannot be
+accessed outside of their scope. Variables declared static are initialized to
+zero (or for pointers, NULL) by default. 
+
+You can use static in (at least) two different ways. Consider this code, and
+imagine it is in a file called jfile.c:
+
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+include <stdio.h>
+static int j = 0;
+	
+void up(void) {
+	/* k is set to 0 when the program starts. The line is then "ignored"
+	 * for the rest of the program (i.e. k is not set to 0 every time up()
+	 * is called)
+	 */
+	static int k = 0;
+	j++;
+	k++;
+	printf("up() called.   k= %2d, j= %2d\n", k , j);
+}
+	
+void down(void) {
+	static int k = 0;
+	j--;
+	k--;
+	printf("down() called. k= %2d, j= %2d\n", k , j);
+}
+	
+int main(void) {
+	int i;
+	  
+	/* call the up function 3 times, then the down function 2 times */
+	for (i= 0; i < 3; i++)
+	   up();
+	for (i= 0; i < 2; i++)
+	   down();
+	 
+	return 0;
+}
+\end{lstlisting}
+
+The j var is accessible by both up and down and retains its value. the k vars
+also retain their value, but they are two different variables in each their
+scopes. static vars are a good way to implement encapsulation, a term from the
+object-oriented way of thinking that effectively means not allowing changes to
+be made to a variable except through function calls.
+
+Running the program above will produce the following output:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+up() called. k= 1, j= 1
+up() called. k= 2, j= 2
+up() called. k= 3, j= 3
+down() called. k= -1, j= 2
+down() called. k= -2, j= 1
+\end{lstlisting}
+
+\textbf{extern} is used when a file needs to access a variable in another file
+that it may not have \textit{\#included} directly.  Therefore, \emph{extern}
+does not actually carve out space for a new variable, it just provides the
+compiler with sufficient information to access the remote variable.
+
+\textbf{\texttt{volatile}} is a special type modifier which informs the
+compiler that the value of the variable may be changed by external entities
+other than the program itself. This is necessary for certain programs compiled
+with optimizations --- if a variable were not defined \texttt{volatile} then
+the compiler may assume that certain operations involving the variable are safe
+to optimize away when in fact they aren't. \emph{volatile} is particularly
+relevant when working with embedded systems (where a program may not have
+complete control of a variable) and multi-threaded applications.
+
+\textbf{auto} is a modifier which specifies an ``automatic'' variable that is
+automatically created when in scope and destroyed when out of scope. If you
+think this sounds like pretty much what you've been doing all along when you
+declare a variable, you're right: all declared items within a block are
+implicitly ``automatic''. For this reason, the \emph{auto} keyword is more like
+the answer to a trivia question than a useful modifier, and there are lots of
+very competent programmers that are unaware of its existence.
+
+\textbf{\texttt{register}} is a hint to the compiler to attempt to optimize the
+storage of the given variable by storing it in a register of the computer's CPU
+when the program is run. Most optimizing compilers do this anyway, so use of
+this keyword is often unnecessary. In fact, ANSI C states that a compiler can
+ignore this keyword if it so desires -- and many do. Microsoft Visual C++ is an
+example of an implementation that completely ignores the \emph{register}
+keyword.

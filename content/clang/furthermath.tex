@@ -1,0 +1,494 @@
+\section{Further math}
+The \texttt{\textless{}math.h\textgreater{}} header contains prototypes for
+several functions that deal with mathematics. In the 1990 version of the ISO
+standard, only the \texttt{double} versions of the functions were specified;
+the 1999 version added the \texttt{float} and \texttt{long double} versions. To
+use these math functions, you must link your program with the math library. For
+some compilers (including GCC), you must specify the additional parameter
+\texttt{-lm}.
+
+The functions can be grouped into the following categories:
+\subsection{Trigonometric functions}
+\subsection{The \texttt{acos} and \texttt{asin} functions}
+The \texttt{acos} functions return the arccosine of their arguments in radians,
+and the \texttt{asin} functions return the arcsine of their arguments in
+radians. All functions expect the argument in the range \url{-1,+1}. The
+arccosine returns a value in the range \url{0,&pi;}; the arcsine returns a
+value in the range \url{-&pi;/2,+&pi;/2}.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float asinf(float x); /* C99 */
+	float acosf(float x); /* C99 */
+	double asin(double x);
+	double acos(double x);
+	long double asinl(long double x); /* C99 */
+	long double acosl(long double x); /* C99 */
+\end{lstlisting}
+
+\subsubsection{The \texttt{atan} and \texttt{atan2} functions}
+The \texttt{atan} functions return the arctangent of their arguments in
+radians, and the \texttt{atan2} function return the arctangent of \texttt{y/x}
+in radians. The \texttt{atan} functions return a value in the range
+\url{-&pi;/2,+&pi;/2} (the reason why \&plusmn;\ensuremath{\pi}/2 are included
+in the range is because the floating-point value may represent infinity, and
+atan(\&plusmn;\&infin;) = \&plusmn;\ensuremath{\pi}/2); the \texttt{atan2}
+functions return a value in the range \url{-&pi;,+&pi;}. For \texttt{atan2}, a
+domain error may occur if both arguments are zero.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float atanf(float x); /* C99 */
+	float atan2f(float y, float x); /* C99 */
+	double atan(double x);
+	double atan2(double y, double x);
+	long double atanl(long double x); /* C99 */
+	long double atan2l(long double y, long double x); /* C99 */
+\end{lstlisting}
+
+\subsubsection{The \texttt{cos}, \texttt{sin}, and \texttt{tan} functions}
+The \texttt{cos}, \texttt{sin}, and \texttt{tan} functions return the cosine,
+sine, and tangent of the argument, expressed in radians.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float cosf(float x); /* C99 */
+	float sinf(float x); /* C99 */
+	float tanf(float x); /* C99 */
+	double cos(double x);
+	double sin(double x);
+	double tan(double x);
+	long double cosl(long double x); /* C99 */
+	long double sinl(long double x); /* C99 */
+	long double tanl(long double x); /* C99 */
+\end{lstlisting}
+
+\subsection{Hyperbolic functions}
+The \texttt{cosh}, \texttt{sinh} and \texttt{tanh} functions compute the
+hyperbolic cosine, the hyperbolic sine, and the hyperbolic tangent of the
+argument respectively. For the hyperbolic sine and cosine functions, a range
+error occurs if the magnitude of the argument is too large.
+
+The \texttt{acosh} functions compute the area hyperbolic cosine of the
+argument. A domain error occurs for arguments less than 1.
+
+The \texttt{asinh} functions compute the area hyperbolic sine of the argument.
+
+The \texttt{atanh} functions compute the area hyperbolic tangent of the
+argument. A domain error occurs if the argument is not in the interval
+\href{-1,}{+1}. A range error may occur if the argument equals -1 or +1.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float coshf(float x); /* C99 */
+	float sinhf(float x); /* C99 */
+	float tanhf(float x); /* C99 */
+	double cosh(double x); 
+	double sinh(double x);
+	double tanh(double x);
+	long double coshl(long double x); /* C99 */
+	long double sinhl(long double x); /* C99 */
+	long double tanhl(long double x); /* C99 */
+	float acoshf(float x); /* C99 */
+	float asinhf(float x); /* C99 */
+	float atanhf(float x); /* C99 */
+	double acosh(double x); /* C99 */
+	double asinh(double x); /* C99 */
+	double atanh(double x); /* C99 */
+	long double acoshl(long double x); /* C99 */
+	long double asinhl(long double x); /* C99 */
+	long double atanhl(long double x); /* C99 */
+\end{lstlisting}
+
+\subsection{Exponential and logarithmic functions}
+\subsubsection{The \texttt{exp}, \texttt{exp2}, and \texttt{expm1} functions}
+The \texttt{exp} functions compute the base-\emph{e} exponential function of
+\texttt{x} (\emph{e}\(^{x}\)). A range error occurs if the magnitude of
+\texttt{x} is too large.
+
+The \texttt{exp2} functions compute the base-2 exponential function of
+\texttt{x} (2\(^{x}\)). A range error occurs if the magnitude of \texttt{x} is
+too large.
+
+The \texttt{expm1} functions compute the base-\emph{e} exponential function of
+the argument, minus 1. A range error occurs in the magnitude of \texttt{x} is
+too large.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float expf(float x); /* C99 */
+	double exp(double x);
+	long double expl(long double x); /* C99 */
+	float exp2f(float x); /* C99 */
+	double exp2(double x); /* C99 */
+	long double exp2l(long double x); /* C99 */
+	float expm1f(float x); /* C99 */
+	double expm1(double x); /* C99 */
+	long double expm1l(long double x); /* C99 */
+\end{lstlisting}
+
+\subsubsection{The \texttt{frexp}, \texttt{ldexp}, \texttt{modf}, \texttt{scalbn}, and \texttt{scalbln} functions}
+These functions are heavily used in software floating-point emulators, but are
+otherwise rarely directly called.
+
+Inside the computer, each floating point number is represented by two parts:
+\begin{itemize}
+	\item The significand is either in the range [1/2, 1), or it equals zero.
+	\item The exponent is an integer.
+\end{itemize}
+
+The value of a floating point number \(v\) is
+$(v = significand * 2^{exponent})$.
+
+The \texttt{frexp} functions break the argument floating point number
+\texttt{value} into those two parts, the exponent and significand.  After
+breaking it apart, it stores the exponent in the \texttt{int} object pointed to
+by \texttt{ex}, and returns the significand.  In other words, the value
+returned is a copy of the given floating point number but with an exponent
+replaced by 0.  If \texttt{value} is zero, both parts of the result are zero.
+
+The \texttt{ldexp} functions multiply a floating-point number by a integral
+power of 2 and return the result.  In other words, it returns copy of the given
+floating point number with the exponent increased by ex.  A range error may
+occur.
+
+The \texttt{modf} functions break the argument \texttt{value} into integer and
+fraction parts, each of which has the same sign as the argument. They store the
+integer part in the object pointed to by \texttt{*iptr} and return the fraction
+part.  The \texttt{*iptr} is a floating-point type, rather than an ``int''
+type, because it might be used to store an integer like 1 000 000 000 000 000
+000 000 which is too big to fit in an int.
+
+The \texttt{scalbn} and \texttt{scalbln} compute \texttt{x} \&times;
+\texttt{FLT\_RADIX\texttt{n}}.
+\texttt{FLT\_RADIX} is the base of the floating-point system; if it is 2, the
+functions are equivalent to \texttt{ldexp}.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float frexpf(float value, int *ex); /* C99 */
+	double frexp(double value, int *ex);
+	long double frexpl(long double value, int *ex); /* C99 */
+	float ldexpf(float x, int ex); /* C99 */
+	double ldexp(double x, int ex);
+	long double ldexpl(long double x, int ex); /* C99 */
+	float modff(float value, float *iptr); /* C99 */
+	double modf(double value, double *iptr); 
+	long double modfl(long double value, long double *iptr); /* C99 */
+	float scalbnf(float x, int ex); /* C99 */
+	double scalbn(double x, int ex); /* C99 */
+	long double scalbnl(long double x, int ex); /* C99 */
+	float scalblnf(float x, long int ex); /* C99 */
+	double scalbln(double x, long int ex); /* C99 */
+	long double scalblnl(long double x, long int ex); /* C99 */
+\end{lstlisting}
+
+Most C floating point libraries also implement the IEEE754-recommended
+nextafter(), nextUp( ), and nextDown( ) functions.
+
+\subsubsection{The \texttt{log}, \texttt{log2}, \texttt{log1p}, and \texttt{log10} functions}
+The \texttt{log} functions compute the base-\emph{e} natural (\textbf{not}
+common) logarithm of the argument and return the result. A domain error occurs
+if the argument is negative. A range error may occur if the argument is zero.
+
+The \texttt{log1p} functions compute the base-\emph{e} natural (\textbf{not}
+common) logarithm of one plus the argument and return the result. A domain
+error occurs if the argument is less than -1. A range error may occur if the
+argument is -1.
+
+The \texttt{log10} functions compute the common (base-10) logarithm of the
+argument and return the result. A domain error occurs if the argument is
+negative. A range error may occur if the argument is zero.
+
+The \texttt{log2} functions compute the base-2 logarithm of the argument and
+return the result. A domain error occurs if the argument is negative. A range
+error may occur if the argument is zero.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float logf(float x); /* C99 */
+	double log(double x);
+	long double logl(long double x); /* C99 */
+	float log1pf(float x); /* C99 */
+	double log1p(double x); /* C99 */
+	long double log1pl(long double x); /* C99 */
+	float log10f(float x); /* C99 */
+	double log10(double x);
+	long double log10l(long double x); /* C99 */
+	float log2f(float x); /* C99 */
+	double log2(double x); /* C99 */
+	long double log2l(long double x); /* C99 */
+\end{lstlisting}
+
+\subsubsection{The \texttt{ilogb} and \texttt{logb} functions}
+
+The \texttt{ilogb} functions extract the exponent of \texttt{x} as a signed int
+value. If \texttt{x} is zero, they return the value \texttt{FP\_ILOGB0}; if
+\texttt{x} is infinite, they return the value \texttt{INT\_MAX}; if \texttt{x}
+is not-a-number they return the value \texttt{FP\_ILOGBNAN}; otherwise, they
+are equivalent to calling the corresponding \texttt{logb} function and casting
+the returned value to type \texttt{int}. A range error may occur if \texttt{x}
+is zero. \texttt{FP\_ILOGB0} and \texttt{FP\_ILOGBNAN} are macros defined in
+\texttt{math.h}; \texttt{INT\_MAX} is a macro defined in \texttt{limits.h}.
+
+The \texttt{logb} functions extract the exponent of \texttt{x} as a signed integer value in floating-point format. If \texttt{x} is subnormal, it is treated as if it were normalized; thus, for positive finite \texttt{x}, 1 $ \leq $ \texttt{x} \&times; \texttt{FLT\_RADIX\textless{}sup\textgreater{}-logb(x)\textless{}/sup\textgreater{}} \textless{} \texttt{FLT\_RADIX} . \texttt{FLT\_RADIX} is the radix for floating-point numbers, defined in the \texttt{float.h} header.
+
+\textless{}source lang=c\textgreater{}
+\begin{verbatim}
+	#include <math.h>
+	int ilogbf(float x); /* C99 */
+	int ilogb(double x); /* C99 */
+	int double ilogbl(long double x); /* C99 */
+	float logbf(float x); /* C99 */
+	double logb(double x); /* C99 */
+	long double logbl(long double x); /* C99 */
+\end{verbatim}
+\textless{}/source\textgreater{}
+
+\section{Power functions}
+
+\subsection{The \texttt{pow} functions}
+
+The \texttt{pow} functions compute \texttt{x} raised to the power \texttt{y} and return the result. A domain error occurs if \texttt{x} is negative and \texttt{y} is not an integral value. A domain error occurs if the result cannot be represented when \texttt{x} is zero and \texttt{y} is less than or equal to zero. A range error may occur.
+
+\textless{}source lang=c\textgreater{}
+\begin{verbatim}
+	#include <math.h>
+	float powf(float x, float y); /* C99 */
+	double pow(double x, double y);
+	long double powl(long double x, long double y); /* C99 */
+\end{verbatim}
+\textless{}/source\textgreater{}
+
+\subsection{The \textless{}code\textgreater{}sqrt\textless{}code\textgreater{} functions}
+
+The \textless{}code\textgreater{}sqrt\textless{}/code\textgreater{} functions compute the nonnegative square root of \textless{}code\textgreater{}x\textless{}/code\textgreater{} and return the result. A domain error occurs if the argument is negative.
+
+\textless{}source lang=c\textgreater{}
+\begin{verbatim}
+	#include <math.h>
+	float sqrtf(float x); /* C99 */
+	double sqrt(double x);
+	long double sqrtl(long double x); /* C99 */
+\end{verbatim}
+\textless{}/source\textgreater{}
+
+\subsection{The \textless{}code\textgreater{}cbrt\textless{}code\textgreater{} functions}
+
+The \textless{}code\textgreater{}cbrt\textless{}/code\textgreater{} functions compute the cube root of \textless{}code\textgreater{}x\textless{}/code\textgreater{} and return the result.
+
+\textless{}source lang=c\textgreater{}
+\begin{verbatim}
+	#include <math.h>
+	float cbrtf(float x); /* C99 */
+	double cbrt(double x); /* C99 */
+	long double cbrtl(long double x); /* C99 */
+\end{verbatim}
+\textless{}/source\textgreater{}
+
+\subsection{The \textless{}code\textgreater{}hypot\textless{}code\textgreater{} functions}
+
+The \textless{}code\textgreater{}hypot\textless{}/code\textgreater{} functions compute the square root of the sums of the squares of \textless{}code\textgreater{}x\textless{}/code\textgreater{} and \textless{}code\textgreater{}y\textless{}/code\textgreater{}, without overflow or underflow, and return the result.
+
+\textless{}source lang=c\textgreater{}
+\begin{verbatim}
+	#include <math.h>
+	float hypotf(float x, float y); /* C99 */
+	double hypot(double x, double y); /* C99 */
+	long double hypotl(long double x, long double y); /* C99 */
+\end{verbatim}
+\textless{}/source\textgreater{}
+
+\section{Nearest integer, absolute value, and remainder functions}
+
+\subsection{The \textless{}code\textgreater{}ceil\textless{}/code\textgreater{} and \textless{}code\textgreater{}floor\textless{}/code\textgreater{} functions}
+
+The \textless{}code\textgreater{}ceil\textless{}/code\textgreater{} functions compute the smallest integral value not less than \textless{}code\textgreater{}x\textless{}/code\textgreater{} and return the result; the \textless{}code\textgreater{}floor\textless{}/code\textgreater{} functions compute the largest integral value not greater than \textless{}code\textgreater{}x\textless{}/code\textgreater{} and return the result.
+
+\textless{}source lang=c\textgreater{}
+\begin{verbatim}
+	#include <math.h>
+	float ceilf(float x); /* C99 */
+	double ceil(double x);
+	long double ceill(long double x); /* C99 */
+	float floorf(float x); /* C99 */
+	double floor(double x);
+	long double floorl(long double x); /* C99 */
+\end{verbatim}
+\textless{}/source\textgreater{}
+
+\subsection{The \textless{}code\textgreater{}fabs\textless{}/code\textgreater{} functions}
+
+The \textless{}code\textgreater{}fabs\textless{}/code\textgreater{} functions compute the absolute value of a floating-point number \textless{}code\textgreater{}x\textless{}/code\textgreater{} and return the result.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float fabsf(float x); /* C99 */
+	double fabs(double x); 
+	long double fabsl(long double x); /* C99 */
+\end{lstlisting}
+
+\subsection{The fmod functions}
+The fmod functions compute the floating-point remainder of x/y and return the
+value x - i * y, for some integer i such that, if y is nonzero, the result has
+the same sign as x and magnitude less than the magnitude of y. If y is zero,
+whether a domain error occurs or the fmod functions return zero is
+implementation-defined.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float fmodf(float x, float y); /* C99 */
+	double fmod(double x, double y);
+	long double fmodl(long double x, long double y); /* C99 */
+\end{lstlisting}
+
+\subsection{The nearbyint, rint, lrint, and llrint functions}
+The nearbyint functions round their argument to an integer value in
+floating-point format, using the current rounding direction and without raising
+the "inexact" floating-point exception.  The rint functions are similar to the
+nearbyint functions except that they can raise the "inexact" floating-point
+exception if the result differs in value from the argument.  The lrint and
+llrint functions round their arguments to the nearest integer value according
+to the current rounding direction. If the result is outside the range of values
+of the return type, the numeric result is undefined and a range error may occur
+if the magnitude of the argument is too large.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float nearbyintf(float x); /* C99 */
+	double nearbyint(double x); /* C99 */
+	long double nearbyintl(long double x); /* C99 */
+	float rintf(float x); /* C99 */
+	double rint(double x); /* C99 */
+	long double rintl(long double x); /* C99 */
+	long int lrintf(float x); /* C99 */
+	long int lrint(double x); /* C99 */
+	long int lrintl(long double x); /* C99 */
+	long long int llrintf(float x); /* C99 */
+	long long int llrint(double x); /* C99 */
+	long long int llrintl(long double x); /* C99 */
+\end{lstlisting}
+
+\subsection{The round, lround, and llround functions}
+The round functions round the argument to the nearest integer value in
+floating-point format, rounding halfway cases away from zero, regardless of the
+current rounding direction.
+
+The lround and llround functions round the argument to the nearest integer
+value, rounding halfway cases away from zero, regardless of the current
+rounding direction. If the result is outside the range of values of the return
+type, the numeric result is undefined and a range error may occur if the
+magnitude of the argument is too large.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float roundf(float x); /* C99 */
+	double round(double x); /* C99 */
+	long double roundl(long double x); /* C99 */
+	long int lroundf(float x); /* C99 */
+	long int lround(double x); /* C99 */
+	long int lroundl(long double x); /* C99 */
+	long long int llroundf(float x); /* C99 */
+	long long int llround(double x); /* C99 */
+	long long int llroundl(long double x); /* C99 */
+\end{lstlisting}
+
+\subsection{The trunc functions}
+The functions round their argument to the integer value in floating-point
+format that is nearest but no larger in magnitude than the argument.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float truncf(float x); /* C99 */
+	double trunc(double x); /* C99 */
+	long double truncl(long double x); /* C99 */
+\end{lstlisting}
+
+\subsection{The remainders functions}
+The functions compute the remainder REM as defined by IEC 60559. The definition
+reads, When \emph{y} != 0, the remainder \emph{r} = \emph{x} REM \emph{y} is
+defined regardless of the rounding mode by the mathematical reduction \emph{r}
+= \emph{x} --- \emph{ny}, where \emph{n} is the integer nearest the exact value
+of \emph{x}/\emph{y}; whenever \textbar{}\emph{n} ---
+\emph{x}/\emph{y}\textbar{} = $\frac{1}{2}$, then \emph{n} is even.  Thus, the
+remainder is always exact. If \emph{r} = 0, its sign shall be that of \emph{x}.
+This definition is applicable for all implementations.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float remainderf(float x, float y); /* C99 */
+	double remainder(double x, double y); /* C99 */
+	long double remainderl(long double x, long double y); /* C99 */
+\end{lstlisting}
+
+\subsection{The remquo code functions}
+The remquo functions return the same remainder as the remainder functions. In
+the object pointed to by quo, they store a value whose sign is the sign of x/y
+and whose magnitude is congruent modulo 2n to the magnitude of the integral
+quotient of x/y, where n is an implementation-defined integer greater than or
+equal to 3.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float remquof(float x, float y, int *quo); /* C99 */
+	double remquo(double x, double y, int *quo); /* C99 */
+	long double remquol(long double x, long double y, int *quo); /* C99 */
+\end{lstlisting}
+
+\section{Error and gamma functions}
+The functions compute the error function of the argument $2/(\pi^{frac{1}{2}}
+\int 0^{x} e^{-t^{2}} dt)$; the functions compute the complimentary error
+function of the argument (that is, 1 --- erf x). For the functions, a range
+error may occur if the argument is too large.
+
+The gamma functions compute the natural logarithm of the absolute value of the
+gamma of the argument (that is,
+log\(_{\emph{e}}\)\textbar{}\&Gamma;(x)\textbar{}). A range error may occur if
+the argument is a negative integer or zero.
+
+The tgamma functions compute the gamma of the argument (that is, \&Gamma;(x)).
+A domain error occurs if the argument is a negative integer or if the result
+cannot be represented when the argument is zero. A range error may occur.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <math.h>
+	float erff(float x); /* C99 */
+	double erf(double x); /* C99 */
+	long double erfl(long double x); /* C99 */
+	float erfcf(float x); /* C99 */
+	double erfc(double x); /* C99 */
+	long double erfcl(long double x); /* C99 */
+	float lgammaf(float x); /* C99 */
+	double lgamma(double x); /* C99 */
+	long double lgammal(long double x); /* C99 */
+	float tgammaf(float x); /* C99 */
+	double tgamma(double x); /* C99 */
+	long double tgammal(long double x); /* C99 */
+\end{lstlisting}

@@ -1,0 +1,233 @@
+\section{Input and Output}
+When you take time to consider it, a computer would be pretty useless without
+some way to talk to the people who use it. Just like we need information in
+order to accomplish tasks, so do computers. And just as we supply information
+to others so that they can do tasks, so do computers.  These supplies and
+returns of information to a computer are called input and output. 'Input' is
+information supplied to a computer or program. 'Output' is information provided
+by a computer or program. Frequently, computer programmers will lump the
+discussion in the more general term input/output or simply, I/O.  In C, there
+are many different ways for a program to communicate with the user. Amazingly,
+the most simple methods usually taught to beginning programmers may also be the
+most powerful. In the "Hello, World" example at the beginning of this text, we
+were introduced to a Standard Library file stdio.h, and one of its functions,
+printf(). Here we discuss more of the functions that stdio.h gives us.
+
+\subsection{Output using printf}
+Recall from the beginning of this text the demonstration program duplicated below:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+
+int main(void) {
+	printf("Hello, world!\n");
+	return 0;
+}
+\end{lstlisting}
+
+If you compile and run this program, you will see the sentence below show up on
+your screen:
+
+\scriptsize
+\begin{verbatim}
+Hello, world!
+\end{verbatim}
+\normalsize
+
+This amazing accomplishment was achieved by using the function printf(). A
+function is like a "black box" that does something for you without exposing the
+internals inside. We can write functions ourselves in C, but we will cover that
+later.  You have seen that to use printf() one puts text, surrounded by quotes,
+in between the parentheses. We call the text surrounded by quotes a literal
+string (or just a string), and we call that string an argument to printf.  As a
+note of explanation, it is sometimes convenient to include the open and closing
+parentheses after a function name to remind us that it is, indeed, a function.
+However usually when the name of the function we are talking about is
+understood, it is not necessary.  As you can see in the example above, using
+printf() can be as simple as typing in some text, surrounded by double quotes
+(note that these are double quotes and not two single quotes). So, for example,
+you can print any string by placing it as an argument to the printf() function:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+printf("This sentence will print out exactly as you see it...");
+\end{lstlisting}
+
+And once it is contained in a proper main() function, it will show:
+\scriptsize
+\begin{verbatim}
+This sentence will print out exactly as you see it...
+\end{verbatim}
+\normalsize
+
+\subsection{Printing numbers and escape sequences}
+\subsubsection{Placeholder codes}
+The printf function is a powerful function, and is probably the most-used
+function in C programs.  For example, let us look at a problem. Say we don't
+know what 1905 + 31214 is. Let's use C to get the answer.  We start writing
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h> // this is important, since printf 
+                   // can't be used without this line
+int main(void) {
+	printf("1905+31214 is");
+}
+\end{lstlisting}
+
+but here we are stuck! printf only prints strings! Thankfully, printf has
+methods for printing numbers. What we do is put a placeholder format code in
+the string. We write:
+\scriptsize
+\begin{verbatim}
+printf("1905+31214 is %d", 1905+31214);
+\end{verbatim}
+\normalsize
+
+The placeholder \%d literally "holds the place" for the actual number that is
+the result of adding 1905 to 31214.  These placeholders are called format
+specifiers. Many other format specifiers work with printf. If we have a
+floating-point number, we can use \%f to print out a floating-point number,
+decimal point and all. Other format specifiers are:
+\begin{itemize}
+\item \%i - int (same as \%d)
+\item \%lf - double
+\item \%c - char
+\item \%s - string
+\item \%x - hexadecimal
+\end{itemize}
+
+\subsubsection{Tabs and newlines}
+What if, we want to achieve some output that will look like:
+\scriptsize
+\begin{verbatim}
+   1905 
+  31214 +
+  -----
+\end{verbatim}
+\normalsize
+
+printf will not put line breaks in at the end of each statement: we must do
+this ourselves. But how?  What we can do is use the newline escape character.
+An escape character is a special character that we can write but will do
+something special onscreen, such as make a beep, write a tab, and so on. To
+write a newline we write \\n. All escape characters start with a backslash.  So
+to achieve the output above, we write
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+printf(" 1905\n31214 +\n-----\n");
+\end{lstlisting}
+
+or to be a bit more clear, we can break this long printf statement over several
+lines. So our program will be
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+ 
+int main(void) {
+	printf(" 1905\n");
+	printf("31214 +\n");
+	printf("-----\n");
+	printf("%d", 1905+31214);
+	return 0;
+}
+\end{lstlisting}
+There are other escape characters we can use. Another common one is to use \\t
+to write a tab. You can use \\a to ring the computer's bell, but you should not
+use this very much in your programs, as excessive use of sound is not very
+friendly to the user.
+
+\subsection{Other output methods}
+\subsubsection{puts()}
+The puts() function is a very simple way to send a string to the screen when
+you have no placeholders to be concerned about. It works very much like the
+printf() function we saw the "Hello, World!" example:
+\scriptsize
+\begin{verbatim}
+puts("Print this string.");
+\end{verbatim}
+\normalsize
+
+will print to the screen:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+Print this string.
+\end{lstlisting}
+
+followed by the newline character (as discussed above). (The puts function
+appends a newline character to its output.) The fputs function is similar:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+fputs("Print this string via fputs", stdout);
+\end{lstlisting}
+
+will print to the stdout file (usually the screen):
+\scriptsize
+\begin{verbatim}
+Print this string via fputs
+\end{verbatim}
+\normalsize
+
+without a newline tacked on to the end.  Since puts() and fputs() does not
+allow the placeholders and the associated formatting that printf() allows, for
+most programmers learning printf() is sufficient for their needs.
+
+\subsection{Input using scanf()}
+The scanf() function is the input method equivalent to the printf() output
+function - simple yet powerful. In its simplest invocation, the scanf format
+string holds a single placeholder representing the type of value that will be
+entered by the user. These placeholders are exactly the same as the printf()
+function - \%d for ints, \%f for floats, and \%lf for doubles. There is, however,
+one variation to scanf() as compared to printf(). The scanf() function requires
+the memory address of the variable to which you want to save the input value.
+While pointers are possible here, this is a concept that won't be approached
+until later in the text. Instead, the simple technique is to use the address-of
+operator, \&. For now it may be best to consider this "magic" before we discuss
+pointers. A typical application might be like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include "stdio.h"
+ 
+int main(void) {
+	int a;
+	
+	printf("Please input an integer value: ");
+	scanf("%d", &a);
+	printf("You entered: %d\n", a);
+	
+	return 0;
+}
+\end{lstlisting}
+
+If you were to describe the effect of the scanf() function call above, it might
+read as: "Read in an integer from the user and store it at the address of
+variable a".  If you are trying to input a string using scanf, you should not
+include the \& operator. The code below will not compile.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+scanf("%s", &a);
+\end{lstlisting}
+
+The correct usage would be:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+scanf("%s", a);
+\end{lstlisting}
+Note of caution on inputs: When data is typed at a keyboard, the information
+does not go straight to the program that is running. It is first stored in what
+is known as a buffer - a small amount of memory reserved for the input source.
+Sometimes there will be data left in the buffer when the program wants to read
+from the input source, and the scanf() function will read this data instead of
+waiting for the user to type something. Some may suggest you use the function
+fflush(stdin), which may work as desired on some computers, but isn't
+considered good practice, as you will see later. Doing this has the downfall
+that if you take your code to a different computer with a different compiler,
+your code may not work properly.

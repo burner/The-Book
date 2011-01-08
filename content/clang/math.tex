@@ -1,0 +1,259 @@
+\section{Simple math}
+\subsection{Operators and Assignments}
+C has a wide range of operators that make simple math easy to handle. The list
+of operators grouped into precedence levels is as follows:
+
+\subsubsection{Primary expressions}
+An identifier is a primary expression, provided that it has been declared as
+designating an object (in which case it is an lvalue value that can be used as
+the left side of an assignment expression) or a function (in which case it is a
+function designator).
+
+A constant is a primary expression. Its type depends on its form and value.
+
+A string literal is a primary expression.
+
+A parenthesized expression is a primary expression. Its type and value are
+those of the unparenthesized expression.
+
+\subsubsection{Postfix operators}
+First, a primary expression is also a postfix expression. The following
+expressions are also postfix expressions:
+
+A postfix expression followed by a left square bracket (\texttt{[}), an
+expression, and a right square bracket (\texttt{]}) constitutes an invocation
+of the array subscript operator. One of the expressions shall have type
+``pointer to object \emph{type}'' and the other shall have an integer type; the
+result type is \emph{type}. Successive array subscript operators designate an
+element of a multidimensional array.
+
+A postfix expression followed by parentheses or an optional parenthesized
+argument list indicates an invocation of the function call operator.
+
+A postfix expression followed by a dot (\texttt{.}) followed by an identifier
+selects a member from a structure or union; a postfix expression followed by an
+arrow (\texttt{-\textgreater{}}) followed by an identifier selects a member
+from a structure or union who is pointed to by the pointer on the left-hand
+side of the expression.
+
+A postfix expression followed by the increment or decrement operators
+(\texttt{++} or \texttt{--}) indicates that the variable is to be incremented
+or decremented as a side effect. The value of the expression is the value of
+the postfix expression \emph{before} the increment or decrement.
+
+\subsubsection{Unary operators}
+
+First, a unary expression is a postfix expression. The following expressions
+are all postfix expressions:
+
+The increment or decrement operators followed by a unary expression is a unary
+expression. The value of the expression is the value of the unary expression
+\emph{after} the increment or decrement.
+
+The following operators followed by a cast expression are unary expressions:
+\begin{verbatim}
+	Operator     Meaning
+	========     =======
+	   &         Address-of; value is the 
+				 location of the operand
+	   *         Contents-of; value is what 
+	   *         is stored at the location
+	   -         Negation
+	   +         Value-of operator
+	   !         Logical negation ( (!E) is 
+				 equivalent to (0==E) )
+	   ~         Bit-wise complement
+\end{verbatim}
+
+The keyword \texttt{sizeof} followed by a unary expression is a unary
+expression. The value is the size of the type of the expression in bytes. The
+expression is not evaluated.
+
+The keyword \texttt{sizeof} followed by a parenthesized type name is a unary
+expression. The value is the size of the type in bytes.
+
+\subsubsection{Cast operators}
+A cast expression is a unary expression.
+
+A parenthesized type name followed by a cast expression is a cast expression.
+The parenthesized type name has the effect of forcing the cast expression into
+the type specified by the type name in parentheses. For arithmetic types, this
+either does not change the value of the expression, or truncates the value of
+the expression if the expression is an integer and the new type is smaller than
+the previous type.
+
+\subsubsection{Multiplicative and additive operators}
+In C, simple math is very easy to handle. The following operators exist: +
+(addition), --- (subtraction), * (multiplication), / (division), and \%
+(modulus); You likely know all of them from your math classes --- except,
+perhaps, modulus. It returns the \textbf{remainder} of a division (e.g. 5 \% 2
+= 1). 
+
+Care must be taken with the modulus, because it's not the equivalent of the
+mathematical modulus: (-5) \% 2 is not 1, but -1. Division of integers will
+return an integer, and the division of a negative integer by a positive integer
+will round towards zero instead of rounding down (e.g. (-5) / 3 = -1 instead of
+-2).
+
+There is no inline operator to do the power (e.g. 5 \^{} 2 is \textbf{not} 25,
+and 5 ** 2 is an error), but there is a power function.
+
+The mathematical order of operations does apply. For example (2 + 3) * 2 = 10
+while 2 + 3 * 2 = 8. The order of precedence in C is BFDMAS: Brackets (or
+parentheses), Functions, Division or Multiplication (from left to right,
+whichever comes first), Addition or Subtraction (also from left to right,
+whichever comes first).
+
+Actually, there are more operators than the above in C.
+
+Assignment in C is simple. You declare the type of variable, the name of the
+variable and what it's equal to. For example, int x = 0; double y = 0.0; char z
+= 'a';
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+
+int main() {
+	int i = 0, j = 0;
+	
+	/* while i is less than 5 AND j is less than 5, loop */
+	while( (i < 5) && (j < 5) ) {
+		/* postfix increment, i++
+		 *     the value of i is read and then incremented */
+		printf("i: %d\t", i++);
+		
+		/* prefix increment, ++j 
+		 *     the value of j is incremented and then read */
+		printf("j: %d\n", ++j);
+	}
+	
+	printf("At the end they have both equal values:\ni: %d\tj: %d\n", i, j);
+	
+	return 0;
+}
+\end{lstlisting}
+
+will display the following:
+
+\begin{verbatim}
+	i: 0    j: 1
+	i: 1    j: 2
+	i: 2    j: 3
+	i: 3    j: 4
+	i: 4    j: 5
+	At the end they have both equal values:
+	i: 5    j: 5
+\end{verbatim}
+
+\subsubsection{shift and rotate}
+Shift functions are often used in low-level I/O hardware interfacing.  Shift
+and rotate functions are heavily used in cryptography and software floating
+point emulation.  Other than that, shifts can be used in place of division or
+multiplication by a power of two.  Many processors have dedicated function
+blocks to make these operations fast -- see Microprocessor Design/Shift and
+Rotate Blocks. On processors which have such blocks, most C compilers compile
+shift and rotate operators to a single assembly-language instruction -- see X86
+Assembly/Shift and Rotate.
+
+\paragraph{shift left}
+The \texttt{\textless{}\textless{}} operator shifts the binary representation
+to the left, dropping the most significant bits and appending it with zero
+bits.  The result is equivalent to multiplying the integer by a power of two.
+
+\paragraph{unsigned shift right}
+The unsigned shift right operator, also sometimes called the logical right
+shift operator.  It shifts the binary representation to the right, dropping the
+least significant bits and prepending it with zeros.  The
+\texttt{\textgreater{}\textgreater{}} operator is equivalent to division by a
+power of two for unsigned integers.
+
+\paragraph{signed shift right}
+The signed shift right operator, also sometimes called the arithmetic right
+shift operator.  It shifts the binary representation to the right, dropping the
+least significant bit, but prepending it with copies of the original sign bit.
+The \texttt{\textgreater{}\textgreater{}} operator is not equivalent to
+division for signed integers.
+
+In C, the behavior of the \texttt{\textgreater{}\textgreater{}} operator
+depends on the data type it acts on.  Therefore, a signed and an unsigned right
+shift looks exactly the same, but produces a different result in some cases.
+
+\paragraph{rotate right}
+Contrary to popular belief, it is possible to write C code that compiles down
+to the ``rotate'' assembly language instruction (on CPUs that have such an
+instruction).
+
+Most compilers recognize this idiom:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	unsigned int x;
+	unsigned int y;
+	/* ... */
+	y = (x >> shift) | (x << (32 - shift));
+\end{lstlisting}
+
+and compile it to a single 32 bit rotate instruction.
+
+\paragraph{rotate left}
+Most compilers recognize this idiom:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	 unsigned int x;
+	 unsigned int y;
+	 /* ... */
+	 y = (x << shift) | (x >> (32 - shift));
+\end{lstlisting}
+
+and compile it to a single 32 bit rotate instruction.
+
+On some systems, this may be \#defineed as a macro or defined as an inline
+function called something like leftrotate32 or rotl32 in a header file
+like bitops.h.
+
+\subsubsection{Relational and equality operators}
+The relational binary operators \texttt{\textless{}} (less than),
+\texttt{\textgreater{}} (greater than), \texttt{\textless{}=} (less than or
+equal), and \texttt{\textgreater{}=} (greater than or equal) operators return a
+value of 1 if the result of the operation is true, 0 if false.
+
+The equality binary operators \texttt{==} (equals) and \texttt{!=} (not equals)
+operators are similar to the relational operators except that their precedence
+is lower.
+
+\subsubsection{Bitwise operators}
+The bitwise operators are \texttt{\&} (and), \texttt{\^{}} (exclusive or) and
+\texttt{\textbar{}} (inclusive or). The \texttt{\&} operator has higher
+precedence than \texttt{\^{}}, which has higher precedence than
+\texttt{\textbar{}}.
+
+\subsubsection{Logical operators}
+The logical operators are \texttt{\&\&} (and), and
+\texttt{\textbar{}\textbar{}} (or). Both of these operators produce 1 if the
+relationship is true and 0 for false. Both of these operators short-circuit; if
+the result of the expression can be determined from the first operand, the
+second is ignored.
+
+\subsubsection{Conditional operators}
+The ternary \texttt{?:} operator is the conditional operator. The expression
+\texttt{(x ? y : z)} has the value of \texttt{y} if \texttt{x} is nonzero,
+\texttt{z} otherwise.
+
+\subsubsection{Assignment operators}
+The assignment operators are \texttt{=}, \texttt{*=}, \texttt{/=},
+\texttt{\%=}, \texttt{+=}, \texttt{-=}, \texttt{\textless{}\textless{}=},
+\texttt{\textgreater{}\textgreater{}=}, \texttt{\&=}, \texttt{\^{}=}, and
+\texttt{\textbar{}=} . The \texttt{=} operator stores the value of the right
+operand into the location determined by the left operand, which must be an
+\href{http://en.wikibooks.org.org/wiki/lvalue}{lvalue}. For the others,
+\texttt{x op= y} is shorthand for \texttt{x = x op (y)} .
+
+\subsubsection{Comma operator}
+The operator with the least precedence is the comma operator. The value of the
+expression \texttt{x, y} is the value of \texttt{y}, but \texttt{x} is
+evaluated.

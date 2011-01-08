@@ -1,0 +1,86 @@
+\section{Compiling}
+Having covered the basic concepts of C programming, we can now briefly discuss
+the process of \emph{compilation}.
+
+Like any programming language, C by itself is completely incomprehensible to a
+microprocessor. Its purpose is to provide an intuitive way for humans to
+provide instructions that can be easily converted into machine code that
+\emph{is} comprehensible to a microprocessor. The \textbf{\emph{compiler}} is
+what takes this code, and translates it into the machine code. 
+
+To those new to programming, this seems fairly simple. A naive compiler might
+read in every source file, translate everything into machine code, and write
+out an executable. This could work, but has two serious problems. First, for a
+large project, the computer may not have enough memory to read all of the
+source code at once. Second, if you make a change to a single source file, you
+would rather not have to recompile the \emph{entire} application. 
+
+To deal with these problems, compilers break their job down into steps; for
+each source file (each \texttt{.c} file), the compiler reads the file, reads
+the files it references with \texttt{\#include}, and translates it to machine
+code. The result of this is an ``object file'' (\texttt{.o}). Once every object
+file is made, a ``linker'' collects all of the object files and writes the
+actual program. This way, if you change one source file, only that file needs
+to be recompiled and then the application needs to be re-linked. 
+
+Without going into the painful details, it can be beneficial to have a
+superficial understanding of the compilation process. In brief, here it is: 
+
+\subsection{Preprocessor}
+Many times you will need to give special instructions to your compiler. This is
+done by inserting \textbf{preprocessor directives} into your code. When you
+begin compiling your code, a special program called the preprocessor scans the
+source code and preforms simple substitution of tokenized strings for others
+according to predefined rules. The preprocessor is not a part of the C
+language.
+
+In C language, all preprocessor directives begin with the pound character (\#).
+You can see one preprocessor directive in the Hello world program introduced in
+A taste of C:
+
+\begin{verbatim}
+	#include <stdio.h>
+\end{verbatim}
+
+This directive causes the header to be included into your program. Other
+directives such as \texttt{\#pragma} control compiler settings and macros. The
+result of the preprocessing stage is a text string. You can think of the
+preprocessor as a non-interactive text editor that prepares your code for the
+compilation step.
+
+\subsection{Syntax Checking}
+This step ensures that the code is valid and will sequence into an executable
+program. Under some compilers, you may get messages or warnings indicating
+potential issues with your program (such as a statement always being true or
+false, etc.) 
+
+When an error is detected in the program, the compiler will normally report the
+filename and line that is giving trouble. 
+
+\subsection{Object Code}
+The compiler produces a machine code equivalent of the source code that can
+then be linked into the final program. The code itself can't be executed yet,
+as it has to complete the linking stage. 
+
+It's important to note after discussing the basics that compilation is a ``one
+way street''. That is, compiling a C source file into machine code is easy, but
+``decompiling'' (turning machine code into the C source that creates it) is
+not. Decompilers for C do exist, but they rarely create useful code.
+
+\subsection{Linking}
+Linking combines the separate object codes into one complete program by
+integrating libraries and the code and producing either an executable program
+or a library. Linking is performed by a linker, which is often part of a
+compiler.
+
+Common errors during this stage are either missing functions, or duplicate
+functions.
+
+\subsection{Automation}
+For large C projects, many programmers choose to automate compilation, both in
+order to reduce user interaction requirements and to speed up the process by
+only recompiling modified files.
+
+Most integrated development environments have some kind of project management,
+which makes such automation very easy. On UNIX-like systems, make and Makefiles
+are often used to accomplish the same.

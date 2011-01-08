@@ -1,0 +1,77 @@
+\section{A taste of C}
+As with nearly every other programming language learning book, we use the
+\emph{Hello world} program to introduce you to C.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+
+int main(void) {
+   printf("Hello, world!\n");
+   return 0;
+}
+\end{lstlisting}
+
+This program prints Hello, world! and then exits.
+Enter this code into your text editor or IDE, and save it as hello.c.
+
+Then, presuming you are using GCC, type \texttt{gcc -o hello hello.c}. This
+tells gcc to compile your hello.c program into a form the machine can execute.
+The '-o hello' tells it to call the compiled program 'hello'.
+
+If you have entered this correctly, you should now see a file called hello.
+This file is the binary version of your program, and when run should display
+Hello, world!
+
+Here is an example of how compiling and running looks when using a terminal on
+a unix system. \texttt{ls} is a common unix command that will list the files in
+the current directory, which in this case is the directory \texttt{progs}
+inside the home directory (represented with the special tilde, \~{}, symbol).
+After running the \texttt{gcc} command, \texttt{ls} will list a new file,
+\texttt{hello} in green. Green is the standard color coding of \texttt{ls} for
+executable files. 
+
+\begin{verbatim}
+~/progs$ ls
+hello.c
+~/progs$ gcc -o hello hello.c
+~/progs$ ls
+<span style="color:green">hello  hello.c
+~/progs$ ./hello
+Hello, world!
+~/progs$
+\end{verbatim}
+
+\subsection{Part-by-part explanation}
+\texttt{\#include \textless{}stdio.h\textgreater{}} tells the C compiler to
+find the standard header called \emph{\textless{stdio.h\textgreater{}}} and add
+it to this program. In C, you often have to pull in extra optional components
+when you need them. \emph{\textless{}stdio.h\textgreater{}} contains
+descriptions of standard input/output functions which you can use to send
+messages to a user, or to read input from a user.
+
+\texttt{int main(void)} is something you'll find in every C program. Every
+program has a \emph{main} function. Generally, the main function is where a
+program begins. However, one C program can be scattered across multiple files,
+so you won't always find a main function in every file.
+The \emph{int} at the beginning means that main will return an integer to the
+operating system when it is finished.
+
+\texttt{printf("Hello, world!\textbackslash{}n");} is the statement that
+actually puts the message to the screen. \emph{printf} is the formatted
+printing function that is declared in the file \emph{stdio.h} --- which is why
+you had to \emph{\#include} that at the start of the program.
+\emph{\textbackslash{}n} is an escape sequence which adds a new line at the end
+of the printed text.
+
+\texttt{return 0;} will return zero (which is the integer referred to on line
+3) to the operating system. When a program runs successfully its return value
+is zero (GCC4 complains if it doesn't when compiling). A non-zero value is
+returned to indicate a warning or error.
+
+The empty line is there because it is (at least on UNIX) considered good
+practice to end a file with a new line. In gcc using the \texttt{-Wall
+-pedantic -ansi} options, if the file does not end with a new line this message
+is displayed: ``warning: no newline at end of file''. (The newline isn't shown
+on the example because MediaWiki automatically removes it)
