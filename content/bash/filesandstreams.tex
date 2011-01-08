@@ -1,0 +1,700 @@
+\section{Files and streams}
+\subsection{The Unix world: one file after another}
+When you think of a computer and everything that goes with it, you usually come
+up with a mental list of all sorts of different things:
+
+\begin{itemize}
+	\item The computer itself
+	\item The monitor
+	\item The keyboard
+	\item The mouse
+	\item Your hard drive with your files and directories on it
+	\item The network connection leading to the Internet
+	\item The printer
+	\item The DVD player
+	\item et cetera
+\end{itemize}
+
+Here's a surprise for you: Unix doesn't have any of these things. Well, almost.
+Unix certainly has \emph{files}. Unix has endless reams of files. And since
+Unix has files, it also has a concept of ``between files'' (think of it this
+way: if your universe consists only of boxes, you automatically know about
+spaces where there are no boxes as well). But Unix knows nothing else than
+that. Everything in the whole (Unix) universe is a file.
+
+Everything is a file. Even things that are really weird things to think of as
+files, are files. Your (data) files are files. Your directories are files. Your
+hard drive is a file. Your \emph{keyboard}, \emph{monitor} and \emph{printer}
+are files. Yes, really: your keyboard is a read-only file of infinite size.
+Your monitor and printer are infinitely sized write-only files. Your network
+connection is a read/write file.
+
+At this point you're probably asking: \emph{Why?} Why would the designers of
+the Unix system have come up with this madness? Why is everything a file? The
+answer is: because if everything is a file, you can \textbf{treat} everything
+like a file. Or, put a different way, you can treat everything in the Unix
+world the same way. And, as we will see shortly, that means you can also
+\emph{combine} virtually everything using file operations.
+
+Before we move on, here's an extra level of weirdness for you: everything in
+Unix is a file. Including the \emph{processes} that run programs. Effectively
+this means that running programs are also files. Including the interactive
+shell session that you've been running to practice scripting in. Yes, really,
+that text screen with the blinking cursor is also a file. And we can prove it
+too. You might recall that in the chapter on Running Commands we mentioned you
+can exit the shell using the Ctrl+d key combination.  Because that combination
+produces the Unix character for... that's right, end-of-file!
+
+\subsection{Streams: what goes between files}
+As we mentioned in the previous subsection, everything in Unix is a file --
+except that which sits \emph{between} files. Between files Unix defines a
+mechanism that allows data to move, bit by bit, from one file to another: the
+\textbf{stream}. A stream is literally what it sounds like: a little river of
+bits pouring from one file into another. Although actually a bridge would
+probably have been a better name because unlike a stream (which is a constant
+flow of water) the flow of bits between files need not be constant, or even
+used at all.
+
+\subsubsection{The standard streams}
+Within the Unix world it is a general convention that each file is connected to
+at least three streams (that's because that turned out to be the most useful
+number for those files that are processes, or running programs). There can be
+more and in fact each file can cause itself to be connected to any number of
+streams (a program can print and open a network connection, for instance). But
+there are three basic streams available to all files, even though they may not
+always be useful or used. These streams are called the ``standard'' streams:
+\begin{description}
+	\item[Standard in (stdin)] the standard stream for input into a file.
+	\item[Standard out (stdout)] the standard stream for output out of a file.
+	\item[Standard error (stderr)] the standard stream for error output from a file.
+\end{description}
+
+As you can probably tell, these streams are very geared towards those files
+that are actually processes of the system. In fact many programming languages
+(like C, C++, Java and Pascal) use exactly these conventions for their standard
+I/O operations. And since the Unix operating system family includes them in the
+core of the system definition, these streams are also central to the Bourne
+Shell.
+
+\subsubsection{Getting hold of the standard streams in your scripts}
+So now we know that there's a general mechanism for basic input and output in
+Unix; but how do you get hold of these streams in a script? What do you have to
+do to hook your script up to the standard out, or read from the standard in?
+Well, the happy answer is: nothing. Your scripts are automatically connected to
+the standard in, out and error stream of the process that is running them. When
+you read input, it automatically comes from the standard in. Your output goes
+straight to the standard out. And program errors go right to the standard
+error. In fact you've already used these streams: every example so far that has
+printed anything has done so to the standard output stream of your script.
+
+And what about the shell in interactive mode? Does that use those standard
+streams as well? Yes, it does. In interactive mode, the standard in stream is
+connected to the keyboard file. And the standard output and standard error are
+connected to the monitor file.
+
+\subsubsection{Okay... But what good is it?}
+This discussion on files and streams has been very interesting so far and a
+nice insight into the depths of Unix. But what good does it do you to know all
+this? Ah, glad you asked!
+
+The Bourne Shell has some built-in features that allow you to do neat tricks
+involving files and their streams. You see, files don't just have streams --
+you can also cross-connect the streams of two files. At the end of the previous
+subsection we said that the standard input of the interactive session is
+connected to the keyboard file. In fact it is connected to the \emph{standard
+output} stream of the keyboard file. And the standard output and error of the
+interactive session are connected to the \emph{standard input} of the monitor
+file. So you can connect the streams of the interactive session to the streams
+of devices.
+
+But wait. Do you remember the remark above that the point of Unix considering
+everything to be a file was that everything gets treated like a file? This is
+why that was important: you can connect a stream from \emph{any} file to a
+stream of \emph{any} other file. You can connect your interactive shell session
+to the printer or the network rather than to the monitor (or in addition to the
+monitor) using streams. You can run a program and have its output go directly
+to the printer by reconnecting the standard output stream of the program. You
+can connect the standard output stream of one program directly to the standard
+input stream of \textbf{another program} and make chains of programs. And the
+Bourne Shell makes it really simple to do all that.
+
+Do you suddenly feel like you've stuck your fingers in the electrical socket?
+That's the feeling of the raw power of the shell flowing through your body....
+
+\section{Redirecting: using streams in the shell}
+As explained in the previous subsection, the shell process is connected by
+standard streams to (by default) the keyboard and the monitor. But very often
+you will want to change this linking. Connecting a file to a stream is a very
+common operation, so would expect it to be called something like ``connecting''
+or ``linking''. But since the Bourne Shell has default connections and
+everything you do is always a \emph{change} in the default connections,
+connecting a file to a (different) stream using the shell is actually called
+\textbf{redirecting}.
+
+There are several operators built in to the Bourne Shell that relate to
+redirecting. The most basic and general one is the pipe operator, which we will
+examine in some detail further on. The others are related to redirecting to
+file.
+
+\subsection{Redirecting to file}
+As we explained (or rather: hinted at) in the previous subsection, one of the
+enormously powerful features of the Bourne Shell on top of a Unix operating
+system is the ability to chain programs together. Execute a program, have it
+produce output, then automatically send that output to another program as
+input. The possible combinations are endless, as is the power of what you can
+achieve.
+
+One of the most common places where you might want to send a program's output
+is to a file in the file system. And this time by file we mean a regular,
+classic data file and not a Unix ``everything is a file including your
+hardware'' file. In order to achieve this you can imagine that we can use the
+chaining mechanism described above: let a program generate output through the
+standard output stream, then connect that stream (i.e. \emph{redirect the
+output}) to the standard input stream of a program that creates a data file in
+the file system. And this would absolutely work. However, redirecting to a data
+file is such a common operation that you don't need a separate end-of-chain
+program for it. Redirecting to file is built straight into the Bourne Shell,
+through the following operators:
+\begin{description}
+	\item[\emph{process} \textgreater{} \emph{data file}] redirect the output
+of \emph{process} to the data file; create the file if necessary, overwrite its
+existing contents otherwise.
+	\item[\emph{process} \textgreater{}\textgreater{} \emph{data file}]
+redirect the output of \emph{process} to the data file; create the file if
+necessary, append to its existing contents otherwise.
+	\item[\emph{process} \textless{} \emph{data file}] read the contents of the
+data file and redirect that contents to \emph{process} as input.
+\end{description}
+
+\subsection{Redirecting output}
+Let's take a closer look at these operators through some examples. Take the
+simple Bourne shell script below called 'hello.sh':
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=A simple shell script that generates some output,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:A simple shell script that generates some output]
+!/bin/sh
+echo Hello
+\end{lstlisting}
+
+This code may be run in any of the ways described in the chapter Running
+Commands. When we run the script, it simply outputs the string \textbf{Hello}
+to the screen and then returns us to our prompt. But let's say we want to
+redirect the output to a file instead. We can use the redirect operators to do
+that easily:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Redirecting the output to a data file,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Redirecting the output to a data file]
+$ hello.sh > myfile.txt
+$
+\end{lstlisting}
+
+This time, we don't see the string 'Hello' on the screen. Where's it gone?
+Well, exactly where we wanted it to: into the (new) data file called
+'myfile.txt'. Let's examine this file using the 'cat' command:
+
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Examining the results of redirecting some output,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Examining the results of redirecting some output]
+$ cat myfile.txt
+Hello
+$
+\end{lstlisting}
+
+Let's run the program again, this time using the '\textgreater{}\textgreater{}'
+operator instead, and then examine 'myfile.txt' again using the 'cat' command:
+
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Redirecting using the append redirect,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Redirecting using the append redirect]
+$ hello.sh >> myfile.txt
+$ cat myfile.txt
+Hello
+Hello
+$
+\end{lstlisting}
+
+You can see that 'myfile.txt' now consists of two lines --- the output has been
+added to the end of the file (or concatenated); this is due to the use of the
+'\textgreater{}\textgreater{}' operator. If we run the script again, this time
+with the single greater-than operator, we get:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Redirecting using the overwrite redirect,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Redirecting using the overwrite redirect]
+$ hello.sh > myfile.txt
+$ cat myfile.txt
+Hello
+$
+\end{lstlisting}
+
+Just one 'Hello' again, because the '\textgreater{}' will always overwrite the
+contents of an existing file if there is one.
+
+\subsection{Redirecting input}
+Okay, so it's clear we can redirect output to a data file. But what about
+reading from a data file? That's also pretty common. The Bourne Shell helps us
+here as well: the entire process of reading a file and pumping its data into a
+stream is captured by the '\textless{}' operator.
+
+By default 'stdin' is fed from your keyboard; run the 'cat' command without any
+arguments and it will just sit there, waiting for you type something:
+
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=cat ???,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:cat]
+$ cat
+\end{lstlisting}
+
+In fact 'cat' will sit there all day until you type a 'Ctrl+D' (the 'End of
+File Character' or 'EOF' for short). To redirect our standard input from
+somewhere else use the '\textless{}' (less-than operator):
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Redirecting into the standard input,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Redirecting into the standard input]
+$ cat < myfile.txt
+Hello
+$
+\end{lstlisting}
+
+So 'cat' will now read from the text file 'myfile.txt'; the 'EOF' character is
+also generated at the end of file, so 'cat' will exit as before.
+
+Note that we previously used 'cat' in this format:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ cat myfile.txt
+\end{lstlisting}
+
+Which is functionally identical to 
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$cat <  myfile.txt
+\end{lstlisting}
+
+However, these are two fundamentally different mechanisms: one uses an argument
+to the command, the other is more general and redirects 'stdin' -- which is
+what we're concerned with here. It's more convenient to use 'cat' with a
+filename as argument, which is why the inventors of 'cat' put this in. However,
+not all programs and scripts are going to take arguments so this is just an
+easy example.
+
+\subsection{Combining file redirects}
+It's possible to redirect 'stdin' and 'stdout' in one line:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Redirecting input to and output from cat at the same time,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Redirecting input to and output from cat at the same time]
+$ cat < myfile.txt > mynewfile.txt
+\end{lstlisting}
+
+The command above will copy the contents of 'myfile.txt' to 'mynewfile.txt'
+(and will overwrite any previous contents of 'mynewfile.txt'). Once again this
+is just a convenient example as we normally would have achieved this effect
+using 'cp myfile.txt mynewfile.txt'.
+
+\subsection{Redirecting standard error (and other streams)}
+So far we have looked at redirecting the ``normal'' standard streams associated
+with files, i.e.\ the files that you use if everything goes correctly and as
+planned. But what about that other stream? The one meant for errors? How do we
+go about redirecting that? For example, if we wanted to redirect error data
+into a log file.
+
+As an example, consider the ls command. If you run the command 'ls myfile.txt',
+it simply lists the filename 'myfile.txt' -- if that file exists. If the file
+'myfile.txt' does NOT exist, 'ls' will return an error to the 'stderr' stream,
+which by default in Bourne Shell is also connected to your monitor.
+
+So, lets run 'ls' a couple of times, first on a file which does exist and then
+on one that doesn't:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Listing an existing file,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Listing an existing file]
+$ ls myfile.txt
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+myfile.txt
+$
+\end{verbatim}
+\normalsize
+
+and then:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Listing a non-existent file,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Listing a non-existent file]
+$ ls nosuchfile.txt
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+ls: no such file or directory 
+$
+\end{verbatim}
+\normalsize
+
+And again, this time with 'stdout' redirected only:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Trying to redirect...,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Trying to redirect...]
+$ ls nosuchfile.txt > logfile.txt
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+ls: no such file or directory
+$
+\end{verbatim}
+\normalsize
+
+We still see the error message; 'logfile.txt' will be created but will be
+empty. This is because we have now redirected the stdout stream, while the
+error message was written to the error stream. So how do we tell the shell that
+we want to redirect the error stream?
+
+In order to understand the answer, we have to cover a little more theory about
+Unix files and streams. You see, deep down the reason that we can redirect
+stdin and stdout with simple operators is that redirecting those streams is so
+common that the shell lets us use a shorthand notation for those streams. But
+actually, to be completely correct, we should have told the shell in every case
+\emph{which} stream we wanted to redirect. In general you see, the shell cannot
+know: there could be tons of streams connected to any file. And in order to
+distinguish one from the other each stream connected to a file has a number
+associated with it: by convention 0 is the standard in, 1 is the standard out,
+2 is standard error and any other streams have numbers counting on from there.
+To redirect any particular stream you prepend the redirect operator with the
+stream number (called the \emph{file descriptor}. So to redirect the error
+message in our example, we prepend the redirect operator with a 2, for the
+stderr stream:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Redirecting the stderr stream,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Redirecting the stderr stream]
+$ ls nosuchfile.txt 2> logfile.txt
+\end{lstlisting}
+
+No output to the screen, but if we examine 'logfile.txt':
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Checking the logfile,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Checking the logfile]
+$ cat logfile.txt
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+ls: no such file or directory 
+\end{verbatim}
+\normalsize
+
+As we mentioned before, the operator without a number is a shorthand notation.
+In other words, this:
+
+\scriptsize
+\begin{verbatim}
+$ cat < inputfile.txt > outputfile.txt
+\end{verbatim}
+\normalsize
+
+is actually short for
+\scriptsize
+\begin{verbatim}
+$ cat 0< inputfile.txt 1> outputfile.txt
+\end{verbatim}
+\normalsize
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=We can also redirect both 'stdout' and 'stderr' independently like this:,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:We can also redirect both 'stdout' and 'stderr' independently like this:]
+$ ls nosuchfile.txt > stdio.txt 2> logfile.txt 
+$
+\end{lstlisting}
+
+'stdio.txt' will be blank , 'logfile.txt' will contain the error as before.
+
+If we want to redirect stdout and stderr to the same file, we can use the file
+descriptor as well:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ ls nosuchfile.txt > alloutput.txt 2>&1
+\end{lstlisting}
+
+Here '2\textgreater{}\&1' means something like 'redirect stderr to the same
+file stdout has been redirected to'. Be careful with the ordering! If you do it
+this way:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ ls nosuchfile.txt 2>&1 > alloutput.txt
+\end{lstlisting}
+
+you will redirect stderr to the file that stdout points to, then send stdout
+somewhere else --- and both streams will end up being redirected to different
+locations.
+
+\subsection{Special files}
+We said earlier that the redirect operators discussed so far all redirect to
+data files. While this is technically true, Unix magic still means that there's
+more to it than just that. You see, the Unix file system tends to contain a
+number of special files called ``devices'', by convention collected in the /dev
+directory. These device files include the files that represent your hard drive,
+DVD player, USB stick and so on. They also include some special files, like
+/dev/null (also known as the bit bucket; anything you write to this file is
+discarded). You can redirect to device files as well as to regular data files.
+Be careful here; you really don't want to redirect raw text data to the boot
+sector of your hard drive (and you can!). But if you know what you're doing,
+you can use the device files by redirecting to them (this is how DVDs are
+burned in Linux, for instance).
+
+As an example of how you might actually use a device file, in the 'Solaris'
+flavour of Unix the loudspeaker and its microphone can be accessed by the file
+'/dev/audio'. So:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+# cat /tmp/audio.au > /dev/audio
+\end{lstlisting}
+
+Will play a sound, whereas:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+# cat < /dev/audio > /tmp/mysound.au
+\end{lstlisting}
+
+Will record a sound.(you will need to CTRL-C this to finish...)
+
+This is fun:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+# cat < /dev/audio > /dev/audio
+\end{lstlisting}
+Now wave the microphone around whilst shouting --- Jimmy Hendrix style
+feedback. Great stuff.  You will probably need to be logged in as 'root' to try
+this by the way.
+
+\subsection{Some redirect warnings}
+The astute reader will have noticed one or two things in the discussion above.
+First of all, a file can have more than just the standard streams associated
+with it. Is it legal to redirect those? Is it even \emph{possible}? The answer
+is, technically, yes. You can redirect stream 4 or 5 of a file (if they exist).
+Don't try it though. If there's more than a few streams in any direction, you
+won't know which stream you're redirecting. Plus, if a program needs more than
+the standard streams it's a good bet that program also needs its extra streams
+going to a specific location.
+
+Second, you might have noticed that file descriptor 0 is, by convention, the
+standard input stream. Does that mean you can redirect a program's standard
+input \textbf{away} from the program? Could you do the following?
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ cat 0> somewhere_else
+\end{lstlisting}
+
+The answer is, yes you can. And yes, things will break if you do.
+
+\subsection{Pipes, Tees and Named Pipes}
+So, after all this talk about redirecting to file, we finally get to it:
+general redirecting by cross-connecting streams. The most general form of
+redirecting and the most powerful one to boot. It's called a pipe and is
+performed using the pipe operator '\textbar{}'. Pipes allow you to join two
+processes together through a ``pipeline'', which directly connects the stdout
+of one file to the stdin of another.
+
+As an example let's consider the 'grep' command which returns a matching
+string, given a keyword and some text to search. And let's also use the ps
+command, which lists running processes on the machine. If you give the command 
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ ps -eaf
+\end{lstlisting}
+
+it will generally list pagefuls of running processes on your machine, which you
+would have to sift through manually to find what you want. Let's say you are
+looking for a process which you know contains the word 'oracle'; use the output
+of 'ps' to pipe into grep, which will only return the matching lines:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ ps -eaf | grep oracle
+\end{lstlisting}
+
+Now you will only get back the lines you need. What happens if there's still
+loads of these ? No problem, pipe the output to the command 'more' (or 'pg'),
+which will pause your screen if it fills up:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ ps -ef | grep oracle | more
+\end{lstlisting}
+
+What about if you want to kill all those processes? You need the 'kill'
+program, plus the process number for each process (the second column returned
+by the ps command). Easy:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ ps -ef | grep oracle | awk '{print $2}' | xargs kill -9
+\end{lstlisting}
+
+In this command, 'ps' lists the processes and 'grep' narrows the results down
+to oracle. The 'awk' tool pulls out the second column of each line. And 'xargs'
+feeds each line, one at a time, to 'kill' as a command line argument.
+
+Pipes can be used to link as many programs as you wish within reasonable limits
+(and we don't know what these limits are!)
+
+Don't forget you can still use the redirectors in combination:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ ps -ef | grep oracle > /tmp/myprocesses.txt
+\end{lstlisting}
+
+There is another useful mechanism that can be used with pipes: the 'tee'. To
+understand tee, imagine a pipe shaped like a 'T' --- one input, two outputs:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ ps -ef | grep oracle | tee /tmp/myprocesses.txt
+\end{lstlisting}
+
+The 'tee' will copy whatever is given to its stdin and redirect this to the
+argument given (a file); it will also then send a further copy to its stdout
+--- which means you can effectively intercept the pipe, take a copy at this
+stage, and carry on piping up other commands; useful maybe for outputting to a
+logfile, and copying to the screen.
+
+A note on piped commands: piped processes run in parallel on the Unix
+environment. Sometimes one process will be blocked, waiting for input from
+another process. But each process in a pipeline is, in principle, running
+simultaneously with all the others.
+
+\subsection{Named pipes}
+There is a variation on the in-line pipe which we have been discussing called
+the 'named pipe'. A named pipe is actually a file with its own 'stdin' and
+'stdout' --- which you attach processes to. This is useful for allowing
+programs to talk to each other, especially when you don't know exactly when one
+program will try and talk to the other (waiting for a backup to finish etc) and
+when you don't want to write a complicated network-based listener or do a
+clumsy polling loop.
+
+To create a 'named pipe', you use the 'mkfifo' command (fifo=first in, first
+out; so data is read out in the same order as it is written into).
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ mkfifo mypipe 
+$
+\end{lstlisting}
+
+This creates a named pipe called 'mypipe'; next we can start using it.
+
+This test is best run with two terminals logged in:
+
+1. From 'terminal a'
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ cat < mypipe
+\end{lstlisting}
+
+The 'cat' will sit there waiting for an input.
+
+2. From 'terminal b'
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ cat myfile.txt > mypipe 
+ $
+\end{lstlisting}
+
+Now try the other way round:
+
+1. From terminal 'b'
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ cat myfile.txt > mypipe
+\end{lstlisting}
+
+This will now sit there, as there isn't another process on the other end to
+'drain' the pipe --- it's blocked.
+
+2. From terminal 'a'
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ cat < mypipe
+\end{lstlisting}
+
+As before, both processes will now finish, the output showing on terminal 'a'.
+
+\subsection{Here documents}
+So far we have looked at redirecting from and to data files and
+cross-connecting data streams. All of these shell mechanisms are based on
+having a ``physical'' source for data --- a process or a data file. Sometimes
+though, you want to feed some data into a target without having a source for
+it. In these cases you can use an ``on the fly'' document called a \emph{here
+document}. A here document means that you open a virtual text document (in
+memory), type into it as usual, close it and then treat it like any normal
+file.
+
+Creating a here document is done using a variation on the input redirect
+operator: the '\textless{}\textless{}' operator. Like the input redirect
+operator, the here document operator takes an argument. For the input redirect
+operator this operand is the name of the file to be streamed in. For the here
+document operator it is the string that will terminate the here document. So
+using the here document operator looks like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+target << terminator string
+here document contents
+terminator string
+\end{lstlisting}
+
+For example: 
+\scriptsize
+\begin{verbatim}
+This is a test.
+This test uses a here document.
+Hello world.
+This here document will end upon the occurrence 
+of the string "%%" on a separate line.
+So this document is still open now.
+But now it will end....
+\end{verbatim}
+\normalsize
+
+When using here documents in combination with variable or command substitution,
+it is important to realize that substitutions are carried out \emph{before} the
+here document is passed on. So for example:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Using a here document with substitutions,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Using a here document with substitutions]
+$ COMMAND=cat
+$ PARAM='Hello World!!'
+$ $COMMAND <<%
+> `echo $PARAM`
+> %
+\end{lstlisting}
+
+Output:
+\scriptsize
+\begin{verbatim}
+Hello World!!
+\end{verbatim}
+\normalsize

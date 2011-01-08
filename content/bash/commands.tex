@@ -1,10 +1,10 @@
-\subsection{The easy way: the interactive session}
+\section{The easy way: the interactive session}
 Before we can start any kind of examination of the abilities of the Bourne
 Shell and how you can tap into its power, we have to cover some basic ground
 first: we have to discuss how to enter commands into the shell for execution by
 that shell.
 
-\subsubsection{Taking another look at what you've probably already seen}
+\subsection{Taking another look at what you've probably already seen}
 If you have access to a Unix-based machine (or an emulator on another operating
 system), you've probably been using the Bourne Shell -- or one of its
 descendants -- already, possibly without realising. Surprise: you've been doing
@@ -35,7 +35,7 @@ $_
 That's it. That's your shell: your direct access to everything the system has
 to offer.
 
-\subsubsection{Using the shell in interactive mode}
+\subsection{Using the shell in interactive mode}
 Specifically, the program you accessed a moment ago is your shell, running in
 \textit{interactive mode}: the shell is running in such a way that it displays
 a prompt and a cursor (the little, blinking line) and is waiting for you to
@@ -66,7 +66,7 @@ very often, both to execute commands that belong to the Bourne Shell
 programming language and simply to start running other programs (like the ls
 program from the example above).
 
-\subsubsection{A useful tidbit}
+\subsection{A useful tidbit}
 Before we move on, we'll mention two useful key combinations when using the
 shell: the command to interrupt running programs and shell commands and the
 command to quit the shell (although, why you would ever want to \textit{stop}
@@ -83,7 +83,7 @@ Control+d in favor of the "exit" command (shame on them). If you're using such
 a shell, just type the word "exit" (like with any other command) and press
 Enter (from here on in, I'll leave the "Enter" out of examples).
 
-\subsection{The only slightly less easy way: the script}
+\section{The only slightly less easy way: the script}
 As we saw in the last section, you can very easily execute shell commands for
 all purposes by starting an interactive shell session and typing your commands
 in at the prompt. However, sometimes you have a set of commands that you have
@@ -95,7 +95,7 @@ task? Wouldn't it be more convenient to have a way to replay a set of commands?
 And to be able to compose that set as easily as you can write the single
 commands that you type into the shell's interactive sessions?
 
-\subsubsection{The shell script}
+\subsection{The shell script}
 Fortunately, there \textit{is} such a way: the Bourne Shell's
 \textit{non-interactive} mode. In this mode, the shell doesn't have a prompt or
 wait for your commands. Instead, the shell reads commands from a text file
@@ -110,7 +110,7 @@ script in plain text format). You write commands just as you would in the
 interactive shell. And you can run your script the moment you have saved it; no
 need to compile it or anything.
 
-\subsubsection{Running a shell script}
+\subsection{Running a shell script}
 To run a shell script (to have the shell read it and execute all the commands
 in the script), you enter a command at an interactive shell prompt as you would
 when doing anything else (if you're using a graphical user interface, you can
@@ -158,7 +158,7 @@ The difference between that and using the \textit{sh} command is that the
 We'll look into this (and its importance) in the next section. By the way, this
 notation with the period is commonly referred to as \textit{sourcing} a script.
 
-\subsubsection{Running a shell script the other way}
+\subsection{Running a shell script the other way}
 There is also another way to execute a shell script, by making more direct use
 of a feature of the Unix operating system: the executable mode.
 
@@ -264,8 +264,8 @@ interpreter that expects its scripts to be plain-text can be specified in this
 way. You can use this same trick to make directly executable Perl scripts or
 Python, Ruby, etc. scripts as well as Bourne Shell scripts.
 
-\subsection{A little bit about Unix and multiprocessing}
-\subsubsection{Why you want to know about multiprocessing}
+\section{A little bit about Unix and multiprocessing}
+\subsection{Why you want to know about multiprocessing}
 While this is not directly a book about Unix, there are some aspects of the
 Unix operating system that we must cover to fully understand why the Bourne
 Shell works the way it does from time to time.
@@ -303,7 +303,7 @@ specifically want to avoid it), you have to know when a command runs as a child
 process and when it runs within your current shell; you might otherwise pick a
 variant that has the opposite effect of that which you want
 
-\subsubsection{What does what}
+\subsection{What does what}
 We have seen several ways of running a shell command or script. With respect to
 multiprocessing, they run in the following way:
 Way of running Runs as
@@ -321,7 +321,7 @@ Through Unix executable permission with interpreter selection & child process\\
 \hline
 \end{tabular}
 
-\subsubsection{A useful thing to know: background processes}
+\subsection{A useful thing to know: background processes}
 With the above, it may seem like multiprocessing is just a pain when doing
 shell scripting. But if that were so, we wouldn't \textit{have} multiprocessing
 -- Unix doesn't tend to keep things that aren't useful. Multiprocessing is a

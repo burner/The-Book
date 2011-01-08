@@ -1,0 +1,264 @@
+\section{Variable Expansion}
+In the Environment module we introduced the idea of an environment variable as
+a general way of storing small pieces of data. In this module we take an
+in-depth look at using those variables: 'variable expansion', 'parameter
+substitution' or just 'substitution'.
+
+\subsection{Substitution}
+The reason that using a variable is called substitution is that the shell
+literally replaces each reference to any variable with its value. This is done
+while evaluating the command-line, which means that the variable substitution
+is made \emph{before} the command is actually executed.
+
+The simplest way of using a variable is the way we've already seen, prepending
+the variable name with a '\$'. So for instance:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$ USER=JoeSixpack
+$ echo $USER
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+JoeSixpack
+\end{verbatim}
+\normalsize
+
+The value JoeSixpack is substituted for \$USER before the echo command is
+executed.
+
+Of course, once the substitution is made the result is still just the text that
+was in the variable. The interpretation of that text is still done by whatever
+program is run. So for example:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Variables do not make magic,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Variables do not make magic]
+$ USER=JoeSixpack
+$ ls $USER
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+ls: cannot access JoeSixpack: No such file or directory
+\end{verbatim}
+\normalsize
+
+Just because the text came from a variable, doesn't mean the file exists.
+
+Basic variable expansion is already quite flexible. You can use it as described
+above, but you can also use variables to create longer strings. For instance,
+if you want to set the log directory for an application to the ``log''
+directory in your home directory, you might fill in the setting like this:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+$HOME/log
+\end{lstlisting}
+
+And if you're going to use that setting more often, you might want to create
+your own variable like this:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+LOGDIR=$HOME/log
+\end{lstlisting}
+
+And, of course, if you want specific subdirectories for logs for different
+programs, then the logs for the Wyxliz application go into directory
+
+\begin{verbatim}
+	$LOGDIR/Wyxliz/
+\end{verbatim}
+
+\subsection{Substitution forms}
+The Bourne Shell has a number of different syntaxes for variable substitution,
+each with its own meaning and use. In this section we examine these syntaxes.
+
+\subsubsection{Basic variable substitution}
+We've already talked at length about basic variable substitution: you define a
+variable, stick a '\$' in front of it, the shell substitutes the value for the
+variable. By now you're probably bored of hearing about it.
+
+But we've not talked about one situation that you might run into with basic
+variable substitution. Consider the following:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Adding some text to a variable's value,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Adding some text to a variable's value]
+$ ANIMAL=duck
+$ echo One $ANIMAL, two $ANIMALs
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+One duck, two
+Uhhh.... we're missing something...
+\end{verbatim}
+\normalsize
+
+So what went wrong here? Well, obviously the shell substituted nothing for the
+ANIMAL variable, but why? Because with the extra 's' the shell thought we were
+asking for the non-existent ANIMALs variable. But what gives there? We've used
+variables in the middle of strings before (as in '/home/ANIMAL/logs'). But an
+'s' is not a '/': an 's' can be a valid part of a variable name, so the shell
+cannot tell the difference. In cases where you explicitly have to separate the
+variable from other text, you can use braces:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Adding some text to a variable's value take II,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:AddingsometexttoavariablesvaluetakeII]
+$ ANIMAL=duck
+$ echo One $ANIMAL, two ${ANIMAL}s
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+One duck, two ducks
+That's better!
+\end{verbatim}
+\normalsize
+
+Both cases (with and without the braces) count as basic variable substitution
+and the rules are exactly the same. Just remember not to leave any spaces
+between the braces and the variable name.
+
+\subsection{Substitution with a default value}
+Since a variable can be empty, you'll often write code in your scripts to check
+that mandatory variables actually have a value. But in the case of optional
+variables it is usually more convenient not to check, but to use a default
+value for the case that a variable is not defined. This case is actually so
+common that the Bourne Shell defines a special syntax for it: the dash. Since a
+dash can mean other things to the shell as well, you have to combine it with
+braces --- the final result looks like this:
+\scriptsize
+\begin{verbatim}
+${varname[:]-default}
+\end{verbatim}
+\normalsize
+
+Again, don't leave any spaces between the braces and the rest of the text. The
+way to use this syntax is as follows:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Default values,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Default values]
+$ THIS_ONE_SET=Hello
+$ echo $THIS_ONE_SET ${THIS_ONE_NOT:-World}
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+Hello World
+\end{verbatim}
+\normalsize
+
+Compare that to this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Default not needed,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Default not needed]
+$ TEXT=aaaaaahhhhhhhh
+$ echo Say ${TEXT:-bbbbbbbbbb}
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+Say aaaaaahhhhhhhh
+\end{verbatim}
+\normalsize
+
+Interestingly, the colon is optional; so \$\{VAR:-default\} has the same result
+as \$\{VAR-default\}.
+
+\subsection{Substitution with default assignment}
+As an extension to default values, there's a syntax that not only supplies a
+default value but assigns it to the unset variable at the same time. It looks
+like this:
+\begin{verbatim}
+${varname[:]=default}
+\end{verbatim}
+\normalsize
+
+As usual, avoid spaces in between the braces. Here's an example that
+demonstrates how this syntax works:
+
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Default value assignment,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Default value assignment]
+$ echo $NEWVAR
+
+$ echo ${NEWVAR:=newval}
+newval
+$ echo $NEWVAR
+newval
+\end{lstlisting}
+
+As with the default value syntax, the colon is optional.
+
+\subsection{Substitution for actual value}
+This substitution is sort of a quick test to see if a variable is defined (and
+that's usually what it's used for). It's sort of the reverse of the default
+value syntax and looks like this:
+
+\scriptsize
+\begin{verbatim}
+${varname[:]+substitute}
+\end{verbatim}
+\normalsize
+
+This syntax returns the substitute value if the variable \textbf{is} defined.
+That sounds counterintuitive at first, especially if you ask what is returned
+if the variable is \textbf{not} defined --- and learn that the value is
+nothing. Here's an example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Actual value substitution,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Actual value substitution]
+$ echo ${NEWVAR:+newval}
+
+$ NEWVAR=oldval
+$ echo ${NEWVAR:+newval}
+newval
+\end{lstlisting}
+
+So what could possibly be the use of this notation? Well, it's used often in
+scripts that have to check whether lots of variables are set or not. In this
+case the fact that a variable has a value means that a certain option has been
+activated, so you're interested in knowing that the variable \emph{has} a
+value, not what that value is. It looks sort of like this (pseudocode, this
+won't actually work in the shell):
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Default value assignment,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Default value assignment]
+if ${SPECIFIC_OPTION_VAR:+optionset} == optionset then ...
+\end{lstlisting}
+
+Of course, in this notation the colon is optional as well.
+
+\subsection{Substitution with value check}
+This final syntax is sort of a debug check to check whether or not a variable
+is set. It looks like this:
+\scriptsize
+\begin{verbatim}
+${varname[:]?message}
+\end{verbatim}
+\normalsize
+
+With this syntax, if the variable is defined everything is okay. Otherwise, the
+message is printed and the command or script exits with a non-zero exit status.
+Or, if there is no message, the text ``parameter null or not set'' is printed.
+As usual the colon is optional and you may not have a space between the colon
+and the variable name.
+
+You can use this syntax to check that the mandatory variables for your scripts
+have been set and to print an error message if they are not.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Default value assignment,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Default value assignment]
+$ echo ${SOMEVAR:?has not been set}
+-sh: SOMEVAR: has not been set
+$ echo ${SOMEVAR:?}
+-sh: SOMEVAR: parameter null or not set
+\end{lstlisting}

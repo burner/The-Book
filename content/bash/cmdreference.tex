@@ -1,0 +1,55 @@
+\section{Command Reference}
+
+The Bourne Shell offers a large number of built-in commands that you can use in
+your shell scripts. The following table gives an overview: See the table \ref{tab:refcmd1} and \ref{tab:refcmd2}.
+
+\begin{table*}[H]
+	\begin{tabular}{|c|p{10cm}|}
+		\hline
+		\textbf{ Command} & \textbf{ Description} \\ \hline
+		 : &  A null command that returns a 0 (true) exit value. \\ \hline
+		 . \emph{file} &  Execute. The commands in the specified file are read and executed by the shell. Commonly referred to as \emph{sourcing} a file. \\ \hline
+		 \# &  Ignore all the text until the end of the line. Used to create comments in shell scripts. \\ \hline
+		 \#!\emph{shell} &  Interpreter hint. Indicates to the OS which interpreter to use to execute a script. \\ \hline
+		 bg [job] ... &  Run the specified jobs (or the current job if no arguments are given) in the background. \\ \hline
+		 break [n] &  Break out of a loop. If a number argument is specified, break out of n levels of loops. \\ \hline
+		 case &  See Control flow \\ \hline
+		 cd [directory] &  Switch to the specified directory (default \$HOME). \\ \hline
+		 continue [n] &  Skip the remaining commands in a loop and continue the loop at the next interation. If an integer argument is specified, skip n loops. \\ \hline
+		 echo string &  Write string to the standard output. \\ \hline
+		 eval string ... &  Concatenate all the arguments with spaces. Then re-parse and execute the command. \\ \hline
+		 exec [command arg ...] &  Execute command in the current process. \\ \hline
+		 exit [exitstatus] &  Terminate the shell process. If exitstatus is given it is used as the exit status of the shell; otherwise the exit status of the last completed command is used. \\ \hline
+		 export name ... &  Mark the named variables or functions for export to child process environments. \\ \hline
+		 fg [job] &  Move the specified job (or the current job if not specified) to the foreground. \\ \hline
+		 for &  See Control flow. \\ \hline
+		 hash -rv command ... &  The shell maintains a hash table which remembers the locations of commands. With no arguments whatsoever, the hash command prints out the contents of this table. Entries which have not been looked at since the last cd command are marked with an asterisk; it is possible for these entries to be invalid.With arguments, the hash command removes the specified commands from the hash table (unless they are functions) and then locates them. The -r option causes the hash command to delete all the entries in the hash table except for functions. \\ \hline
+		 if &  See Control flow. \\ \hline
+		 jobs & display status of jobs in the current session \\ \hline
+		 newgrp [group] &  Temporarily move your user to a new group. If no group is listed, move back to your user's default group. \\ \hline
+		 pwd &  Print the working directory. \\ \hline
+		 read variable [...] &  Read a line from the input and assign each individual word to a listed variable (in order). Any leftover words are assigned to the last variable. \\ \hline
+		 readonly name ... &  Make the listed variables read-only. \\ \hline
+		 return [n] &  Return from a shell function. If an integer argument is specified it will be the exit status of the function. \\ \hline
+		 set [\{ -options \textbar{} +options \textbar{} -- \}] arg ... &  The set command performs three different functions.With no arguments, it lists the values of all shell variables.If options are given, it sets the specified option flags or clears them.The third use of the set command is to set the values of the shell's positional parameters to the specified args. To change the positional parameters without changing any options, use “--” as the first argument to set. If no args are present, the set command will clear all the positional parameters (equivalent to executing “shift \$\#”.) \\ \hline
+	\end{tabular}
+	\caption{Bourne Shell command reference 1}
+	\label{tab:refcmd1} 
+\end{table*}
+
+\begin{table*}[H]
+	\begin{tabular}{|c|p{10cm}|}
+		\hline
+		 shift [n] &  Shift the positional parameters n times. \\ \hline
+		 test &  See Control flow. \\ \hline
+		 trap [action] signal ... &  Cause the shell to parse and execute action when any of the specified signals are received. \\ \hline
+		 type [name ...] &  Show whether a command is a UNIX command, a shell built-in command or a shell function. \\ \hline
+		 ulimit &  Report on or set resource limits. \\ \hline
+		 umask [mask] &  Set the value of umask (the mask for the default file permissions \emph{not} assigned to newly created files). If the argument is omitted, the umask value is printed. \\ \hline
+		 unset name ... &  Drop the definition of the given names in the shell. \\ \hline
+		 wait [job] &  Wait for the specified job to complete and return the exit status of the last process in the job. If the argument is omitted, wait for all jobs to complete and the return an exit status of zero. \\ \hline
+		 while &  See Control flow. \\ \hline
+	\end{tabular}
+	\caption{Bourne Shell command reference 2}
+	\label{tab:refcmd2}
+\end{table*}

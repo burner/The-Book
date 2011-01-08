@@ -1,0 +1,1051 @@
+\section{Control flow}
+So far we've talked about basics and theory. We've covered the different shells
+available and how to get shell scripts running in the Bourne Shell. We've
+talked about the Unix environment and we've seen that you have variables that
+control the environment and that you can use to store values for your own use.
+What we haven't done yet, though, is actually \emph{done} anything. We haven't
+made the system act, jump through hoops, fetch the newspaper or do the dishes.
+
+In this chapter it's time to get serious. In this chapter we talk programming
+--- how to write programs that make decisions and execute commands. In this
+chapter we talk about control flow and command execution.
+
+What is the difference between a program launcher and a command shell? Why is
+Bourne Shell a tool that has commanded power and respect the world over for
+decades and not just a stupid little tool you use to start \emph{real}
+programs? Because Bourne Shell is not just an environment that launches
+programs: Bourne Shell is a fully programmable environment with the power of a
+full programming language at its command. We've already seen in Environment
+that Bourne Shell has variables in memory. But Bourne Shell can do more than
+that: it can make decisions and repeat commands. Like any real programming
+language, Bourne Shell has \emph{control flow}, the ability to steer the
+computer.
+
+\subsection{Test: evaluating conditions}
+Before we can make decisions in shell scripts, we need a way of evaluating
+conditions. We have to be able to check the state of certain affairs so that we
+can base our decisions on what we find.
+
+Strangely enough the actual shell doesn't include any mechanism for this. There
+is a tool for exactly this purpose called \textbf{test} (and it was literally
+created for use in shell scripts), but nevertheless it is not strictly part of
+the shell. The 'test' tool evaluates conditions and returns either
+\textbf{true} or \textbf{false}, depending on what it finds. It returns these
+values in the form of an exit status (in the \$? shell variable): a zero for
+\textbf{true} and something else for \textbf{false}. The general form of the
+test command is
+
+\scriptsize
+\begin{verbatim}
+test condition
+\end{verbatim}
+\normalsize
+
+as in 
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=A test for string equality,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:A test for string equality]
+test "Hello World" = "Hello World"
+\end{lstlisting}
+
+This test for the equality of two strings returns an exit status of zero. There
+is also a shorthand notation for 'test' which is usually more readable in
+scripts, namely angle brackets:
+\scriptsize
+\begin{verbatim}
+[ condition ]
+\end{verbatim}
+\normalsize
+
+Note the spaces between the brackets and the actual condition -- don't forget
+them in your own scripts. The equivalent of the example above in shorthand is 
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=A shorter test for string equality,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:A shorter test for string equality]
+[ "Hello World" = "Hello World" ]
+\end{lstlisting}
+
+'Test' can evaluate a number of different kinds of conditions, to fit with the
+different kinds of tests that you're like to want to carry out in a shell
+script. Most specific shells have added on to the basic set of available
+conditions, but Bourne Shell recognizes the following:
+
+\textbf{File conditions}
+\begin{description}
+	\item[-b \emph{file}] \emph{file} exists and is a block special file
+	\item[-c \emph{file}] \emph{file} exists and is a character special file
+	\item[-d \emph{file}] \emph{file} exists and is a directory
+	\item[-f \emph{file}] \emph{file} exists and is a regular data file
+	\item[-g \emph{file}] \emph{file} exists and has its set-group-id bit set
+	\item[-k \emph{file}] \emph{file} exists and has its sticky bit set
+	\item[-p \emph{file}] \emph{file} exists and is a named pipe
+	\item[-r \emph{file}] \emph{file} exists and is readable
+	\item[-s \emph{file}] \emph{file} exists and its size is greater than zero
+	\item[-t [n]] The open file descriptor with number n is a terminal device;
+n is optional, default 1
+	\item[-u \emph{file}] \emph{file} exists and has its set-user-id bit set
+	\item[-w \emph{file}] \emph{file} exists and is writable
+	\item[-x \emph{file}] \emph{file} exists and is executable
+\end{description}
+
+\textbf{String conditions}
+\begin{description}
+	\item[-n \emph{s}] \emph{s} has non-zero length
+	\item[-z \emph{s}] \emph{s} has zero length
+	\item[\emph{s0} = \emph{s1}] \emph{s0} and \emph{s1} are identical
+	\item[\emph{s0} != \emph{s1}] \emph{s0} and \emph{s1} are different
+	\item[\emph{s}] \emph{s} is not null (often used to check that an
+environment variable has a value)
+\end{description}
+
+\textbf{Integer conditions}
+\begin{description}
+	\item[\emph{n0} -eq \emph{n1}] \emph{n0} is equal to \emph{n1}
+	\item[\emph{n0} -ge \emph{n1}] \emph{n0} is greater than or equal to \emph{n1}
+	\item[\emph{n0} -gt \emph{n1}] \emph{n0} is strictly greater than \emph{n1}
+	\item[\emph{n0} -le \emph{n1}] \emph{n0} is less than or equal to \emph{n1}
+	\item[\emph{n0} -lt \emph{n1}] \emph{n0} is strictly less than \emph{n1}
+	\item[\emph{n0} -ne \emph{n1}] \emph{n0} is not equal to \emph{n1}
+\end{description}
+
+Finally, conditions can be combined and grouped:
+\begin{description}
+	\item[\textbackslash{}(\emph{B}\textbackslash{})] Parentheses are used for
+grouping conditions (don't forget the backslashes). A grouped condition
+(\emph{B}) is true if \emph{B} is true.
+	\item[\textbf{!} \emph{B}] Negation; is true if \emph{B} is false.
+	\item[\emph{B0} \textbf{-a} \emph{B1}] And; is true if \emph{B0} and
+\emph{B1} are both true.
+	\item[\emph{B0} \textbf{-o} \emph{B1}] Or; is true if either \emph{B0} or
+\emph{B1} is true.
+\end{description}
+
+\subsection{Conditional execution}
+Okay, so now we know how to evaluate some conditions. Let's see how make use of
+this ability to do some programming.
+
+All programming languages need two things: a form of decision making or
+conditional execution and a form of repetition or looping. We'll get to looping
+later, for now let's concentrate on conditional execution. Bourne Shell
+supports two forms of conditional execution, the \textbf{if}-statement and the
+\textbf{case}-statement.
+
+The \textbf{if}-statement is the most general of the two. It's general form is
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+\textbf{if} \emph{command-list}\\
+\textbf{then} \emph{command-list}\\
+\textbf{elif} \emph{command-list}\\
+\textbf{then} \emph{command-list}\\
+...
+\textbf{else} \emph{command-list}\\
+\textbf{fi}
+\end{lstlisting}
+
+This command is to be interpreted as follows:
+
+\begin{enumerate}
+	\item The command list following the \textbf{if} is executed.
+	\item If the last command returns a status zero, the command list following
+the first \textbf{then} is executed and the statement terminates after
+completion of the last command in this list.
+	\item If the last command returns a non-zero status, the command list
+following the first \textbf{elif} (if there is one) is executed.
+	\item If the last command returns a status zero, the command list following
+the next \textbf{then} is executed and the statement terminates after
+completion of the last command in this list.
+	\item If the last command returns a non-zero status, the command list
+following the next \textbf{elif} (if there is one) is executed and so on.
+	\item If no command list following the \textbf{if} or an \textbf{elif}
+terminates in a zero status, the command list following the else (if there is
+one) is executed.
+	\item The statement terminates. If the statement terminated without an
+error, the return status is zero.
+\end{enumerate}
+
+It is interesting to note that the \textbf{if}-statement allows command lists
+everywhere, including in places where conditions are evaluated. This means that
+you can execute as many compound commands as you like before reaching a
+decision point. The only command that affects the outcome of the decision is
+the last one executed in the list.
+
+In most cases though, for the sake of readability and maintainability, you will
+want to limit yourself to one command for a condition. In most cases this
+command will be a use of the 'test' tool.
+
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Example of a simple if statement,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Example of a simple if statement]
+if [ 1 -gt 0 ]
+then
+  echo YES
+fi
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+YES
+\end{verbatim}
+\normalsize
+
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Example of an if statement with an else clause,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Example of an if statement with an else clause]
+if [ 1 -le 0 ]
+then
+  echo YES
+else
+  echo NO
+fi
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+NO
+\end{verbatim}
+\normalsize
+
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Example of a full if statement with an else clause and two elifs,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Example of a full if statement with an else clause and two elifs]
+rank=captain
+
+if [ "$rank" = colonel ]
+then
+  echo Hannibal Smith
+elif [ "$rank" = captain ]
+then
+  echo Howling Mad Murdock
+elif [ "$rank" = lieutenant ]
+then
+  echo Templeton Peck
+else
+  echo B.A. Baracus
+fi
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+Howling Mad Murdock
+\end{verbatim}
+\normalsize
+
+The \textbf{case}-statement is sort of a special form of the
+\textbf{if}-statement, specialized in the kind of test demonstrated in the last
+example: taking a value and comparing it to a fixed set of expected values or
+patterns. The case statement is used very frequently to evaluate command line
+arguments to scripts. For example, if you write a script that uses switches to
+identify command line arguments, you know that there are only a limited number
+of legal switches. The \textbf{case}-statement is an elegant alternative to a
+potentially messy \textbf{if}-statement in such a case.
+
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=The general form of the case statement is,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:The general form of the case statement is]
+\textbf{case} \emph{value} \textbf{in}\\
+\emph{pattern0} \textbf{)} \emph{command-list-0} \textbf{;;}\\
+\emph{pattern1} \textbf{)} \emph{command-list-1} \textbf{;;}\\
+...\\
+\textbf{esac}
+\end{lstlisting}
+
+The value can be any value, including an environment variable. Each pattern is
+a regular expression and the command list executed is the one for the first
+pattern that matches the value (so make sure you don't have overlapping
+patterns). Each command list must end with a double semicolon. The return
+status is zero if the statement terminates without syntax errors.
+
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=The last 'if'-example revisited,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:The last 'if'-example revisited]
+rank=captain
+
+case $rank in
+    colonel) echo Hannibal Smith;;
+    captain) echo Howling Mad Murdock;;
+    lieutenant) echo Templeton Peck;;
+    sergeant) echo B.A. Baracus;;
+    *) echo OOPS;;
+esac
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+Howling Mad Murdock
+\end{verbatim}
+\normalsize
+
+\paragraph{If versus case: what is the difference?}
+So what exactly is the difference between the \textbf{if}- and
+\textbf{case}-statements? And what is the point of having two statements that
+are so similar? Well, the technical difference is this: the
+\textbf{case}-statement works off of data available to the shell (like an
+environment variable), whereas the \textbf{if}-statement works off the exit
+status of a program or command. Since fixed values and environment variables
+depend on the shell but the exit status is a concept general to the Unix
+system, this means that the \textbf{if}-statement is more general than the
+\textbf{case}-statement.
+
+Let's look at a slightly larger example, just to put the two together and compare:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#!/bin/sh
+
+if [ "$2" ]
+then
+  sentence="$1 is a"
+else
+  echo Not enough command line arguments! >&2
+  exit 1
+fi
+
+case $2 in
+  fruit|veg*) sentence="$sentence vegetarian!";;
+  meat) sentence="$sentence meat eater!";;
+  *) sentence="${sentence}n omnivore!";;
+esac
+
+echo $sentence
+\end{lstlisting}
+
+Note that this is a shell script and that it uses positional variables to
+capture command-line arguments. The script starts with an \textbf{if}-statement
+to check that we have the right number of arguments -- note the use of 'test'
+to see if the value of variable \$2 is not null and the exit status of 'test'
+to determine how the \textbf{if}-statement proceeds. If there are enough
+arguments, we assume the first argument is a name and start building the
+sentence that is the result of our script. Otherwise we write an error message
+(to stderr, the place to write errors; read all about it in
+\href{http://en.wikibooks.org.org/wiki/Bourne_Shell_Scripting/Files_and_streams}{Files
+and streams}) and exit the script with a non-zero return value. Note that this
+else statement has a command list with more than one command in it.
+
+Assuming we got through the \textbf{if}-statement without trouble, we get to
+the \textbf{case}-statement. Here we check the value of variable \$2, which
+should be a food preference. If that value is either fruit or something
+starting with veg, we add a claim to the script result that some person is a
+vegetarian. If the value was exactly meat, the person is a meat eater. Anything
+else, he is an omnivore. Note that in that last case pattern clause we have to
+use curly braces in the variable substitution; that's because we want to add a
+letter n directly onto the existing value of sentence, without a space in
+between.
+
+Let's put the script in a file called 'preferences.sh' and look at the effect
+of some calls of this script:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Calling the script with different effects,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Calling the script with different effects]
+$ sh preferences.sh
+Not enough command line arguments!
+$sh preferences.sh Joe
+Not enough command line arguments!
+$sh preferences.sh Joe fruit
+Joe is a vegetarian!
+$sh preferences.sh Joe veg
+Joe is a vegetarian!
+$sh preferences.sh Joe vegetables
+Joe is a vegetarian!
+$sh preferences.sh Joe meat
+Joe is a meat eater!
+sh preferences.sh Joe meat potatoes
+Joe is a meat eater!
+sh preferences.sh Joe potatoes
+Joe is an omnivore!
+\end{lstlisting}
+
+\subsection{Repetition}
+In addition to conditional execution mechanisms every programming language
+needs a means of repetition, repeated execution of a set of commands. The
+Bourne Shell has several mechanisms for exactly that: the
+\textbf{while}-statement, the \textbf{until}-statement and the
+\textbf{for}-statement.
+
+\subsubsection{The while loop}
+The \textbf{while}-statement is the simplest and most straightforward form of
+repetition statement in Bourne shell. It is also the most general. Its general
+form is this:
+
+% commented out template(bcode:Example)
+\begin{comment}
+\textbf{while} \emph{command-list1}
+\textbf{do} \emph{command-list2}
+\textbf{done}
+\end{comment}
+
+The \textbf{while}-statement is interpreted as follows:
+\begin{enumerate}
+	\item Execute the commands in command list 1.
+	\item If the exit status of the last command is non-zero, the statement
+terminates.
+	\item Otherwise execute the commands in command list 2 and go back to step
+1.
+	\item If the statement does not contain a syntax error and it ever
+terminates, it terminates with exit status zero.
+\end{enumerate}
+
+Much like the \textbf{if}-statement, you can use a full command list to control
+the \textbf{while}-statement and only the last command in that list actually
+controls the statement. But in reality you will probably want to limit yourself
+to one command and, as with the \textbf{if}-statement, you will usually use the
+'test' program for that command.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=A while loop that prints all the values between 0 and 10,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:A while loop that prints all the values between 0 and 10]
+counter=0
+
+while [ $counter -lt 10 ]
+do
+  echo $counter
+  counter=`expr $counter + 1`
+done
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+\end{verbatim}
+\normalsize
+Note the use of command substitution to increase the value of the counter
+variable.
+
+The \textbf{while}-statement is commonly used to deal with situations where a
+script can have an indeterminate number of command-line arguments, by using the
+\textbf{shift} command and the special '\$\#' variable that indicates the
+number of command-line arguments:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Printing all the command-line arguments,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Printing all the command-line arguments]
+#!/bin/sh
+
+while [ $# -gt 0 ]
+do
+    echo $1
+    shift
+done
+\end{lstlisting}
+
+\subsubsection{The until loop}
+The \textbf{until}-statement is also a repetition statement, but it is sort of
+the semantic opposite of the \textbf{while}-statement. The general form of the
+\textbf{until}-statement is
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+until command-list1
+do command-list2
+done
+\end{lstlisting}
+
+The interpretation of this statement is almost the same as that of the
+\textbf{while}-statement. The only difference is that the commands in command
+list 2 are executed as long as the last command of command list 1 returns a
+non-zero status. Or, to put it more simply: command list 2 is executed as long
+as the condition of the loop is \emph{not} met.
+
+Whereas \textbf{while}-statements are mostly used to establish some effect
+(``repeat until done''), \textbf{until}-statements are more commonly used to
+poll for the existence of some condition or to wait until some condition is
+met. For instance, assume some process is running that will write 10000 lines
+to a certain file. The following \textbf{until}-statement waits for the file to
+have grown to 10000 lines:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Waiting for myfile.txt to grow to 10000 lines,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Waiting for myfile.txt to grow to 10000 lines]
+until [ $lines -eq 10000 ]
+do
+    lines=`wc -l dates | awk '{print $1}'`
+    sleep 5
+done
+\end{lstlisting}
+
+\subsubsection{The for loop}
+In the section on Control flow, we discussed that the difference between
+\textbf{if} and \textbf{case} was that the first depended on command exit
+statuses whereas the second was closely linked to data available in the shell.
+That kind of pairing also exists for repetition statements: \textbf{while} and
+\textbf{until} use command exit statuses and \textbf{for} uses data explicitly
+available in the shell.
+
+The \textbf{for}-statement loops over a fixed, finite set of values. Its
+general form is
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+for name in w1 w2 ...
+do command-list
+done
+\end{lstlisting}
+
+This statement executes the command list for each value named after the 'in'.
+Within the command list, the current value \emph{w\(_{i}\)} is available
+through the variable \emph{name}. The value list must be separated from the
+'do' by a semicolon or a newline. And the command list must be separated from
+the 'done' by a semicolon or a newline. So, for example:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=A for loop that prints some values,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:A for loop that prints some values]
+for myval in Abel Bertha Charlie Delta Easy Fox Gumbo Henry India
+do
+  echo $myval Company
+done
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+Abel Company
+Bertha Company
+Charlie Company
+Delta Company
+Easy Company
+Fox Company
+Gumbo Company
+Henry Company
+India Company
+\end{verbatim}
+\normalsize
+
+The \textbf{for} statement is used a lot to loop over command line arguments.
+For that reason the shell even has a shorthand notation for this use: if you
+leave off the 'in' and the values part, the command assumes \$* as the list of
+values. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Using for to loop over command line arguments,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Using for to loop over command line arguments]
+#!/bin/sh
+
+for arg
+do
+  echo $arg
+done
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+$ sh loop_args.sh A B C D\\
+A
+B
+C
+D
+\end{verbatim}
+\normalsize
+
+This use of for is commonly combined with case to handle command line switches.
+
+\section{Command execution}
+In the last section on Control Flow we discussed the major programming
+constructs and control flow statements offered by the Bourne Shell. However,
+there are lots of other syntactic constructs in the shell that allow you to
+control the way commands are executed and to embed commands in other commands.
+In this section we discuss some of the more important ones.
+
+\subsection{Command joining}
+Earlier, we looked at the \textbf{if}-statement as a method of conditional
+execution. In addition to this expansive statement the Bourne Shell also offers
+a method of directly linking two commands together and making the execution of
+one of them conditional on the outcome (the exit status) of the other. This is
+useful for making quick, inline decisions on command execution. But you
+probably wouldn't want to use these constructs in a shell script or for longer
+command sequences, because they aren't the most readable.
+
+You can join commands together using the \textbf{\&\&} and
+\textbf{\textbar{}\textbar{}} operators. These operators (which you might
+recognize as borrowed from the C programming language) are \emph{short
+circuiting} operators: they make the execution of the second command dependent
+on the exit status of the first and so can allow you to avoid unnecessary
+command executions.
+
+The \textbf{\&\&} operator joins two commands together and only executes the
+second if the exit status of the first is zero (i.e. the first command
+succeeds). Consider the following example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Attempt to create a file and delete it again if the creation succeeds,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Attempt to create a file and delete it again if the creation succeeds]
+echo Hello World > tempfile.txt && rm tempfile.txt
+\end{lstlisting}
+
+In this example the deletion would be pointless if the file creation fails
+(because the file system is read-only, say). Using the \textbf{\&\&} operator
+prevents the deletion from being attempted if the file creation fails. A
+similar -- and possibly more useful -- example is this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Check if a file exists and make a backup copy if it does,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Check if a file exists and make a backup copy if it does]
+test -f my_important_file && cp my_important_file backup
+\end{lstlisting}
+
+In contrast to the \textbf{\&\&} operator, the \textbf{\textbar{}\textbar{}}
+operator executes the second command only if the exit status of the first
+command is \emph{not} zero (i.e. it fails). Consider the following example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Make sure we do not overwrite a file; create a new file only if it doesn't exist yet,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Make sure we do not overwrite a file; create a new file only if it doesn't exist yet]
+test -f my_file || echo Hello World > my_file
+\end{lstlisting}
+
+For both these operators the exit status of the joined commands is the exit
+status of the last command that actually got executed.
+
+\subsection{Command grouping}
+You can join multiple commands into one command list by joining them using the
+\textbf{;} operator, like so:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Create a directory and change into it all in one go,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Create a directory and change into it all in one go]
+mkdir newdir;cd newdir
+\end{lstlisting}
+
+There is no conditional execution here; all commands are executed, even if one
+of them fails.
+
+When joining commands into a command list, you can group the commands together
+for clarity and some special handling. There are two ways of grouping commands:
+using curly braces and using parentheses.
+
+Grouping using curly braces is just for clarity; it doesn't add any semantics
+to joining using semicolons. The only differences between with braces and
+without are that if you use braces you \emph{must} insert an extra semicolon
+after your command list and you have to remember to put spaces between the
+braces and your command list or the shell won't understand what you mean.
+Here's an example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Create a directory and change into it all in one go grouped with curly braces,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Create a directory and change into it all in one go grouped with curly braces]
+{ mkdir newdir;cd newdir; }
+\end{lstlisting}
+
+The parentheses are far more interesting. When you group a command list with
+parentheses, it is executed... in a separate process. This means that whatever
+you do in the command list doesn't affect the environment in which you gave the
+command. Consider the example above again, with braces and parentheses:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Create a directory and change into it all in one go grouped with curly braces,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Create a directory and change into it all in one go grouped with curly braces]
+/home$ { mkdir newdir;cd newdir; }
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+/home/newdir$
+Note that your working directory has changed
+\end{verbatim}
+\normalsize
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Create a directory and change into it all in one go grouped with parentheses,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Create a directory and change into it all in one go grouped with parentheses]
+/home$ (mkdir newdir;cd newdir)
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+/home$
+Note that your working directory is still the same 
+--- but the new directory has been created
+\end{verbatim}
+\normalsize
+
+Here's another one:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Creating shell variables in the current and in a new environment,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Creating shell variables in the current and in a new environment]
+$ VAR0=A
+$ (VAR1=B)
+$ echo \"$VAR0\" \"$VAR1\"
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+"A""
+VAR1 was created in a separate process with its own environment,
+so it doesn't exist in the original environment
+\end{verbatim}
+\normalsize
+
+\subsection{Command subsitution}
+In the chapter on Environment we talked about variable substitution. The Bourne
+Shell also supports \emph{command substitution}. This is sort of like variable
+substitution, but instead of a variable being replaced by its value a command
+is replaced by its output. We saw an example of this earlier when discussing
+the \textbf{while}-statement, where we assigned the outcome of an arithmetic
+expression evaluation to an environment variable.
+
+Command substitution is accomplished using either of two notations. The
+original Bourne Shell used grave accents (`\emph{command}`), which is still
+generally supported by most shells. Later on the POSIX 1003.1 standard added
+the \textbf{\$(} \emph{command} \textbf{)} notation. Consider the following
+examples:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Making a daily backup (old-skool),language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Making a daily backup (old-skool)]
+cp myfile backup/myfile-`date`
+\end{lstlisting}
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Making a daily backup (POSIX 1003.1),language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Making a daily backup (POSIX 1003.1)]
+cp myfile backup/myfile-$(date)
+\end{lstlisting}
+
+\subsection{Regular expressions and metacharacters}
+Usually, in the day-to-day tasks that you do with your shell, you will want to
+be explicit and exact about which files you want to operate on. After all, you
+want to delete a specific file and not a random one. And you want to send your
+network communications to the network device file and not to the keyboard.
+
+But there are times, especially in scripting, when you will want to be able to
+operate on more than one file at a time. For instance, if you have written a
+script that makes a regular backup of all the files in your home directory
+whose names end in ``.dat''. If there are a lot of those files, or there are
+more being made each day with new names each time, then you do not want to have
+to name all those files explicitly in your backup script.
+
+We have also seen another example of not wanting to be too explicit: in the
+section on the \textbf{case}-statement, there is an example where we claim that
+somebody is a vegetarian if he likes fruit or anything starting with ``veg''.
+We could have included all sorts of options there and been explicit (although
+there are an infinite number of words you can make that start with ``veg'').
+But we used a \emph{pattern} instead and saved ourselves a lot of time.
+
+For exactly these cases the shell supports a (limited) form of \emph{regular
+expressions}: patterns that allow you to say something like ``I mean every
+string, every sequence of characters, that looks sort of like this''. The shell
+allows you to use these regular expressions anywhere (although they don't
+always make sense --- for example, it makes no sense to use a regular
+expression to say \emph{where} you want to copy a file). That means in shell
+scripts, in the interactive shell, as part of the \textbf{case}-statement, to
+select files, general strings, anything.
+
+In order to create regular expressions you use one or more
+\emph{metacharacters}. Metacharacters are characters that have special meaning
+to the shell and are automatically recognized as part of regular expressions.
+The Bourne shell recognizes the following metacharacters:
+
+\begin{description}
+	\item[\textbf{*}] Matches any string.
+	\item[?] Matches any single character.
+	\item[[\emph{characters}]] Matches any character enclosed in the angle
+brackets.
+	\item[[!\emph{characters}]] Matches any character \emph{not} enclosed in
+the angle brackets.
+	\item[\emph{pat0}\textbar{}\emph{pat1}] Matches any string that matches
+\emph{pat0} \textbf{or} \emph{pat1} (only in \textbf{case}-statement patterns!)
+\end{description}
+
+Here are some examples of how you might use regular expressions in the shell:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=List all files whose names end in .dat,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:List all files whose names end in .dat]
+ls *.dat
+\end{lstlisting}
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=List all files whose names are file- followed by two characters followed by .txt,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:List all files whose names are file- followed by two characters followed by .txt]
+ls file-??.txt
+\end{lstlisting}
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Make a backup copy of all text files with a datestamp,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]Make a backup copy of all text files with a datestamp
+for i in *.txt; do cp $i backup/$i-`date +%Y%m%d`; done
+\end{lstlisting}
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=List all files in the directories Backup0 and Backup1,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:List all files in the directories Backup0 and Backup1]
+ls Backup[01]
+\end{lstlisting}
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=List all files in the other backup directories,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:List all files in the other backup directories]
+ls Backup[!01]
+\end{lstlisting}
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Execute all shell scripts whose names start with myscript and end in .sh,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Execute all shell scripts whose names start with myscript and end in .sh]
+myscript*.sh
+\end{lstlisting}
+
+\subsubsection{Regular expressions and hidden files}
+When selecting files, the metacharacters match all files except files whose
+names start with a period (``.''). Files that start with a period are either
+special files or are assumed to be configuration files. For that reason these
+files are semi-protected, in the sense that you cannot just pick them up with
+the metacharacters. In order to include these files when selecting with regular
+expressions, you must include the leading period explicitly. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Lising all files whose names start with a period,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Lising all files whose names start with a period]
+/home$ ls .*
+\end{lstlisting}
+
+The period files in a home directory
+\scriptsize
+\begin{verbatim}
+.
+..
+.profile
+\end{verbatim}
+\normalsize
+
+The example above shows a listing of period files. In this example the listing
+includes '.profile', which is the user configuration file for the Bourne Shell.
+It also includes the special directories '.' (which means ``the current
+directory'') and '..' (which is the parent directory of the current directory).
+You can address these special directories like any other. So for instance
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+ls .
+\end{lstlisting}
+
+is the same semantically as just 'ls' and 
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+cd ..
+\end{lstlisting}
+
+changes your working directory to the parent directory of the directory that
+was your working directory before.
+
+\subsection{Quoting}
+When you introduce special characters like the metacharacters discussed in the
+previous section, you automatically get into situations when you really don't
+want those special characters evaluated. For example, assume that you have a
+file whose name includes an asterisk ('*'). How would you address that file?
+For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Metacharacters in file names can cause problems,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Metacharacters in file names can cause problems]
+echo Test0 > asterisk*.file
+echo Test1 > asteriskSTAR.file
+cat asterisk*.file
+\end{lstlisting}
+
+Output:
+\scriptsize
+\begin{verbatim}
+Test0
+Test1
+\end{verbatim}
+\normalsize
+Oops; that clearly wasn't the idea...
+
+Clearly what is needed is a way of temporarily turning metacharacters off. The
+Bourne Shell built-in quoting mechanisms do exactly that. In fact, they do a
+lot more than that. For instance, if you have a file name with spaces in it (so
+that the shell cannot tell the different words in the file name belong
+together) the quoting mechanisms will help you deal with that problem as well.
+
+There are three quoting mechanisms in the Bourne Shell:
+
+\begin{description}
+	\item[\textbackslash{}] backslash, for single character quoting.
+	\item[''] single quotes, to quote entire strings.
+	\item[``''] double quotes, to quote entire strings but still allow for some special characters.
+\end{description}
+
+The simplest of these is the backslash, which quotes the character that
+immediately follows it. So, for example:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Echo with an asterisk,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Echo with an asterisk]
+echo *
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+asterisk*.file asterisking.file backup biep.txt BLAAT.txt 
+conditional1.sh condit ional1.sh~ conditional.sh conditional.sh~ 
+dates error_test.sh error_test.sh~ fil e with spaces.txt 
+looping0.sh looping1.sh out_nok out_ok preferences.sh pre
+ferences.sh~ test.txt
+\end{verbatim}
+\normalsize
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Echoing an asterisk,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Echoing an asterisk]
+echo \*
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+*
+\end{verbatim}
+\normalsize
+
+So the backslash basically disables special character interpretation for the
+duration of one character. Interestingly, the newline character is also
+considered a special character in this context, so you can use the backslash to
+split commands to the interpreter over multiple lines. Like so:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=A multiline command,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:A multiline command]
+echo This is a \
+>very long command!
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+This is a very long command!
+\end{verbatim}
+\normalsize
+
+Note: you don't have to type the \textgreater{}; the shell puts it in as a hint
+that you're continuing on a new line.
+
+The backslash escape also works for file names with spaces:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Difficult file to list...,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Difficult file to list...]
+ls file with spaces.txt
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+ls: cannot access file: No such file or directory
+ls: cannot access with: No such file or directory
+ls: cannot access spaces.txt: No such file or directory
+\end{verbatim}
+\normalsize
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Listing the file using escapes,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Listing the file using escapes]
+ls file\ with\ spaces.txt
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+file with spaces.txt
+\end{verbatim}
+\normalsize
+
+But what if you want to pass a backslash to the shell? Well, think about it.
+Backslash disables interpretation of one character, so if you want to use a
+backslash for anything else... then '\textbackslash{}\textbackslash{}' will do
+it!
+
+So we've seen that a backslash allows you to disable special character
+interpretation for a single character by quoting it. But what if you want to
+quote a lot of special characters all at once? As you've seen above with the
+filename with spaces, you \emph{can} quote each special character separately,
+but that gets to be a drag really quickly. Usually it's quicker, easier and
+less error-prone simply to quote an entire string of characters in one go. To
+do exactly that you use single quotes. Two single quotes quote the entire
+string they surround, disabling interpretation of all special characters in
+that string --- with the exception of the single quote (so that you can
+\emph{stop} quoting as well). For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Quoting to use lots of asterisks,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Quoting to use lots of asterisks]
+echo '*******'
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+*******
+\end{verbatim}
+\normalsize
+
+So let's try something. Let's assume that for some strange reason we would like
+to print three asterisks (``***''), then a space, then the current working
+directory, a space and three more asterisks. We know we can disable
+metacharater interpretation with single quotes so this should be no biggy,
+right? And to make life easy, the built-in command 'pwd' \textbf{p}rints the
+\textbf{w}orking \textbf{d}irectory, so this is really easy:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Printing the working directory with decorations,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Printing the working directory with decorations]
+echo '*** `pwd` ***'
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+*** `pwd` *** Uh... wait... that's not right...
+\end{verbatim}
+\normalsize
+
+So what went wrong? Well, the single quotes disable interpretation of all
+special characters. So the grave accents we used for the command substitution
+didn't work! Can we make it work a different way? Like by using the Path of
+Working Directory environmentvariable (\$PWD)? Nope, the \$-character won't
+work either.
+
+This is a typical Goldilocks problem. We want to quote some special characters,
+but not all. We could use backslashes, but that doesn't do enough to be
+convenient (it's too cold). We can use single quotes, but that kills too many
+special characters (it's too hot). What we need is quoting that's \emph{juuuust
+riiiiight}. More to the point, what we want (and more often than you think) is
+to disable all special character interpretation except variable and command
+substitution. Because this is a common desire the shell supports it through a
+separate quoting mechanism: the double quote. The double quote disables all
+special character interpretation except the grave accent (command
+substitution), the \$ (variable substitution) and the double quote (so you can
+\emph{stop} quoting). So the solution to our problem above is:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Printing the working directory with decorations take II,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Printing the working directory with decorations take II]
+echo "*** `pwd` ***"
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+*** /home/user/examples ***
+\end{verbatim}
+\normalsize
+
+By the way, we actually cheated a little bit above for educational purposes
+(hey, you try coming up with these examples); we could also have solved the
+problem like this:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Printing the working directory with decorations alternative,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Printing the working directory with decorations alternative]
+echo '***' `pwd` '***'
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+*** /home/user/examples ***
+\end{verbatim}
+\normalsize

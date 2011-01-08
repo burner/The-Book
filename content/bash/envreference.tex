@@ -1,0 +1,39 @@
+\section{Environment reference}
+In the section on the environment we discussed the concept of environment
+variables. We also mentioned that there are usually a large number of
+environment variables that are created centrally in \textbf{/etc/profile}.
+There are a number of these that have a predefined meaning in the Bourne Shell.
+They are not set automatically, mind, but they have meaning when they are set.
+
+On most systems there are far more predefined variables than we list here. And
+some of these will mean something to your shell (most shells have more options
+than the Bourne Shell). Check your shell's documentation for a listing. The
+ones below are meaningful to the Bourne Shell and are usually also recognized
+by other shells. See the \ref{table:envvariable} table.
+
+\begin{table*}[H]
+	\begin{tabular}{|c|p{10cm}|}
+		\hline
+		\textbf{ Variable} & \textbf{ Meanings} \\ \hline
+		 HOME &  The user's home directory. Set automatically at login from the user's login directory in the password file \\ \hline
+		 PATH &  The default search path for executables. \\ \hline
+		 CDPATH &  The search path used with the cd builtin, to allow for shortcuts. \\ \hline
+		 LANG &  The directory for internationalization files, used by localizable programs. \\ \hline
+		 MAIL &  The name of a mail file, that will be checked for the arrival of new mail. \\ \hline
+		 MAILCHECK &  The frequency in seconds that the shell checks for the arrival of mail. \\ \hline
+		 MAILPATH &  A colon “:” separated list of file names, for the shell to check for incoming mail. \\ \hline
+		 PS1 &  The control string for your prompt, which defaults to “\$ ”,
+unless you are the superuser, in which case it defaults to “\# ”. \\ \hline
+		 PS2 &  The control string for your secondary prompt, which defaults to
+“\textgreater{} ”. The secondary prompt is what you see when you break a
+command over more than one line. \\ \hline
+		 PS4 &  The character string you see before the output of an execution
+trace (set -x); defaults to “+ ”. \\ \hline
+		 IFS &  Input Field Separators. Basically the characters the shell
+considers to be whitespace. Normally set to \textless{} space \textgreater{}, \textless tab \textgreater{}, and
+\textless newline \textgreater{}. \\ \hline
+		 TERM &  The terminal type, for use by the shell. \\ \hline
+	\end{tabular}
+	\caption{Bourne Shell environment variables}
+	\label{table:envvariable}
+\end{table*}

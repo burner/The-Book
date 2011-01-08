@@ -1,4 +1,4 @@
-\subsection{The Environments}
+\section{The Environments}
 When discussing a Unix shell, you often come across the term "environment".
 This term is used to describe the context in which a program executes and is
 usually meant to mean a set of "environment variables" (we'll get to those
@@ -9,7 +9,7 @@ actually is called the "environment". The second is a much wider collection of
 resources that influence the execution of a program and is called the
 \textit{command execution environment}.
 
-\subsubsection{The command execution environment}
+\subsection{The command execution environment}
 Each running program, either started directly by the user from the shell or
 indirectly by another process, operates within a collection of global resources
 called its \textbf{command execution environment} (CEE).
@@ -56,7 +56,7 @@ parent, but not the entire parent CEE. The inherited copy includes:
 \item Traps set by the shell
 \end{itemize}.
 
-\paragraph{The 'set' command}
+\subsubsection{The 'set' command}
 The 'set' command allows you to set or disable a number of options that are
 part of the CEE and influence the behavior of the shell. To set an option, set
 is called with a command line argument of '-' followed by one or more flags. To
@@ -77,7 +77,7 @@ get some use out of:
 Again, you'll probably mostly use set without arguments, to inspect the list of
 defined variables.
 
-\subsubsection{The environment and environment variables}
+\subsection{The environment and environment variables}
 Part of the CEE is something that is simply called the \textit{environment}.
 The environment is a collection of name/value pairs called \textit{environment variables}.
 These variables technically also contain the shell |functions, but
@@ -155,12 +155,12 @@ bin  booktemp  Documents  Mail  mbox  public_html  sent
 There's nothing wrong with setting a variable to the name of an executable,
 then executing that executable by calling the variable as a command.
 
-\subsubsection{Different kinds of environment variables}
+\subsection{Different kinds of environment variables}
 Although you use all environment variables the same way, there are a couple of
 different kinds of variables. In this section we discuss the differences
 between them and their uses.
 
-\paragraph{Named variables}
+\subsubsection{Named variables}
 The simplest and most straightforward environment variable is the named
 variable. We saw it earlier: it's just a name with a value, which can be
 retrieved by prepending a \$ to the name. You create and define a named
@@ -212,7 +212,7 @@ including the output of entire commands.
 There are usually lots of named variables defined in your environment, even if
 you are not aware of them. Try the 'set' command and have a look.
 
-\paragraph{Positional variables}
+\subsubsection{Positional variables}
 Most of the environment variables in the shell are named variables, but there
 are also a couple of "special" variables. Variables that you don't set, but
 whose values are automatically arranged and maintained by the shell. Variables
@@ -324,7 +324,7 @@ Mouse Cheese
 \end{verbatim}
 \normalsize
 
-\paragraph{Shifting}
+\subsubsection{Shifting}
 So what happens if you have more than nine command line arguments? Then your
 script is too complicated. No, but seriously: then you have a little problem.
 It's allowed to pass more than nine arguments, but there are only nine
@@ -352,7 +352,7 @@ you have them stored elsewhere or you don't need them anymore!
 \item You cannot shift back to the right.
 \end{itemize}
 
-\subsection{Other, special variables}
+\section{Other, special variables}
 In addition to the positional variables the Bourne Shell includes a number of
 other, special variables with special information about the shell. You'll
 probably not use these as often, but it's good to know they're there. These
@@ -367,7 +367,7 @@ variables are
 	\item[\$@]All the command-line arguments. When \_Shell \_ Scripting /Control \_ flow \#Quoting | quoted, expands to all command-line arguments quoted individually (i.e. "\$@" = "\$1" "\$2" "\$3" ...).
 \end{description}
 
-\subsubsection{Exporting variables to a subprocess}
+\subsection{Exporting variables to a subprocess}
 We've mentioned it a couple of times before: Unix is a multi-user,
 multiprocessing operating system. And that fact is very much supported by the
 Bourne Shell, which allows you to start up new processes right from inside a
@@ -471,7 +471,7 @@ variable in one single command. Another is to allow you to \textit{remove} the
 export marking from a variable. However, Bourne Shell only supports exporting
 as explained above.
 
-\subsubsection{Your profile} In the previous sections we've discussed the
+\subsection{Your profile} In the previous sections we've discussed the
 runtime environment of every program and command you run using the shell. We've
 talked about the command execution environment and at some length about the
 piece of it simply called "the environment", which contains environment
@@ -526,7 +526,7 @@ you want or need to the .profile script in your directory. The call to execute
 the system profile script doesn't have to be first, but you probably don't want
 to remove it altogether.
 
-\subsection{Multitasking and job control}
+\section{Multitasking and job control}
 With the arrival of fast computers, CPUs that can switch between multiple tasks
 in a very small amount of time, CPUs that can actually do multiple things at
 the same time and networks of multiple CPUs, having the computer perform
@@ -578,7 +578,7 @@ In this section we will explore multitasking support within the Unix shell. We
 will look at enabling support, at working with multiple tasks and at the
 utilities that a shell has available to help you.
 
-\subsubsection{Some terminology} Before we discuss the mechanics of
+\subsection{Some terminology} Before we discuss the mechanics of
 multitasking in the shell, let's cover some terminology. This will help us
 discuss the subject clearly and you'll also know what is meant when you run
 across these terms elsewhere.
@@ -608,7 +608,7 @@ terms you'll come across:
 \item[Terminate] Unload a program from memory and destroy the job that was running the program.
 \end{description}
 
-\subsubsection{Job control in the shell: what does it mean?}
+\subsection{Job control in the shell: what does it mean?}
 A job is a program you start within the shell. By default a new job will
 suspend the shell and take control over the input and output: every stroke you
 type at the keyboard will go to the job, as will every mouse movement. Nothing
@@ -646,7 +646,7 @@ described above: to start programs in the background, to suspend running
 programs and to resume suspended programs, either in the foreground or in the
 background.
 
-\subsubsection{Enabling job control}
+\subsection{Enabling job control}
 In order to do all the things we talked about in the previous section, you need
 two things:
 
@@ -689,7 +689,7 @@ scripts, you usually include an interpreter hint that calls for a Bourne Shell
 control, several modern shells turn off job control by default in
 non-interactive mode as a compatibility feature.
 
-\subsubsection{Creating a job and moving it around}
+\subsection{Creating a job and moving it around}
 We've already talked at length about how to create a foreground job: type a
 command or executable name at the prompt, hit enter, there's your job. Been
 there, done that, bought the T-shirt.
@@ -777,7 +777,7 @@ won't change. The job is not a background job; it's not running at all! The job
 is suspended. Many programs recognize the \textit{CTRL+Z} combination to suspend.
 And even those that don't usually have some way of suspending themselves.
 
-\subsubsection{Moving to the background and stopping in the background}
+\subsection{Moving to the background and stopping in the background}
 Once a job is suspended, you can resume it either in the foreground or the
 background. To resume in the foreground you use the 'fg' command discussed
 earlier. You use 'bg' for the background:
@@ -827,7 +827,7 @@ We'll get back to what this does exactly
 ../Debugging \_and \_signal \_handling \#System \_signals | later, when we talk about
 signals.
 
-\subsubsection{Job control tools and job status}
+\subsection{Job control tools and job status}
 We mentioned before that the POSIX 1003.1 standard has standardized a number of
 the job control tools that were included for job control in the jsh shell and
 its successors. We've already looked at a couple of these tools; in this
@@ -963,7 +963,7 @@ These processes will get cleaned up by the \textit{init} process but sometimes
 a reboot will be required to get rid of them.
 \end{description}
 
-\subsubsection{Other job control related tools}
+\subsection{Other job control related tools}
 In the \#Job\_control\_tools\_and\_job\_status|last section we discussed the
 standard facilities that are available for job control in the Unix shell.
 However, there are also a number of non-standard tools that you might come
@@ -971,7 +971,7 @@ across. And even though the focus of this book is Bourne Shell scripting
 (particularly as the lingua franca of Unix shell scripting) these tools are so
 common that we would be remiss if we did not at least mention them.
 
-\paragraph{Shell commands you might come across}
+\subsubsection{Shell commands you might come across}
 In addition to the tools previously discussed, there are two shell commands
 that are quite common: 'stop' and 'suspend'.
 
@@ -1007,7 +1007,7 @@ shell in which the command was issued. In this variant the -f argument
 indicates the shell should be suspended even if it is a login shell. To resume
 the shell execution, send it a SIGCONT signal using the 'kill' command.
 
-\paragraph{The process snapshot utility}
+\subsubsection{The process snapshot utility}
 The last tool we will discuss is the process snapshot utility, 'ps'. This
 utility is not a shell tool at all, but it occurs in some variant on pretty
 much every system and you will want to use it often. Possibly more often even

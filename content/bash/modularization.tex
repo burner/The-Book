@@ -1,0 +1,219 @@
+\section{Modularization}
+If you've ever done any programming in a different environment than the shell,
+you're probably familiar with the following scenario: you're writing your
+program, happily typing away at the keyboard, until you notice that
+
+\begin{itemize}
+	\item you have to repeat some code you typed earlier because your program
+has to perform exactly the same actions in two different locations; or
+	\item your program is just too \emph{long} to understand anymore.
+\end{itemize}
+
+In other words, you've reached the point where it becomes necessary to divide
+your program up into modules that can be run as separate subprograms and called
+as often as you like. Working in the Bourne Shell is no different than working
+in any other language in this respect. Sooner or later you're going to find
+yourself writing a shell script that's just too long to be practical anymore.
+And the time will have come to divide your script up into modules.
+
+\subsection{Named functions}
+Of course, the easy and obvious way to divide a script into modules is just to
+create a couple of different shell scripts --- just a few separate text files
+with executable permissions. But using separate files isn't always the most
+practical solution either. Spreading your script over multiple files can make
+it hard to maintain. Especially if you end up with shell scripts that aren't
+really meaningful unless they are called specifically from one other,
+particular shell script.
+
+Especially for this situation the Bourne Shell includes the concept of a
+\emph{named function}: the possibility to associate a name with a command list
+and execute the command list by using the name as a command. This is what it
+looks like:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+name () command group
+\end{lstlisting}
+
+This functionality is available throughout the shell and is useful in several
+situations. First of all, you can use it to break a long shell script up into
+multiple modules. But second, you can use it to define your own little macros
+in your own environment that you don't want to create a full script for. Many
+modern shells include a built-in command for this called \emph{alias}, but
+old-fashioned shells like the original Bourne Shell did not; you can use named
+functions to accomplish the same result.
+
+\subsection{Creating a named function}
+\subsubsection{Functions with a simple command group}
+Let's start off simply by creating a function that prints ``Hello World!!''.
+And let's call it ``hw''. This is what it looks like:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Hello world as a named function,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Hello world as a named function]
+hw() {
+>  echo 'Hello World!!';
+>}
+\end{lstlisting}
+
+We can use exactly the same code in a shell script or in the interactive shell
+--- the example above is from the interactive shell. There are several things
+to notice about this example. First of all, we didn't need a separate keyword
+to define a function, just the parentheses did it. To the shell, function
+definitions are like extended variable definitions. They're part of the
+environment; you set them just by defining a name and a meaning.
+
+The second thing to note is that, once you're past the parentheses, all the
+normal rules hold for the command group. In our case we used a command group
+with braces, so we needed the semicolon after the echo command. The string we
+want to print contains exclamation points, so we have to quote it (as usual).
+And we were allowed to break the command group across multiple lines, even in
+interactive mode, just like normal.
+
+Here's how you use the new function:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Calling our function,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Calling our function]
+$ hw
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+Hello World!!
+\end{verbatim}
+\normalsize
+
+\subsubsection{Functions that execute in a separate process}
+The definition of a function takes a command group. \emph{Any} command group.
+Including the command group with parentheses rather than braces. So if we want,
+we can define a function that runs as a subprocess in its own environment as
+well. Here's hello world again, in a subprocess:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Hello world as a named function,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Hello world as a named function]
+hw() ( echo 'Hello World!!' )
+\end{lstlisting}
+
+It's all on one line this time to keep it short, but the same rules apply as
+before. And of course the same environment rules apply as well, so any
+variables defined in the function will not be available anymore once the
+function ends.
+
+\subsection{Functions with parameters}
+If you've done any programming in a different programming language you know
+that the most useful functions are those that take parameters. In other words,
+ones that don't always rigidly do the same thing but can be influenced by
+values passed in when the function is called. So here's an interesting
+question: can we pass parameters to a function? Can we create a definition like
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+functionWithParams (ARG0, ARG1) { do something with ARG0 and ARG1 } 
+\end{lstlisting}
+
+And then make a call like 'functionWithParams(Hello, World)'? Well, the answer
+is simple: no. The parenthese are just there as a flag for the shell to let it
+know that the previous name is the name of a function rather than a variable
+and there is no room for parameters.
+
+Or actually, it's more a case of the above being the simple answer rather than
+the answer being simple. You see, when you execute a function you are executing
+a command. To the shell there's really very little difference between executing
+a named function and executing 'ls'. It's a command like any other. And it may
+not be able to have parameters, but like any other command it can certainly
+have \emph{command line arguments}. So we may not be able to define a function
+with parameters like above, but we can certainly do this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Functions with command-line arguments,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Functions with command-line arguments]
+$ repeatOne () { echo $1; }
+$ repeatOne 'Hello World!'
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+Hello World!
+\end{verbatim}
+\normalsize
+
+And you can use any other variable from the environment as well. Of course,
+that's a nice trick for when you're calling a function from the command line in
+the interactive shell. But what about in a shell script? The positional
+variables for command-line arguments are already taken by the arguments to the
+shell script, right? Ah, but wait! Each command executed in the shell (no
+matter how it was executed) has its \textbf{own} set of command-line arguments!
+So there's no interference and you can use the same mechanism. For example, if
+we define a script like this:
+
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=function.sh: A function in a shell script,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:function.sh: A function in a shell script]
+#!/bin/sh
+
+myFunction() {
+  echo $1
+}
+
+echo $1
+myFunction
+myFunction "Hello World"
+echo $1
+\end{lstlisting}
+
+Then it executes exactly the way we want:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Executing the function.sh script,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Executing the function.sh script]
+$ . function.sh 'Goodbye World!!'
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+Goodbye World!
+
+Hello World
+Goodbye World!
+\end{verbatim}
+\normalsize
+
+\subsubsection{Functions in the environment}
+We've mentioned it before, but let's delve a little deeper into it now: what
+are functions exactly? We've hinted that they're an alias for a command list or
+a macro and that they're part of the environment. But what \emph{is} a function
+exactly?
+
+A function, as far as the shell is concerned, is just a very verbose variable
+definition. And that's really all it is: a name (a text string) that is
+associated with a value (some more text) and can be replaced by that value when
+the name is used. Just like a shell variable. And we can prove it too: just
+define a function in the interactive shell, then give the 'set' command (to
+list all the variable definitions in your current environment). Your function
+will be in the list.
+
+Because functions are really a special kind of shell variable definition, they
+behave exactly the same way normal variables do:
+
+\begin{itemize}
+	\item Functions are defined by listing their name, a definition operator
+and then the value of the function. Functions use a different definition
+operator though: '()' instead of '='. This tells the shell to add some special
+considerations to the function (like not needing the '\$' character when using
+the function).
+	\item Functions are part of the environment. That means that when commands
+are issued from the shell, functions are also copied into the copy of the
+environment that is given to the issued command.
+	\item Functions can also be passed to new subprocesses if they are marked
+for export, using the 'export' command. Some shells will require a special
+command-line argument to 'export' for functions (bash, for instance, requires
+you to do an 'export -f' to export functions).
+	\item You can drop function definitions by using the 'unset' command.
+\end{itemize}
+
+Of course, when you use them functions behave just like commands (they are
+expanded into a command list, after all). We've already seen that you can use
+command-line arguments with functions and the positional variables to match.
+But you can also redirect input and output to and from commands and pipe
+commands together as well.

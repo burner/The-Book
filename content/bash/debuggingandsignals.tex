@@ -1,0 +1,723 @@
+\section{Debugging and signal handling}
+In the previous sections we've told you all about the Bourne Shell and how to
+write scripts using the shell's language. We've been careful to include all the
+details we could think of so you will be able to write the best scripts you
+can. But no matter how carefully you've paid attention and no matter how
+carefully you write your scripts, the time will come to pass when something
+you've written simply will not work --- no matter how sure you are it should.
+So how do you proceed from here?
+
+In this module we cover the tools the Bourne Shell provides to deal with the
+unexpected. Unexpected behavior of your script (for which you must debug the
+script) and unexpected behavior \emph{around} your script (caused by signals
+being delivered to your script by the operating system).
+
+\subsection{Debugging Flags}
+So here you are, in the middle of the night having just finished a long and
+complicated shell script, just poured your heart and soul into it for three
+days straight while living on nothing but coffee, cola and pizza... and it just
+won't work. Somewhere in there is a bug that is just eluding you. Something is
+going wrong, some unexpected behavior has popped up or something else is
+driving you crazy. So how are you going to debug this script? Sure, you can
+pump it full of 'echo' commands and debug that way, but isn't there an easier
+way?
+
+Generally speaking the most insightful way to debug any program is to follow
+the execution of the program along statement by statement to see what the
+program is doing exactly. The most advanced form of this (offered by modern
+IDEs) allows you to trace into a program by stopping the execution at a certain
+point and examining its internal state. The Bourne Shell is, unfortunately, not
+that advanced. But it does offer the next best thing: command tracing. The
+shell can print each and every command as it is being executed.
+
+The tracing functionality (there are two of them) is activated using either the
+'set' command or by passing parameters directly to the shell executable when it
+is called. In either case you can use the \emph{-x} parameter, the \emph{-v}
+parameter or both.
+
+\begin{description}
+	\item[-v] Turns on verbose mode; each command is printed by the shell as it is read.
+	\item[-x] This turns on command tracing; every command is printed by the shell as it is executed.
+\end{description}
+
+\subsubsection{Debugging}
+Let's consider the following script:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=divider.sh: Script with a potential error,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:divider.sh: Script with a potential error]
+#!/bin/sh
+
+DIVISOR=${1:-0}
+echo $DIVISOR
+expr 12 / $DIVISOR
+\end{lstlisting}
+
+Let's execute this script and not pass in a command-line argument (so we use
+the default value 0 for the DIVISOR variable):
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Running the script,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Running the script]
+$ sh divider.sh
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+0
+expr: division by zero
+\end{verbatim}
+\normalsize
+
+Of course it's not too hard to figure out what went wrong in this case, but
+let's take a closer look anyway. Let's see what the shell executed, using the
+\textbf{-x} parameter:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Running the script with tracing on,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Running the script with tracing on]
+$ sh -x divider.sh
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
++ DIVISOR=0
++ echo 0
+0
++ expr 12 / 0
+expr: division by zero
+\end{verbatim}
+\normalsize
+
+So indeed, clearly the shell tried to have a division by zero evaluated. Just
+in case we're confused about where the zero came from, let's see which commands
+the shell actually read:
+
+\scriptsize
+\begin{verbatim}
+$ sh -v divider.sh
+\end{verbatim}
+\normalsize
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Running the script in verbose mode,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Running the script in verbose mode]
+#!/bin/sh
+
+DIVISOR=${1:-0}
+echo $DIVISOR
+0
+expr 12 / $DIVISOR
+expr: division by zero
+\end{lstlisting}
+
+So obviously, the script read a command with a variable substitution that
+didn't work out very well. If we combine these two parameters the resulting
+output tells the whole, sad story:
+
+\scriptsize
+\begin{verbatim}
+$ sh -xv divider.sh
+\end{verbatim}
+\normalsize
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Running the script with maximum debugging,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Running the script with maximum debugging]
+#!/bin/sh
+
+DIVISOR=${1:-0}
++ DIVISOR=0
+echo $DIVISOR
++ echo 0
+0
+expr 12 / $DIVISOR
++ expr 12 / 0
+expr: division by zero
+\end{lstlisting}
+
+There is another parameter that you can use to debug your script, the
+\textbf{-n} parameter. This causes the shell to read the commands but not
+execute them. You can use this parameter to do a syntax checking run of your
+script.
+
+\subsection{Places to put your parameters}
+As you saw in the previous section, we used the shell parameters by passing
+them in as command-line parameters to the shell executable. But couldn't we
+have put the parameters inside the script itself? After all, there is an
+interpreter hint in there... And surely enough, we can do exactly that. Let's
+modify the script a little and try it.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=The same script but now with parameters to the interpreter hint,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:The same script but now with parameters to the interpreter hint]
+#!/bin/sh -xv
+
+DIVISOR=${1:-0}
+echo $DIVISOR
+expr 12 / $DIVISOR
+\end{lstlisting}
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Running the script,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Running the script]
+$ chmod +x divider.sh
+$ ./divider.sh
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+#!/bin/sh
+
+DIVISOR=${1:-0}
++ DIVISOR=0
+echo $DIVISOR
++ echo 0
+0
+expr 12 / $DIVISOR
++ expr 12 / 0
+expr: division by zero
+\end{verbatim}
+\normalsize
+
+Works like a charm.
+
+So there's no problem there. But there is a little gotcha. Let's try running
+the script again:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Running the script again,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Running the script again]
+$ sh divider.sh
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+0
+expr: division by zero
+\end{verbatim}
+\normalsize
+Where did the debugging go?
+
+So what happened to the debugging that time? Well, you have remember that the
+interpreter hint is used when you try to execute the script as an executable in
+its own right. But in the last example, we weren't doing that. In the last
+example we called the shell ourselves and passed it the script as a parameter.
+So the shell executed without any debugging activated. It would have worked if
+we'd done a ``sh -xv divider.sh'' though.
+
+What about sourcing the script (i.e. using the dot notation)?
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Running the script again,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Running the script again]
+$ . divider.sh
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+0
+expr: division by zero
+\end{verbatim}
+\normalsize
+No debugging there either...
+
+This time the script was executed by the same shell process that is running the
+interactive shell for us. And the same principle applies: no debugging there
+either. Because the interactive shell was not started with debugging flags. But
+we can fix that as well; this is where the 'set' command comes in:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Running the script again,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Running the script again]
+$ set -xv
+$ . divider.sh
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+. divider.sh
++ . divider.sh
+#!/bin/sh -vx
+
+DIVISOR=${1:-0}
+++ DIVISOR=0
+echo $DIVISOR
+++ echo 0
+0
+expr 12 / $DIVISOR
+++ expr 12 / 0
+expr: division by zero
+\end{verbatim}
+\normalsize
+
+And now we have debugging active in the interactive shell and we get a full
+trace of the script. In fact, we even get a trace of the interactive shell
+\emph{calling} the script! But now what happens if we start a new shell process
+with debugging on in the interactive shell? Does it carry over?
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Running the script again,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Running the script again]
+$ sh divider.sh
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+sh divider.sh
++ sh divider.sh
+0
+expr: division by zero
+\end{verbatim}
+\normalsize
+Not quite...
+
+Well, we certainly get a trace of the script being called, but no trace of the
+script itself. The moral of the story is: when debugging, make sure you know
+which shell you're activating the trace in.
+
+By the way, to turn tracing in the interactive shell off again you can either
+do a 'set +xv' or simply a 'set -'.
+
+\subsection{Breaking out of a script}
+When writing or debugging a shell script it is sometimes useful to exit out (to
+stop the execution of the script) at certain points. You use the 'exit'
+built-in command to do this. The command looks simply like this:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+exit [n]
+\end{lstlisting}
+
+If you leave off the optional exit status, the exit status of he script will be
+the exit status of the last command that executed before the call to 'exit'.
+
+For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Exiting from a script,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Exiting from a script]
+#!/bin/sh -x
+echo hello
+exit 1
+\end{lstlisting}
+
+If you run this script and then test the output status, you will see (using the
+\$? built-in variable):
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Checking the exit status,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Checking the exit status]
+echo $?
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+1
+\end{verbatim}
+\normalsize
+
+There's one thing to look out for when using 'exit': 'exit' actually terminates
+the executing process. So if you're executing an executable script with an
+interpreter hint or have called the shell explicitly and passed in your script
+as an argument that is fine. But if you've sourced the script (used the
+dot-notation), then your script is being run by the process running your
+interactive shell. So you may inadvertently terminate your shell session and
+log yourself out by using the 'exit' command!
+
+There's a variation on 'exit' meant specifically for blocks of code that are
+not processes of their own. This is the 'return' command, which is very similar
+to the 'exit' command:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+return [n]
+\end{lstlisting}
+
+Return has exactly the same semantics as 'exit', but is primarily intended for
+use in shell functions (it makes a function return without terminating the
+script). Here's an example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=exitandreturn.sh,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:exitandreturn.sh]
+#!/bin/sh
+
+sayHello() {
+  echo 'Hi there!!'
+  return 2
+}
+
+echo 'Hello World!!'
+sayHello
+echo $?
+echo 'Goodbye!!'
+exit
+\end{lstlisting}
+
+If we run this script, we see the following:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Running the script,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Running the script]
+./exit_and_return.sh
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+Hello World!!
+Hi there!!
+2
+Goodbye!!
+\end{verbatim}
+\normalsize
+
+The function returned with a testable exit status of 2. The overall exit status
+of the script is zero though, since the last command executed by the script
+('echo Goodbye!!') exited without errors.
+
+You can also use a 'return' statement to exit a shell script that you executed
+by sourcing it (the script will be run by the process that runs the interactive
+shell, so that's not a subprocess). But it's usually not a good idea, since
+this will limit your script to being sourced: if you try to run it any other
+way, the fact that you used a 'return' statement alone will cause an error.
+
+\subsection{Signal trapping}
+A syntax, command error or call to 'exit' is not the only thing that can stop
+your script from executing. The process that runs your script might also
+suddenly receive a signal from the operating system. Signals are a simple form
+of event notification: think of a signal as a little light suddenly popping on
+in your room, to let you know that somebody outside the room wants your
+attention. Only it's not just one light. The Unix system usually allows for
+lots of different signals so it's more like having a wall full of little lamps,
+each of which could suddenly start blinking.
+
+On a single-process operating system like MS-DOS, life was simple. The
+environment was single-process, meaning your code (once running) had complete
+machine control. Any signal arriving was always a hardware interrupt (e.g. the
+computer signalling that the floppy disk was ready to read) and you could
+safely ignore all those signals if you didn't need external hardware; either it
+was some device event you weren't interested in, or something was really wrong
+--- in which case the computer was crashing anyway and there was nothing you
+could do.
+
+On a Unix system, life is not so easy. On Unix signals can come from all over
+the place (including other programs). And you never have complete control of
+the system either. A signal may be a hardware interrupt, or another program
+signalling, or the user who got fed up with waiting, logged in to a second
+shell session and is now ordering your process to die. On the bright side, life
+is still not too complicated. Most Unix systems (and certainly the Bourne
+Shell) come with default handling for most signals. Usually you can still
+safely ignore signals and let the shell or the OS deal with them. In fact, if
+the signal in question is number 9 (loosely translated: \textbf{KILL!! KILL!!
+DIE!! DIE, RIGHT NOW!!}), you probably \emph{should} ignore it and let the OS
+kill your process.
+
+But sometimes you just have to do your own signal handling. That might be
+because you've been working with files and want to do some cleanup before your
+process dies. Or because the signal is part of your multi-process program
+design (e.g. listening for signal 16, which is ``user-defined signal 1'').
+Which is why the Bourne Shell gives us the 'trap' command.
+
+\subsubsection{Trap}
+The trap command is actually quite simple (especially if you've ever done
+event-driven programming of any kind). Essentially the trap command says ``if
+one of the following signals is received by this process, do this''. It looks
+like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+trap [command string] signal0 [signal1] ...
+\end{lstlisting}
+
+For example, to trap user-defined signal 1 (commonly referred to as SIGUSR1)
+and print ``Hello World'' whenever it comes along, you would do this:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Trapping SIGUSR1,language={bash},
+breaklines=true,xleftmargin=15pt,label=lstTrapping SIGUSR1:Trapping SIGUSR1]
+$ trap "echo Hello World" 16
+\end{lstlisting}
+
+Most Unix systems also allow you to use symbolic names (we'll get back to these
+a little later). So you can probably also do this:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Trapping SIGUSR1 (little easier),language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Trapping SIGUSR1 (little easier)]
+$ trap "echo Hello World" SIGUSR1
+\end{lstlisting}
+
+And if you can do that, you can usually also do this:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Trapping SIGUSR1 (even easier),language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Trapping SIGUSR1 (even easier)]
+$ trap "echo Hello World" USR1
+\end{lstlisting}
+
+The command string passed to 'trap' is a string that contains a command list.
+It's not treated as a command list though; it's just a string and it isn't
+interpreted until a signal is caught. The command string can be any of the
+following:
+
+\begin{description}
+	\item[A string] A string containing a command list. Any and all commands
+are allowed and you can use multiple commands separated by semicolons as well
+(i.e. a command list).
+	\item['\textless{}nowiki/\textgreater{}'] The empty string. Actually this
+is the same as the previous case, since this is the empty command string. This
+causes the shell to execute nothing when a signal is trapped --- in other
+words, to ignore the signal.
+	\item[] Nothing, the null string. This resets the signal handling to the
+default signal action (which is usually kill process).
+\end{description}
+
+Following the command list you can list as many signals as you want to be
+associated with that command list. The traps that you set up in this manner are
+valid for every command that \emph{follows} the 'trap' command.
+
+Right about now it's probably a good idea to look at an example to clear things
+up a bit. You can use 'trap' anywhere (as usual) including the interactive
+shell. But most of the time you will want to introduce traps into a script
+rather than into your interactive shell process. Let's create a simple script
+that uses the 'trap' command:
+
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=A simple signal trap,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:A simple signal trap]
+#!/bin/sh
+
+trap 'echo Hello World' SIGUSR1
+
+while [ 1 -gt 0 ]
+do
+   echo Running....
+   sleep 5
+done
+\end{lstlisting}
+
+This script in and of itself is an endless loop, which prints ``Running...''
+and then sleeps for five seconds. But we've added a 'trap' command
+(\textbf{before} the loop, otherwise the trap would never be executed and it
+wouldn't affect the loop) that prints ``Hello World'' whenever the process
+receives the SIGUSR1 signal. So let's start the process by running the script:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Infinite loop...,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Infinite loop...]
+$ ./trap_signal.sh
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+Running....
+Running....
+Running....
+Running....
+Running....
+Running....
+...
+\end{verbatim}
+\normalsize
+
+This could get boring after a while....
+To spring the trap, we must send the running process a signal. To do that, log
+into a new shell session and use a process tool (like 'ps') to find the correct
+process id (PID):
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Finding the process ID,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Finding the process ID]
+$ ps -ef | grep signal
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+bzt 10865 7067 0 15:08 pts/0 00:00:00 /bin/sh ./trap_signal.sh
+bzt 10808 10415 0 15:12 pts/1 00:00:00 fgrep signal
+\end{verbatim}
+\normalsize
+
+Now, to send a signal to that process, we use the 'kill' command which is built
+into the Bourne Shell: 
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:]
+kill [-signal] ID [ID] ...
+\end{lstlisting}
+
+As the name suggests, 'kill' was actually intended to kill processes (this fits
+with the default signal being SIGTERM and the default signal handler being
+terminate). But in fact what it does is nothing more than send a signal to a
+process. So for example, we can send a SIGUSR1 to our process like this:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Let's trip the trap...,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Let's trip the trap...]
+kill -SIGUSR1 10865
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+...
+Running....
+Running....
+Running....
+Running....
+Running....
+Hello World
+Running....
+Running....
+...
+\end{verbatim}
+\normalsize
+
+You might notice that there's a short pause before ``Hello World!'' appears; it
+won't happen until the running 'sleep' command is done. But after that, there
+it is. But you might be a little surprised: the signal didn't kill the process.
+That's because 'trap' \emph{completely} replaces the signal handler with the
+commands you set up. And an 'echo Hello World' alone won't kill a process...
+The lesson here is a simple one: if you want your signal trap to terminate your
+process, make sure you include an 'exit' command.
+
+Between having multiple commands in your command list and potentially trapping
+lots of signals, you might be worried that a 'trap' statement can become messy.
+Fortunately, you can also use shell functions as commands in a 'trap'. The
+following example illustates that and the difference between an exiting event
+handler and a non-exiting event handler:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=A trap with a shell function as a handler,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:A trap with a shell function as a handler]
+#!/bin/sh
+
+exit_with_grace() {
+  echo Goodbye World
+  exit
+}
+
+trap "exit_with_grace" USR1 TERM QUIT
+trap "echo Hello World" USR2
+
+while [ 1 -gt 0 ]
+do
+   echo Running....
+   sleep 5
+done
+\end{lstlisting}
+
+\subsubsection{System signals}
+Here's the official definition of a signal from the POSIX-1003 2001 edition
+standard:
+
+\scriptsize
+\begin{verbatim}
+A mechanism by which a process or thread may be notified of, or
+affected by, an event occurring in the system.  Examples of such 
+events include hardware exceptions and specific actions by 
+processes. The term signal is also used to refer to the event itself.
+\end{verbatim}
+\normalsize
+
+In other words, a signal is some sort of short message that is send from one
+process (possible a system process) to another. But what does that mean
+exactly? What does a signal look like? The definition given above is kind of
+vague...
+
+If you have any feel for what happens in computing when you give a vague
+definition, you already know the answer to the questions above: every Unix
+flavor that was developed came up with its own definition of ``signal''. They
+pretty much all settled on a message that consists of an integer (because
+that's simple), but not exactly the \emph{same} list everywhere. Then there was
+some standardization and Unix systems organized themselves into the System V
+and BSD flavors and at last everybody agreed on the following definition:
+
+\scriptsize
+\begin{verbatim}
+The system signals are the signals listed in 
+/usr/include/sys/signal.h .
+\end{verbatim}
+\normalsize
+
+God, that's helpful...
+
+Since then a lot has happened, including the definition of the POSIX-1003
+standard. This standard, which standardizes most of the Unix interfaces
+(including the shell in part 1 (1003.1)) finally came up with a standard list
+of symbolic signal names and default handlers. So usually, nowadays, you can
+make use of that list and expect your script to work on most systems. Just be
+aware that it's not \emph{completely} fool-proof...
+
+POSIX-1003 defines the signals listed in the table below. The values given are
+the \emph{typical} numeric values, but they aren't mandatory and you shouldn't
+rely on them (but then again, you use symbolic values in order not to use
+actual values). See table \ref{tab:posixsignal}.
+
+\begin{table*}[H]
+	\begin{tabular}{|c|c|p{5cm}|c|}
+		\hline
+		\textbf{ Signal} & \textbf{ Default action} & \textbf{ Description} & \textbf{ Typical value(s)} \\ \hline
+		 SIGABRT &  Abort with core dump &  Abort process and generate a core dump &  6 \\ \hline
+		 SIGALRM &  Terminate &  Alarm clock. &  14 \\ \hline
+		 SIGBUS &  Abort with core dump &  Access to an undefined portion of a memory object. &  7, 10 \\ \hline
+		 SIGCHLD &  Ignore &  Child process terminated, stopped &  20, 17, 18 \\ \hline
+		 SIGCONT &  Continue process (if stopped) &  Continue executing, if stopped. &  19,18,25 \\ \hline
+		 SIGFPE &  Abort with core dump &  Erroneous arithmetic operation. &  8 \\ \hline
+		 SIGHUP &  Terminate &  Hangup. &  1 \\ \hline
+		 SIGILL &  Abort with core dump &  Illegal instruction. &  4 \\ \hline
+		 SIGINT &  Terminate &  Terminal interrupt signal. &  2 \\ \hline
+		 SIGKILL &  Terminate &  Kill (cannot be caught or ignored). &  9 \\ \hline
+		 SIGPIPE &  Terminate &  Write on a pipe with no one to read it (i.e. broken pipe). &  13 \\ \hline
+		 SIGQUIT &  Terminate &  Terminal quit signal. &  3 \\ \hline
+		 SIGSEGV &  Abort with core dump &  Invalid memory reference. &  11 \\ \hline
+		 SIGSTOP &  Stop process &  Stop executing (cannot be caught or ignored). &  17,19,23 \\ \hline
+		 SIGTERM &  Terminate &  Termination signal. &  15 \\ \hline
+		 SIGTSTP &  Stop process &  Terminal stop signal. &  18,20,24 \\ \hline
+		 SIGTTIN &  Stop process &  Background process attempting read. &  21,21,26 \\ \hline
+		 SIGTTOU &  Stop process &  Background process attempting write. &  22,22,27 \\ \hline
+		 SIGUSR1 &  Terminate &  User-defined signal 1. &  30,10,16 \\ \hline
+		 SIGUSR2 &  Terminate &  User-defined signal 2. &  31,12,17 \\ \hline
+		 SIGPOLL &  Terminate &  Pollable event. &  - \\ \hline
+		 SIGPROF &  Terminate &  Profiling timer expired. &  27,27,29 \\ \hline
+		 SIGSYS &  Abort with core dump &  Bad system call. &  12 \\ \hline
+		 SIGTRAP &  Abort with core dump &  Trace/breakpoint trap &  5 \\ \hline
+		 SIGURG &  Ignore &  High bandwidth data is available at a socket. &  16,23,21 \\ \hline
+		 SIGVTALRM &  Terminate &  Virtual timer expired. &  26,28 \\ \hline
+		 SIGXCPU &  Abort with core dump &  CPU time limit exceeded. &  24,30 \\ \hline
+		 SIGXFSZ &  Abort with core dump &  File size limit exceeded. &  25,31 \\ \hline
+	\end{tabular}
+	\caption{POSIX system signals}
+	\label{tab:posixsignal}
+\end{table*}
+
+Earlier on we talked about job control and suspending and resuming jobs. Job
+suspension and resuming is actually completely based on sending signals to
+processes, so you can in fact control job stopping and starting completely
+using 'kill' and the signal list. To suspend a process, send it the SIGSTOP
+signal. To resume, send it the SIGCONT signal.
+
+\subsubsection{Err... ERR?}
+If you go online and read about 'trap', you might come across another kind of
+``signal'' which is called \textbf{ERR}. It's used with 'trap' the same way
+regular signals are, but it isn't really a signal at all. It's used to trap
+command errors (i.e. non-zero exit statuses), like this:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=Error trapping,language={bash},
+breaklines=true,xleftmargin=15pt,label=lst:Error trapping]
+$ trap 'echo HELLO WORLD' ERR
+$ expr 1 / 0
+\end{lstlisting}
+
+\scriptsize
+\begin{verbatim}
+expr: division by zero
+HELLO WORLD
+\end{verbatim}
+\normalsize
+The non-zero exit status was trapped as though it was a signal.
+
+So why didn we cover this ``signal'' earlier, when we were discussing
+'trap'? Well, we saved it until
+the discussion on system and non-system signals for a reason: ERR isn't
+standard at all. It was added by the Korn Shell to make life easier, but not
+adopted by the POSIX standard and it certainly isn't part of the original
+Bourne Shell. So if you use it, remember that your script may not be portable
+anymore.
