@@ -1,0 +1,158 @@
+\section{Opt Args}
+A \emph{library} in C is a group of functions and declarations, exposed for use
+by other programs. The library therefore consists of an \emph{interface}
+expressed in a \texttt{.h} file (named the ``header'') and an
+\emph{implementation} expressed in a \texttt{.c} file. This \texttt{.c} file
+might be precompiled or otherwise inaccessible, or it might be available to the
+programmer. (Note: Libraries may call functions in other libraries such as the
+Standard C or math libraries to do various tasks.)
+
+We're going to use as example a function to parse arguments from the command
+line. Arguments on the command line could be by themselves:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+-i
+\end{lstlisting}
+
+have an optional argument that is concatenated to the letter:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+-ioptarg
+\end{lstlisting}
+
+or have the argument in a separate argv-element:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+-i optarg
+\end{lstlisting}
+
+In order to parse all these types of arguments, we have written the following
+``getopt.c'' file:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>              /* for fprintf() and EOF */
+#include <string.h>             /* for strchr() */
+#include "getopt.h"             /* consistency check */
+ 
+/* variables */
+int opterr = 1;                 /* getopt prints errors if this is on */
+int optind = 1;                 /* token pointer */
+int optopt;                     /* option character passed back to user */
+char *optarg;                   /* flag argument (or value) */
+ 
+/* function */
+/* return option character, EOF if no more or ? if problem.
+	The arguments to the function:
+	argc, argv - the arguments to the main() function. An argument of "--"
+	stops the processing.
+	opts - a string containing the valid option characters.
+	an option character followed by a colon (:) indicates that
+	the option has a required argument.
+*/
+int getopt (int argc, char **argv, char *opts) {
+	static int sp = 1;            /* character index into current token */
+	register char *cp;            /* pointer into current token */
+ 
+	if (sp == 1) {
+		/* check for more flag-like tokens */
+		if (optind >= argc || argv[optind][0] != '-' || argv[optind][1] == '\0')
+			return EOF;
+		else if (strcmp (argv[optind], "--") == 0) {
+			optind++;
+			return EOF;
+		}
+	}
+ 
+	optopt = argv[optind][sp];
+ 
+	if (optopt == ':' || (cp = strchr (opts, optopt)) == NULL) {
+		if (opterr)
+			fprintf (stderr, "%s: invalid option -- '%c'\n", argv[0], optopt);
+ 
+		/* if no characters left in this token, move to next token */
+		if (argv[optind][++sp] == '\0') {
+			optind++;
+			sp = 1;
+		}
+ 
+		return '?';
+	}
+ 
+	if (*++cp == ':') {
+		/* if a value is expected, get it */
+		if (argv[optind][sp + 1] != '\0')
+			/* flag value is rest of current token */
+			optarg = argv[optind++] + (sp + 1);
+		else if (++optind >= argc)
+		{
+			if (opterr)
+				fprintf (stderr, "%s: option requires an argument -- '%c'\n",
+							argv[0], optopt);
+			sp = 1;
+			return '?';
+		}
+		else
+		/* flag value is next token */
+		optarg = argv[optind++];
+		sp = 1;
+	} else {
+		/* set up to look at next char in token, next time */
+		if (argv[optind][++sp] == '\0')
+		{
+			/* no more in current token, so setup next token */
+			sp = 1;
+			optind++;
+		}
+		optarg = 0;
+	}
+	return optopt;
+} 
+\end{lstlisting}
+
+The interface would be the following ``getopt.h'' file:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#ifndef GETOPT_H
+	#define GETOPT_H
+ 
+	/* exported variables */
+	extern int opterr, optind, optopt;
+	extern char *optarg;
+ 
+	/* exported function */
+	int getopt(int, char **, char *);
+#endif
+\end{lstlisting}
+
+At a minimum, a programmer has the interface file to figure out how to use a
+library, although, in general, the library programmer also wrote documentation
+on how to use the library. In the above case, the documentation should say that
+the provided arguments
+\textless{}code\textgreater{}**argv\textless{}code\textgreater{} and
+\textless{}code\textgreater{}*opts\textless{}code\textgreater{} both shouldn't
+be null pointers (or why would you be using the
+\textless{}code\textgreater{}getopt\textless{}/code\textgreater{} function
+anyway?). Specifically, it typically states what each parameter is for and what
+return values can be expected in which conditions. Programmers that use a
+library, are normally not interested in the implementation of the library --
+unless the implementation has a bug, in which case he would want to complain
+somehow.
+
+Both the implementation of the getopts library, and programs that use the
+library should state \textless{}code\textgreater{}\#include
+``getopt.h''\textless{}/code\textgreater{}, in order to refer to the
+corresponding interface. Now the library is ``linked'' to the program -- the
+one that contains the main() function. The program may refer to dozens of
+interfaces.
+
+In some cases, just placing \textless{}code\textgreater{}\#include
+``getopt.h''\textless{}/code\textgreater{} may appear correct but will still
+fail to link properly. This indicates that the library is not installed
+correctly, or there may be some additional configuration required. You will
+have to check either the compiler's documentation or library's documentation on
+how to resolve this issue. 

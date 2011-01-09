@@ -1,0 +1,146 @@
+\section{Complex types}\label{Complex_types}
+\subsection{Data structures}
+A data structure (``struct'') contains multiple pieces of data.  Each piece of
+data (called a ``member'') can be accessed by the name of the variable,
+followed by a '.', then the name of the member.  (Another way to access a
+member is using the member operator '-\textgreater{}').  The member variables
+of a struct can be of any data type and can even be an array or a pointer.
+
+\subsection{Pointers}
+Pointers are variables that don't hold the actual data. Instead they point to
+the memory location of some other variable.  For example,
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+int *pointer = &variable;
+\end{lstlisting}
+
+defines a pointer to an \texttt{int}, and also makes it point to the particular
+integer contained in \texttt{variable}.
+
+The '*' is what makes this an integer pointer.  To make the pointer point to a
+different integer, use the form
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+pointer = &sandwiches;
+\end{lstlisting}
+
+Where \& is the \emph{address of} operator.  Often programmers set the value of
+the pointer to NULL (a standard macro defined as 0 or (void*)0 ) like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+pointer = NULL;
+\end{lstlisting}
+
+This tells us that the pointer isn't currently pointing to any real location.
+
+Additionally, to dereference (access the thing being pointed at) the pointer,
+use the form:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+value = *pointer;
+\end{lstlisting}
+
+\subsection{Structs}
+A data structure contains multiple pieces of data.  One defines a data
+structure using the \texttt{struct} keyword. For example,
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+struct mystruct {
+    int int_member;
+    double double_member;
+    char string_member[25];
+} variable;
+\end{lstlisting}
+
+\texttt{variable} is an instance of \texttt{mystruct}. You can omit it from the
+end of the \texttt{struct} declaration and declare it later using:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+struct mystruct variable;
+\end{lstlisting}
+
+It is often common practice to make a \emph{type synonym} so we don't have to
+type ``struct mystruct'' all the time. C allows us the possibility to do so
+using a \texttt{typedef} statement, which aliases a type:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+typedef struct {
+  ...
+} Mystruct;
+\end{lstlisting}
+
+The \texttt{struct} itself has no name (by the absence of a name on the first
+line), but it is aliased as \texttt{Mystruct}. Then you can use
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+Mystruct structure;
+\end{lstlisting}
+
+Note that it is commonplace, and good style to capitalize the \textbf{first
+letter} of a type synonym. However in the actual definition we need to give the
+struct a \emph{tag} so we can refer to it: we may have a \emph{recursive data
+structure} of some kind.
+
+\subsection{Unions}
+The definition of a union is similar to that of a struct. The difference
+between the two is that in a struct, the members occupy different areas of
+memory, but in a union, the members occupy the same area of memory. Thus, in
+the following type, for example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+union {
+    int i;
+    double d;
+} u;
+\end{lstlisting}
+
+The programmer can access either \texttt{u.i} or \texttt{u.d}, but not both at
+the same time. Since \texttt{u.i} and \texttt{u.d} occupy the same area of
+memory, modifying one modifies the value of the other, sometimes in
+unpredictable ways.
+
+The size of a union is the size of its largest member.
+
+\subsection{Type modifiers}
+\textbf{\texttt{register}} is a hint to the compiler to attempt to optimise the
+storage of the given variable by storing it in a register of the computer's CPU
+when the program is run. Most optimising compilers do this anyway, so use of
+this keyword is often unnecessary. In fact, ANSI C states that a compiler can
+ignore this keyword if it so desires -- and many do. Microsoft Visual C++ is an
+example of an implementation that completely ignores the \emph{register}
+keyword.
+
+\textbf{\texttt{volatile}} is a special type modifier which informs the
+compiler that the value of the variable may be changed by external entities
+other than the program itself. This is necessary for certain programs compiled
+with optimisations --- if a variable were not defined \texttt{volatile} then
+the compiler may assume that certain operations involving the variable were
+safe to optimise away when in fact they aren't. \emph{volatile} is particularly
+relevant when working with embedded systems (where a program may not have
+complete control of a variable) and multi-threaded applications.
+
+\textbf{\texttt{auto}} is a modifier which specifies an ``automatic'' variable
+that is automatically created when you get inside a scope and destroyed when
+you get out of a scope. If you think this sounds like pretty much what you've
+been doing all along when you declare a variable, you're right: all declared
+items within a block are implicitly ``automatic''. For this reason, the
+\emph{auto} keyword is more like the answer to a trivia question than a useful
+modifier, and there are lots of very competent programmers that are unaware of
+its existence.
+
+\textbf{\texttt{extern}} is used when a file needs to access a variable in
+another file that it may not have \#included directly. Therefore, \emph{extern}
+does not actually carve out space for a new variable, it just provides the
+compiler with sufficient information to access the remote variable.
+
+Add \texttt{restrict} and \texttt{static}, and try changing names of variable
+to something other than \texttt{variable}.

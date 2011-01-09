@@ -1,0 +1,243 @@
+\section{Networking in UNIX}
+Network programming under UNIX is relatively simple in C.
+
+This guide assumes you already have a good general idea about C, UNIX and
+networks.
+
+\subsection{A simple client}
+To start with, we'll look at one of the simplest things you can do, initialize
+a stream connection and receive a message from a remote server.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+
+#define MAXRCVLEN 500
+#define PORTNUM 2343
+
+int main(int argc, char *argv[]) {
+	char buffer[MAXRCVLEN + 1]; /* +1 so we can add null terminator */
+	int len, mysocket;
+	struct sockaddr_in dest; 
+
+	mysocket = socket(AF_INET, SOCK_STREAM, 0);
+ 
+	memset(&dest, 0, sizeof(dest));				/* zero the struct */
+	dest.sin_family = AF_INET;
+	dest.sin_addr.s_addr = inet_addr("127.0.0.1"); /* set destination IP number */ 
+	dest.sin_port = htons(PORTNUM);				/* set destination port number */
+
+	connect(mysocket, (struct sockaddr *)&dest, sizeof(struct sockaddr));
+ 
+	len = recv(mysocket, buffer, MAXRCVLEN, 0);
+
+	/* We have to null terminate the received data ourselves */
+	buffer[len] = '\0';
+
+	printf("Received %s (%d bytes).\n", buffer, len);
+
+	close(mysocket);
+	return EXIT_SUCCESS;
+}
+\end{lstlisting}
+
+This is the very bare bones of a client; in practice, we would check every
+function that we called for failure, however for clarity, error checking the
+code has been left out for now.
+
+As you can see, the code mainly revolves around ``dest'' which is a struct of
+type sockaddr\_in; in this struct we store information about the machine we
+want to connect to.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+mysocket = socket(AF_INET, SOCK_STREAM, 0);
+\end{lstlisting}
+
+The socket function tells our OS that we want a file descriptor for a socket
+which we can use for a network stream connection; what the parameters mean is
+mostly irrelevent for now.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+memset(&dest, 0, sizeof(dest));                /* zero the struct */
+dest.sin_family = AF_INET;
+dest.sin_addr.s_addr = inet_addr("127.0.0.1"); /* set destination IP number */ 
+dest.sin_port = htons(PORTNUM);                /* set destination port number */
+\end{lstlisting}
+
+Now we get on to the interesting part:
+
+The first line uses memset to zero the struct.
+
+The second line sets the address family, this should be the same as was used in
+the socket function, for most purposes AF\_INET will serve.
+
+The third line is where we set the IP of the machine we need to connect to. The
+variable dest.sin\_addr.s\_addr is just an integer stored in Big Endian format,
+but we don't have to know that as the inet\_addr function will do the
+conversion from string into Big Endian integer for us.
+
+The fourth line sets the destination port number, the htons() function converts
+the port number into a Big Endian short integer. If your program is going to be
+solely run on machines which use Big Endian numbers as default then
+dest.sin\_port = 21; would work just as well, however for portability reasons
+htons() should be used.
+
+Now that all of the preliminary work is done, we can actually make the
+connection and use it:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+connect(mysocket, (struct sockaddr *)&dest, sizeof(struct sockaddr));
+\end{lstlisting}
+
+This tells our OS to use the socket mysocket to create a connection to the
+machine specified in dest.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+len = recv(mysocket, buffer, MAXRCVLEN, 0);
+\end{lstlisting}
+
+Now this receives upto MAXRCVLEN bytes of data from the connection and stores
+them in the buffer string. The number of characters received is returned by
+recv(). It is important to note that the data received will not automatically
+be null terminated when stored in buffer hence we need to do it ourselves with
+buffer[inputlen] = '\textbackslash{}0'.
+
+And that's about it!
+
+The next step after learning how to receive data is learning how to send it. If
+you've understood the previous section then this is quite easy. All you have to
+do is use the the send() function, which uses the same parameters as receive.
+If in our previous example ``buffer'' had the text we wanted to send and its
+length was stored in ``len'' we would write send(mysocket, buffer, len, 0).
+send() returns the number of bytes that were sent. It is important to remember
+that send(), for various reasons, may not be able to send all of the bytes, so
+it is imporant to check that this value is equal to the number of bytes you
+were sending. In most cases this can be resolved by resending the unsent data.
+
+\subsection{A simple server}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+
+#define PORTNUM 2343
+
+int main(int argc, char *argv[]) {
+	char msg[] = "Hello World !\n";
+ 
+	struct sockaddr_in dest; /* socket info about the machine connecting to us */
+	struct sockaddr_in serv; /* socket info about our server */
+	int mysocket;			/* socket used to listen for incoming connections */
+	int socksize = sizeof(struct sockaddr_in);
+ 
+	memset(&serv, 0, sizeof(serv));	/* zero the struct before filling the fields */
+	serv.sin_family = AF_INET;		 /* set the type of connection to TCP/IP */
+	serv.sin_addr.s_addr = INADDR_ANY; /* set our address to any interface */
+	serv.sin_port = htons(PORTNUM);	/* set the server port number */	
+ 
+	mysocket = socket(AF_INET, SOCK_STREAM, 0);
+ 
+	/* bind serv information to mysocket */
+	bind(mysocket, (struct sockaddr *)&serv, sizeof(struct sockaddr));
+ 
+	/* start listening, allowing a queue of up to 1 pending connection */
+	listen(mysocket, 1);
+	int consocket = accept(mysocket, (struct sockaddr *)&dest, &socksize);
+ 
+	while(consocket)
+	{
+		
+ 
+		printf("Incoming connection from %s - sending welcome\n", inet_ntoa(dest.sin_addr));
+		send(consocket, msg, strlen(msg), 0);
+ 
+		
+	}
+	close(consocket);
+	close(mysocket);
+	return EXIT_SUCCESS;
+}
+\end{lstlisting}
+
+Superficially, this is very similar to the client. The first important
+difference is that rather than creating a sockaddr\_in with information about
+the machine we're connecting to we create it with information about the server,
+and then we ``bind'' it to the socket. This allows the machine to know the data
+received on the port specified in the sockaddr\_in should be handled by our
+specified socket.
+
+The listen command then tells our program to start listening using that socket,
+the second parameter of listen() allows us to specify the maximum number of
+connections that can be queued. Each time a connection is made to the server it
+is added to the queue, we take connections from the queue using the accept()
+function.
+
+Then we have the core of the server code, we use the accept() function to take
+a connection from the queue. If there is no connection waiting on the queue the
+function causes the program to wait until a connection is received. The
+accept() function returns us another socket this is essentially a ``session''
+socket solely for communicating with connection we took off the queue. The
+original socket (mysocket) continues to listen on the specified port for
+further connections.
+
+Once we have ``session'' socket we can handle it in the same way as with the
+client using send() and recv() to handle data transfers.
+
+Note that this server can only accept one connection at a time; if you want to
+simultaneously handle multiple clients then you'll need to fork() off separate
+processes, or use threads, to handle the connections.
+
+\subsection{Useful network functions}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+int gethostname(char *hostname, size_t size);
+\end{lstlisting}
+
+Parameters are a pointer to the first character of an array of chars and the
+size of that array. If possible, it finds the hostname and stores it in the
+array. On failure it returns -1.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+struct hostent *gethostbyname(const char *name);
+\end{lstlisting}
+
+This function obtains information about a domain name and stored it in a
+hostent struct, in the hostent structure the most useful part is the (char**)
+h\_addr\_list field, this is a null terminated array of IP addresses associated
+with that domain. The field h\_addr is a pointer to the first IP address in the
+h\_addr\_list array. Returns NULL on failure.
+
+\subsection{What about stateless connections?}
+If you don't want to exploit the properties of TCP in your program but rather
+just have to use a UDP protocol then you can just switch ``SOCK\_STREAM'' in
+your socket call for ``SOCK\_DGRAM'' and use it in the same way. It is
+important to remember that UDP does not guarantee delivery of packets and order
+of delivery, so checking is important.
+
+If you want to exploit the properties of UDP, then you can use sendto() and
+recvfrom() which operate like send() and recv() except you need to provide
+extra parameters specifiying who you are communicating with.
+
+\subsection{How to check for errors?}
+The functions socket(), recv() and connect() all return -1 on failure and use
+errno for further details.

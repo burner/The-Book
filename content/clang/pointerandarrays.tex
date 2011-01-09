@@ -1,0 +1,736 @@
+\section{Pointers and arrays}
+A \textbf{pointer} is a value that designates the address (i.e., the location
+in memory), of some value. There are four fundamental things you need to know
+about pointers:
+
+\begin{itemize}
+	\item How to declare them
+	\item How to assign to them
+	\item How to reference the value to which the pointer points (known as
+\emph{dereferencing}) and
+	\item How they relate to arrays
+\end{itemize}
+
+We'll also discuss the relationship of pointers with text strings and the more
+advanced concept of function pointers.
+
+Pointers are variables that hold a memory location -- the location of some
+other variable.  One can access the value of the variable pointed to using the
+dereferencing operator '*'. The initial value is usually set to NULL, and when
+it is set, the address of the variable is passed in with the '\&' or address
+operator.  Pointers can hold any data type, even functions.
+
+The vast majority of arrays in C are simple lists, also called ``1 dimensional
+arrays''. We will briefly cover multi-dimensional arrays in a later chapter.
+
+\subsection{Declaring pointers}
+Consider the following snippet of code which declares two pointers:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+struct MyStruct {
+	int   m_aNumber;
+	float num2;
+};
+
+int *pJ2;
+struct MyStruct *pAnItem;
+\end{lstlisting}
+
+The first four lines define a structure.  The next line declares a variable
+which points to an \texttt{int}, and the bottom line declares a variable which
+points to something with structure MyStruct. So to declare a variable as
+something which points to some type, rather than contains some type, the
+asterisk (\texttt{*}) is placed before the variable name. 
+
+In the first of the following lines of code, \texttt{var1} is a pointer to a
+long while \texttt{var2} is a long and not a pointer to a long. In the second
+line \texttt{p3} is declared as a pointer to a pointer to an int.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+long  *var1, var2;
+int   **p3;
+\end{lstlisting}
+
+Pointer types are often used as parameters to function calls. The following
+shows how to declare a function which uses a pointer as an argument. Since C
+passes function arguments by value, in order to allow a function to modify a
+value from the calling routine, a pointer to the value must be passed. Pointers
+to structures are also used as function arguments even when nothing in the
+struct will be modified in the function. This is done to avoid copying the
+complete contents of the structure onto the stack. More about pointers as
+function arguments later.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+int MyFunction(struct MyStruct *pStruct);
+\end{lstlisting}
+
+\subsection{Assigning values to pointers}
+So far we've discussed how to declare pointers. The process of assigning values
+to pointers is next. To assign a pointer the address of a variable, the
+\texttt{\&} or 'address of' operator is used. 
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+int myInt;
+int *pPointer;
+struct MyStruct dvorak;
+struct MyStruct *pKeyboard;
+ 
+pPointer = &myInt;
+pKeyboard = &dvorak;
+\end{lstlisting}
+
+Here, pPointer will now reference myInt and pKeyboard will reference dvorak.
+
+Pointers can also be assigned to reference dynamically allocated memory. The
+malloc() and calloc() functions are often what are used to do this.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdlib.h>
+/* ... */
+struct MyStruct *pKeyboard;
+/* ... */
+pKeyboard = malloc(sizeof *pKeyboard);
+\end{lstlisting}
+
+The malloc function returns a pointer to dynamically allocated memory (or NULL
+if unsuccessful). The size of this memory will be appropriately sized to
+contain the MyStruct structure.
+
+The following is an example showing one pointer being assigned to another and
+of a pointer being assigned a return value from a function.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+static struct MyStruct val1, val2, val3, val4;
+
+struct MyStruct *ASillyFunction( int b ) {
+	struct MyStruct *myReturn;
+	
+	if(b == 1) myReturn = &val1;
+	else if(b==2) myReturn = &val2;
+	else if(b==3) myReturn = &val3;
+	else myReturn = &val4;
+	
+	return myReturn;
+}
+
+struct MyStruct *strPointer;
+int *c, *d;
+int j;
+
+c = &j; /* pointer assigned using & operator */
+d = c;  /* assign one pointer to another     */
+strPointer = ASillyFunction( 3 ); /* pointer returned from a function. */
+\end{lstlisting}
+
+When returning a pointer from a function, do not return a pointer that points
+to a value that is local to the function or that is a pointer to a function
+argument. Pointers to local variables become invalid when the function exits.
+In the above function, the value returned points to a static variable.
+Returning a pointer to dynamically allocated memory is also valid.
+
+\subsection{Pointer dereferencing}
+To access a value to which a pointer points, the \texttt{*} operator is used.
+Another operator, the \texttt{-\textgreater{}} operator is used in conjunction
+with pointers to structures. Here's a short example.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+int c, d;
+int *pj;
+struct MyStruct astruct;
+struct MyStruct *bb;
+
+c = 10;
+pj = &c;  /* pj points to c */
+d = *pj;  /* d is assigned the value to which pj points, 10 */
+pj = &d;  /* now points to d */
+*pj = 12; /* d is now 12 */
+
+bb = &astruct;
+(*bb).m_aNumber = 3; /* assigns 3 to the m_aNumber member of astruct */
+bb->num2 = 44.3;     /* assigns 44.3 to the num2 member of astruct   */
+*pj = bb->m_aNumber; /* eqivalent to d = astruct.m_aNumber;          */
+\end{lstlisting}
+
+The expression \texttt{bb-\textgreater{}mem} is entirely equivalent to
+\texttt{(*bb).mem}. They both access the \texttt{mem} element of the structure
+pointed to by \texttt{bb}. There is one more way of dereferencing a pointer,
+which will be discussed in the following section.
+
+When dereferencing a pointer that points to an invalid memory location, an
+error often occurs which results in the program terminating. The error is often
+reported as a segmentation error. A common cause of this is failure to
+initialize a pointer before trying to dereference it.
+
+C is known for giving you just enough rope to hang yourself, and pointer
+dereferencing is a prime example. You are quite free to write code that
+accesses memory outside that which you have explicity requested from the
+system. And many times, that memory may appear as available to your program due
+to the vagaries of system memory allocation. However, even if 99 executions
+allow your program to run without fault, that 100th execution may be the time
+when your ``memory pilfering'' is caught by the system and the program fails.
+Be careful to ensure that your pointer offsets are within the bounds of
+allocated memory!
+
+The declaration \texttt{void *somePointer;} is used to declare a pointer of
+some nonspecified type. You can assign a value to a void pointer, but you must
+cast the variable to point to some specified type before you can dereference
+it. Pointer arithmetic is also not valid with \texttt{void *} pointers.
+
+\subsection{Pointers and Arrays}
+Up to now, we've carefully been avoiding discussing arrays in the context of
+pointers. The interaction of pointers and arrays can be confusing but here are
+two fundamental statements about it:
+\begin{itemize}
+	\item A variable declared as an array of some type acts as a pointer to
+that type. When used by itself, it points to the first element of the array.
+	\item A pointer can be indexed like an array name.
+\end{itemize}
+
+The first case often is seen to occur when an array is passed as an argument to
+a function. The function declares the parameter as a pointer, but the actual
+argument may be the name of an array. The second case often occurs when
+accessing dynamically allocated memory. Let's look at examples of each. In the
+following code, the call to calloc() effectively allocates an array of struct
+MyStruct items.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+float KrazyFunction( struct MyStruct *parm1, int p1size, int bb ) { 
+	int ix; //declaring an integer variable//
+	for(ix=0; ix<p1size; ix++) {
+		if(parm1[ix].m_aNumber == bb )
+			return parm1[ix].num2;
+	}
+	return 0.0f;
+}
+
+/* ... */
+struct MyStruct myArray[4];
+#define MY_ARRAY_SIZE (sizeof(myArray)/sizeof(*myArray))
+float v3;
+struct MyStruct *secondArray;
+int someSize;
+int ix;
+/* initialization of myArray ... */
+v3 = KrazyFunction( myArray, MY_ARRAY_SIZE, 4 );
+/* ... */
+secondArray = calloc( someSize, sizeof *secondArray);
+for(ix=0; ix<someSize; ix++) {
+	secondArray[ix].m_aNumber = ix *2;
+	secondArray[ix].num2 = .304 * ix * ix;
+}
+\end{lstlisting}
+
+Pointers and array names can pretty much be used interchangeably. There are
+exceptions. You cannot assign a new pointer value to an array name. The array
+name will always point to the first element of the array. In the function
+\texttt{KrazyFunction} above, you could however assign a new value to parm1, as
+it is just a pointer to the first element of myArray. It is also valid for a
+function to return a pointer to one of the array elements from an array passed
+as an argument to a function. A function should never return a pointer to a
+local variable, even though the compiler will probably not complain.
+
+When declaring parameters to functions, declaring an array variable without a
+size is equivalent to declaring a pointer. Often this is done to emphasize the
+fact that the pointer variable will be used in a manner equivalent to an array. 
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+/* two equivalent function definitions */
+int LittleFunction( int *paramN );
+int LittleFunction( int paramN[] );
+\end{lstlisting}
+
+Now we're ready to discuss pointer arithmetic. You can add and subtract integer
+values to/from pointers. If myArray is declared to be some type of array, the
+expression \texttt{*(myArray+j)}, where j is an integer, is equivalent to
+\texttt{myArray[j]}. So for instance in the above example where we had the
+expression secondArray[i].num2, we could have written that as
+\texttt{*(secondArray+i).num2} or more simply
+\texttt{(secondArray+i)-\textgreater{}num2}.
+
+Note that for addition and subtraction of integers and pointers, the value of
+the pointer is not adjusted by the integer amount, but is adjusted by the
+amount multiplied by the size (in bytes) of the type to which the pointer
+refers. One pointer may also be subtracted from another, provided they point to
+elements of the same array (or the position just beyond the end of the array).
+If you have a pointer that points to an element of an array, the index of the
+element is the result when the array name is subtracted from the pointer.
+Here's an example.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+struct MyStruct someArray[20];
+struct MyStruct *p2;
+int idx;
+
+.
+/* array initialization .. */
+. 
+for(p2 = someArray; p2 < someArray+20;  ++p2) {
+	if (p2->num2 > testValue) break;
+}
+idx = p2 - someArray;
+\end{lstlisting}
+
+You may be wondering how pointers and multidimensional arrays interact. Lets
+look at this a bit in detail. Suppose A is declared as a two dimensional array
+of floats (\texttt{float A[D1][D2];}) and that pf is declared a pointer to a
+float. If pf is initialized to point to A[0][0], then *(pf+1) is equivalent to
+A[0][1] and *(pf+D2) is equivalent to A[1][0]. The elements of the array are
+stored in row-major order.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+float A[6][8];
+float *pf;
+pf = &A[0][0]; 
+*(pf+1) = 1.3;   /* assigns 1.3 to A[0][1] */
+*(pf+8) = 2.3;   /* assigns 2.3 to A[1][0] */
+\end{lstlisting}
+	
+Let's look at a slightly different problem. We want to have a two dimensional
+array, but we don't need to have all the rows the same length. What we do is
+declare an array of pointers. The second line below declares A as an array of
+pointers. Each pointer points to a float. Here's some applicable code:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+float  linearA[30];
+float *A[6];
+
+A[0] = linearA;      /*  5 - 0 = 5 elements in row  */
+A[1] = linearA + 5;  /* 11 - 5 = 6 elements in row  */
+A[2] = linearA + 11; /* 15 - 11 = 4 elements in row */
+A[3] = linearA + 15; /* 21 - 15 = 6 elements        */
+A[4] = linearA + 21; /* 25 - 21 = 4 elements        */
+A[5] = linearA + 25; /* 30 - 25 = 5 elements        */
+
+A[3][2] = 3.66;  /* assigns 3.66 to linearA[17];     */
+A[3][-3] = 1.44; /* refers to linearA[12];           
+negative indices are sometimes useful. But avoid using 
+them as much as possible. */
+\end{lstlisting}
+
+We also note here something curious about array indexing. Suppose myArray is an
+array and idx is an integer value. The expression myArray[idx] is equivalent to
+idx[myArray]. The first is equivalent to *(myArray+idx), and the second is
+equivalent to *(idx+myArray). These turn out to be the same, since the addition
+is commutative.
+
+Pointers can be used with preincrement or post decrement, which is sometimes
+done within a loop, as in the following example. The increment and decrement
+applies to the pointer, not to the object to which the pointer refers.  In
+other words, *pArray++ is equivalent to *(pArray++).
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+long myArray[20];
+long *pArray;
+int i;
+
+/* Assign values to the entries of myArray */
+pArray = myArray;
+for(i=0; i<10; ++i) {
+	*pArray++ = 5 + 3*i + 12*i*i;
+	*pArray++ = 6 + 2*i + 7*i*i;
+}
+\end{lstlisting}
+
+\subsection{Pointers in Function Arguments}
+Often we need to invoke a function with an argument that is itself a pointer.
+In many instances, the variable is itself a parameter for the current function
+and may be a pointer to some type of structure. The ampersand character is not
+needed in this circumstance to obtain a pointer value, as the variable is
+itself a pointer. In the example below, the variable \texttt{pStruct}, a
+pointer, is a parameter to function \texttt{FunctTwo,} and is passed as an
+argument to \texttt{FunctOne}.  The second parameter to \texttt{FunctOne} is an
+int. Since in function \texttt{FunctTwo, mValue} is a pointer to an int, the
+pointer must first be dereferenced using the * operator, hence the second
+argument in the call is \texttt{*mValue}. The third parameter to function
+\texttt{FunctOne} is a pointer to a long. Since \texttt{pAA} is itself a
+pointer to a long, no ampersand is needed when it is used as the third argument
+to the function.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+int FunctOne( struct SomeStruct *pValue, int iValue, long *lValue ) {
+   /*  do some stuff ... */
+   return 0;
+}
+
+int FunctTwo( struct someStruct *pStruct, int *mValue ) {
+	int j;
+	long  AnArray[25];
+	long *pAA;
+	 
+	pAA = &AnArray[13];
+	j = FunctOne( pStruct, *mValue, pAA );
+	return j;
+}
+\end{lstlisting}
+
+\subsection{Pointers and Text Strings}
+Historically, text strings in C have been implemented as arrays of characters,
+with the last byte in the string being a zero, or the null character
+'\textbackslash{}0'. Most C implementations come with a standard library of
+functions for manipulating strings. Many of the more commonly used functions
+expect the strings to be null terminated strings of characters.  To use these
+functions requires the inclusion of the standard C header file ``string.h''. 
+
+A statically declared, initialized string would look similar to the following:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+static const char *myFormat = "Total Amount Due: %d";
+\end{lstlisting}
+
+The variable \texttt{myFormat} can be viewed as an array of 21 characters.
+There is an implied null character ('\textbackslash{}0') tacked on to the end
+of the string after the 'd' as the 21st item in the array.  You can also
+initialize the individual characters of the array as follows:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+static const char myFlower[] = { 'P', 'e', 't', 'u', 'n', 'i', 'a', '\0' };
+\end{lstlisting}
+
+An initialized array of strings would typically be done as follows:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+static const char *myColors[] = {
+   "Red", "Orange", "Yellow", "Green", "Blue", "Violet" };
+\end{lstlisting}
+
+The initilization of an especially long string can be split across lines of
+source code as follows.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+static char *longString = "Hello. My name is Rudolph and I work as a reindeer "
+  "around Christmas time up at the North Pole.  My boss is a really swell guy."
+  " He likes to give everybody gifts.";
+\end{lstlisting}
+
+The library functions that are used with strings are discussed in a later chapter.
+
+\subsubsection{Pointers to Functions}
+C also allows you to create pointers to functions. Pointers to functions can
+get rather messy. Declaring a typedef to a function pointer generally clarifies
+the code. Here's an example that uses a function pointer, and a void * pointer
+to implement what's known as a callback. The \texttt{DoSomethingNice} function
+invokes a caller supplied function \texttt{TalkJive} with caller data. Note
+that \texttt{DoSomethingNice} really doesn't know anything about what
+\texttt{dataPointer}refers to.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+typedef  int (*MyFunctionType)( int, void *);      /* a typedef for a function pointer */
+
+#define THE_BIGGEST 100
+
+int DoSomethingNice( int aVariable, MyFunctionType aFunction, void *dataPointer ) {
+	int rv = 0;
+	if (aVariable < THE_BIGGEST) {
+		/* invoke function through function pointer (old style) */
+		rv = (*aFunction)(aVariable, dataPointer );
+	} else {
+		  /* invoke function through function pointer (new style) */
+		rv = aFunction(aVariable, dataPointer );
+	};
+	return rv;
+}
+
+struct sDataINeed {
+	int colorSpec;
+	char *phrase;
+};
+typedef struct sDataINeed DataINeed;
+
+int TalkJive( int myNumber, void *someStuff ) {
+	/* recast void * to pointer type specifically needed for this function */
+	DataINeed *myData = someStuff;
+	/* talk jive. */
+	return 5;
+}
+
+static DataINeed  sillyStuff = { BLUE, "Whatcha talkin 'bout Willis?" };
+
+/* ... */
+DoSomethingNice( 41, &TalkJive,  &sillyStuff );
+\end{lstlisting}
+
+Some versions of C may not require an ampersand preceeding the
+\texttt{TalkJive} argument in the \texttt{DoSomethingNice} call. Some
+implementations may require specifically casting the argument to the
+\texttt{MyFunctionType} type, even though the function signature exacly matches
+that of the typedef.
+
+Function pointers can be useful for implementing a form of polymorphism in C.
+First one declares a structure having as elements function pointers for the
+various operations to that can be specified polymorphically. A second base
+object structure containing a pointer to the previous structure is also
+declared. A class is defined by extending the second structure with the data
+specific for the class, and static variable of the type of the first structure,
+containing the addresses of the functions that are associated with the class.
+This type of polymorphism is used in the standard library when file I/O
+functions are called.
+
+A similar mechanism can also be used for implementing a state machine in C. A
+structure is defined which contains function pointers for handling events that
+may occur within state, and for functions to be invoked upon entry to and exit
+from the state. An instance of this structure corresponds to a state. Each
+state is initialized with pointers to functions appropriate for the state. The
+current state of the state machine is in effect a pointer to one of these
+states. Changing the value of the current state pointer effectively changes the
+current state. When some event occurs, the appropriate function is called
+through a function pointer in the current state.
+
+\subsubsection{Practical use of function pointer in C}
+Function pointers are mainly used to reduce the complexity of switch statement.
+Example With Switch statement: 
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int add(int a, int b);
+int sub(int a, int b);
+int mul(int a, int b);
+int div(int a, int b);
+
+int main() {
+	int i, result;
+	int a=10;
+	int b=5;
+	scanf("Enter the value between 0 and 3 : %d",&i); 
+	switch(i) {
+		case 0: result = add(a,b); break;
+		case 1: result = sub(a,b); break;
+		case 2: result = mul(a,b); break;
+		case 3: result = div(a,b); break;
+	}
+}
+
+int add(int i, int j) {
+	return (i+j);
+}
+
+int sub(int i, int j) {
+	return (i-j);
+}
+
+int mul(int i, int j) {
+	return (i*j);
+}
+
+int div(int i, int j) {
+	return (i/j);
+}
+\end{lstlisting}
+
+Without Switch Statement or Use of function pointer: Here you will see the
+beautiful use of function pointer.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+
+int add(int a, int b);
+int sub(int a, int b);
+int mul(int a, int b);
+int div(int a, int b);
+int (*oper[4])(int a, int b) = \{add, sub, mul, div\};
+
+int main() {
+	int i,result;
+	int a=10;
+	int b=5;
+	scanf("Enter the value between 0 and 3 : %d",&i); 
+	result = (*oper[i])(a,b);
+}
+
+int add(int i, int j) {
+	return (i+j);
+}
+
+int sub(int i, int j) {
+	return (i-j);
+}
+
+int mul(int i, int j) {
+	return (i*j);
+}
+
+int div(int i, int j) {
+	return (i/j);
+}
+\end{lstlisting}
+
+\subsubsection{Examples of pointer constructs}
+Below are some example constructs which may aid in creating your pointer.
+
+\begin{tabular}{p{2.0cm} p{6.0cm}}
+	int i;         & integer variable 'i'\\
+	int *p;        & pointer 'p' to an integer\\
+	int a[];       & array 'a' of integers\\
+	int f();       & function 'f' with return value of type integer\\
+	int **pp;      & pointer 'pp' to a pointer to an integer\\
+	int (*pa)[];   & pointer 'pa' to an array of integer\\
+	int (*pf)();   & pointer 'pf' to a function with returnvalue integer\\
+	int *ap[];     & array 'ap' of pointers to an integer\\
+	int *fp();     & function 'fp' which returns a pointer to an integer\\
+	int ***ppp;    & pointer 'ppp' to a pointer to a pointer to an integer\\
+	int (**ppa)[]; & pointer 'ppa' to a pointer to an array of integers\\
+	int (**ppf)(); & pointer 'ppf' to a pointer to a function with return value of type integer\\
+	int *(*pap)[]; & pointer 'pap' to an array of pointers to an integer\\
+	int *(*pfp)(); & pointer 'pfp' to function with return value of type pointer to an integer\\
+	int **app[];   & array of pointers 'app' that point to integer values\\
+	int (*apa[])[];& array of pointers 'apa' to arrays of integers\\
+	int (*apf[])();& array of pointers 'apf' to functions with return values of type integer\\
+	int ***fpp();  & function 'fpp' which returns a pointer to a pointer to a pointer to an int\\
+	int (*fpa())[];& function 'fpa' with return value of a pointer to array of integers\\
+	int (*fpf())();& function 'fpf' with return value of a pointer to function which returns an integer
+\end{tabular}
+
+\subsubsection{sizeof}
+The sizeof operator is often used to refer to the size of a static array
+declared earlier in the same function.
+
+To find the end of an array.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+/* better.c - demonstrates one method of fixing the problem */
+ 
+#include <stdio.h>
+#include <string.h>
+ 
+int main(int argc, char *argv[]) {
+	char buffer[10];
+	if (argc < 2) {
+		fprintf(stderr, "USAGE: %s string\n", argv[0]);
+		return 1;
+	}
+	strncpy(buffer, argv[1], sizeof(buffer));
+	buffer[sizeof(buffer) - 1] = '\0';
+	return 0;
+}
+\end{lstlisting}
+
+To iterate over every element of an array, use
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#define NUM_ELEM(x) (sizeof (x) / sizeof (*(x)))
+
+for( i = 0; i < NUM_ELEM(array); i++ ) {
+	/* do something with array[i] */
+	;
+}
+\end{lstlisting}
+
+Note that the sizeof operator only works on things defined earlier in the same
+function.  The compiler replaces it with some fixed constant number.  In this
+case, the buffer was declared as an array of 10 char's earlier in the same
+function, and the compiler replaces sizeof(buffer) with the number 10 at
+compile time (equivalent to us hard-coding 10 into the code in place of
+sizeof(buffer)).  The information about the length of buffer is not actually
+stored anywhere in memory (unless we keep track of it separately) and cannot be
+programmatically obtained at run time from the array/pointer itself.
+
+Often a function needs to know the size of an array it was given -- an array
+defined in some other function.
+For example,
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+/* broken.c - demonstrates a flaw */
+ 
+#include <stdio.h>
+#include <string.h>
+#define NUM_ELEM(x) (sizeof (x) / sizeof (*(x)))
+ 
+int sum( int input_array[] ){
+	int sum_so_far = 0;
+	// WON'T WORK -- input_array wasn't defined in this function.
+	for( i = 0; i < NUM_ELEM(input_array); i++ ) {
+	  sum_so_far += input_array[i];
+	};
+	return( sum_so_far );
+}
+ 
+int main(int argc, char *argv[]) {
+	int left_array[] = { 1, 2, 3 };
+	int right_array[] = { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+	int the_sum = sum( left_array );
+	printf( "the sum of left_array is: %d", the_sum );
+	the_sum = sum( right_array );
+	printf( "the sum of right_array is: %d", the_sum );
+	
+	return 0;
+}
+\end{lstlisting}
+
+Unfortunately, (in C and C++) the length of the array cannot be obtained from
+an array passed in at run time, because (as mentioned above) the size of an
+array is not stored anywhere.  The compiler always replaces sizeof with a
+constant.  This sum() routine needs to handle more than just one constant
+length of an array.
+
+There are some common ways to work around this fact:
+\begin{itemize}
+	\item Write the function to require, for each array parameter, a ``length''
+parameter (which has type ``size\_t''). (Typically we use sizeof at the point
+where this function is called).
+	\item Use of a convention, such as a
+\href{http://en.wikipedia.org/wiki/null-terminated_string}{null-terminated
+string} to mark the end of the array.
+	\item Instead of passing raw arrays, pass a structure that includes the
+length of the array (such as ``.length'') as well as the array (or a pointer to
+the first element); similar to the string or vector classes in C++.
+\end{itemize}
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+/* fixed.c - demonstrates one work-around */
+ 
+#include <stdio.h>
+#include <string.h>
+#define NUM_ELEM(x) (sizeof (x) / sizeof (*(x)))
+ 
+int sum( int input_array[], size_t length ){
+	int sum_so_far = 0;
+	int i;
+	for( i = 0; i < length; i++ ) {
+	  sum_so_far += input_array[i];
+	};
+	return( sum_so_far );
+}
+ 
+int main(int argc, char *argv[]) {
+	int left_array[] = { 1, 2, 3, 4 };
+	int right_array[] = { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+	// works here, because left_array is defined in this function
+	int the_sum = sum( left_array, NUM_ELEM(left_array) ); 
+	printf( "the sum of left_array is: %d", the_sum );
+	// works here, because right_array is defined in this function
+	the_sum = sum( right_array, NUM_ELEM(right_array) ); 
+	printf( "the sum of right_array is: %d", the_sum );
+	
+	return 0;
+}
+\end{lstlisting}
+
+It's worth mentioning that sizeof operator has two variations: \texttt{sizeof
+(\emph{type})} (for instance: \texttt{sizeof (int)} or \texttt{sizeof (struct
+some\_structure)}) and \texttt{sizeof \emph{expression}} (for instance:
+\texttt{sizeof some\_variable.some\_field} or \texttt{sizeof 1}).

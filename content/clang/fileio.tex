@@ -1,0 +1,1372 @@
+\section{File IO}
+\subsection{Introduction}
+The \texttt{stdio.h} header declares a broad assortment of functions that
+perform input and output to files and devices such as the console. It was one
+of the earliest headers to appear in the C library. It declares more functions
+than any other standard header and also requires more explanation because of
+the complex machinery that underlies the functions.
+
+The device-independent model of input and output has seen dramatic improvement
+over the years and has received little recognition for its success. FORTRAN II
+was touted as a machine-independent language in the 1960s, yet it was
+essentially impossible to move a FORTRAN program between architectures without
+some change. In FORTRAN II, you named the device you were talking to right in
+the FORTRAN statement in the middle of your FORTRAN code. So, you said
+\texttt{READ INPUT TAPE 5} on a tape-oriented IBM 7090 but \texttt{READ CARD}
+to read a card image on other machines. FORTRAN IV had more generic
+\texttt{READ} and \texttt{WRITE} statements, specifying a \emph{logical unit
+number} (LUN) instead of the device name. The era of device-independent I/O had
+dawned.
+
+Peripheral devices such as printers still had fairly strong notions about what
+they were asked to do. And then, \emph{peripheral interchange} utilities were
+invented to handle bizarre devices. When cathode-ray tubes came onto the scene,
+each manufacturer of consoles solved problems such as console cursor movement
+in an independent manner, causing further headaches.
+
+It was into this atmosphere that Unix was born. Ken Thompson and Dennis
+Ritchie, the developers of Unix, deserve credit for packing any number of
+bright ideas into the operating system. Their approach to device independence
+was one of the brightest.
+
+The ANSI C \texttt{\textless{}stdio.h\textgreater{}} library is based on the
+original Unix file I/O primitives but casts a wider net to accommodate the
+least-common denominator across varied systems.
+
+\subsection{Streams}
+Input and output, whether to or from physical devices such as terminals and
+tape drives, or whether to or from files supported on structured storage
+devices, are mapped into logical data streams, whose properties are more
+uniform than their various inputs and outputs. Two forms of mapping are
+supported: text streams and binary streams.
+
+A text stream consists of one or more lines. A line in a text stream consists
+of zero or more characters plus a terminating new-line character. (The only
+exception is that in some implementations the last line of a file does not
+require a terminating new-line character.) Unix adopted a standard internal
+format for all text streams. Each line of text is terminated by a new-line
+character. That's what any program expects when it reads text, and that's what
+any program produces when it writes text. (This is the most basic convention,
+and if it doesn't meet the needs of a text-oriented peripheral attached to a
+Unix machine, then the fix-up occurs out at the edges of the system. Nothing in
+between needs to change.) The string of characters that go into, or come out of
+a text stream may have to be modified to conform to specific conventions. This
+results in a possible difference between the data that go into a text stream
+and the data that come out. For instance, in some implementations when a
+space-character precedes a new-line character in the input, the space character
+gets removed out of the output. In general, when the data only consist of
+printable characters and the control characters horizontal tab and new-line,
+the input and output of a text stream are equal.
+
+Compared to a text stream, a binary stream is pretty straight forward. A binary
+stream is an ordered sequence of characters that can transparently record
+internal data. Data written to a binary stream shall always equal the data that
+gets read out under the same implementation. Binary streams, however, may have
+an implementation-defined number of null characters appended to the end of the
+stream. There are no further conventions which need to be considered.
+
+Nothing in Unix prevents the program from writing arbitrary 8-bit binary codes
+to any open file, or reading them back unchanged from an adequate repository.
+Thus, Unix obliterated the long-standing distinction between text streams and
+binary streams.
+
+\subsection{Standard Streams}
+When a C program starts its execution the program automatically opens three
+standard streams named \texttt{stdin}, \texttt{stdout}, and \texttt{stderr}.
+These are attached for every C program.
+
+The first standard stream is used for input buffering and other two are used
+for output. These streams are sequences of bytes.
+
+Consider the following program:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	/* A example program. */
+	int main()
+	{
+	    int var;
+	    scanf ("%d", &var); /* use stdin for scanning a integer from keyboard. */
+	    printf ("%d", var); /* use stdout for printing a character. */
+	}
+	/* end program. */
+\end{lstlisting}
+
+By default \texttt{stdin} points to the keyboard and \texttt{stdout} and
+\texttt{stderr} point to the screen. It is possible under Unix and may be
+possible under other operating systems to redirect input from or output to a
+file or both.
+
+\subsection{\texttt{FILE} pointers}
+The \texttt{\textless{}stdio.h\textgreater{}} header contains a definition for
+a type \texttt{FILE} (usually via a \texttt{typedef}) which is capable of
+processing all the information needed to exercise control over a stream,
+including its file position indicator, a pointer to the associated buffer (if
+any), an error indicator that records whether a read/write error has occurred,
+and an end-of-file indicator that records whether the end of the file has been
+reached.
+
+It is considered bad manners to access the contents of \texttt{FILE} directly
+unless the programmer is writing an implementation of
+\texttt{\textless{}stdio.h\textgreater{}} and its contents. Better access to
+the contents of \texttt{FILE} is provided via the functions in
+\texttt{\textless{}stdio.h\textgreater{}}. It can be said that the
+\texttt{FILE} type is an early example of
+\href{http://en.wikipedia.org/wiki/Object-oriented\_programming}{object-oriented
+programming}.
+
+\subsection{Opening and Closing Files}
+To open and close files, the \texttt{\textless{}stdio.h\textgreater{}} library
+has three functions: \texttt{fopen}, \texttt{freopen}, and \texttt{fclose}.
+\subsubsection{Opening Files}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+	#include <stdio.h>
+	FILE *fopen(const char *filename, const char *mode);
+	FILE *freopen(const char *filename, const char *mode, FILE *stream);
+\end{lstlisting}
+
+The \texttt{fopen} and \texttt{freopen} functions open files.
+
+The \texttt{fopen} function opens the file whose name is in the string pointed
+to by \texttt{filename} and associates a stream with it.
+
+The argument \texttt{mode} points to a string beginning with one of the
+following sequences:
+
+\begin{tabular}{l p{5.5cm}}
+r          & open a text file for reading\\
+w          & truncate to zero length or create a text file for writing\\
+a          & append; open or create text file for writing at end-of-file\\
+rb         & open binary file for reading\\
+wb         & truncate to zero length or create a binary file for writing\\
+ab         & append; open or create binary file for writing at end-of-file\\
+r+         & open text file for update (reading and writing)\\
+w+         & truncate to zero length or create a text file for update\\
+a+         & append; open or create text file for update\\
+r+b or rb+ & open binary file for update (reading and writing)\\
+w+b or wb+ & truncate to zero length or create a binary file for update\\
+a+b or ab+ & append; open or create binary file for update\\
+\end{tabular}
+
+Opening a file with read mode ('\texttt{r}' as the first character in the
+\texttt{mode} argument) fails if the file does not exist or cannot be read.
+
+Opening a file with append mode ('\texttt{a}' as the first character in the
+\texttt{mode} argument) causes all subsequent writes to the file to be forced
+to the then-current end-of-file, regardless of intervening calls to the
+\texttt{fseek} function. In some implementations, opening a binary file with
+append mode ('\texttt{b}' as the second or third character in the above list of
+\texttt{mode} arguments) may initially position the file position indicator for
+the stream beyond the last data written, because of null character padding.
+
+When a file is opened with update mode ('\texttt{+}' as the second or third
+character in the above list of \texttt{mode} argument values), both input and
+output may be performed on the associated stream. However, output may not be
+directly followed by input without an intervening call to the \texttt{fflush}
+function or to a file positioning function (\texttt{fseek}, \texttt{fsetpos},
+or \texttt{rewind}), and input may not be directly followed by output without
+an intervening call to a file positioning function, unless the input operation
+encounters end-of-file. Opening (or creating) a text file with update mode may
+instead open (or create) a binary stream in some implementations.
+
+When opened, a stream is fully buffered if and only if it can be determined not
+to refer to an interactive device. The error and end-of-file indicators are
+cleared.
+
+The \texttt{fopen} function returns a pointer to the object controlling the
+stream. If the open operation fails, \texttt{fopen} returns a null pointer.
+
+The \texttt{freopen} function opens the file whose name is the string pointed
+to by \texttt{filename} and associates the stream pointed to by \texttt{stream}
+with it. The mode argument is used just as in the \texttt{fopen} function.
+
+The \texttt{freopen} function first attempts to close any file that is
+associated with the specified stream. Failure to close the file successfully is
+ignored. The error and end-of-file indicators for the stream are cleared.
+
+The \texttt{freopen} function returns a null pointer if the open operation
+fails, or the value \texttt{stream} if the open operation succeeds. 
+
+\subsubsection{Closing Files}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int fclose(FILE *stream);
+\end{lstlisting}
+
+The \texttt{fclose} function causes the stream pointed to by \texttt{stream} to
+be flushed and the associated file to be closed. Any unwritten buffered data
+for the stream are delivered to the host environment to be written to the file;
+any unread buffered data are discarded. The stream is disassociated from the
+file. If the associated buffer was automatically allocated, it is deallocated.
+The function returns zero if the stream was successfully closed or \texttt{EOF}
+if any errors were detected.
+
+\subsection{Other file access functions}
+\subsubsection{The \texttt{fflush} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int fflush(FILE *stream);
+\end{lstlisting}
+
+If \texttt{stream} points to an output stream or an update stream in which the
+most recent operation was not input, the \texttt{fflush} function causes any
+unwritten data for that stream to be deferred to the host environment to be
+written to the file. The behavior of fflush is undefined for input stream.
+
+If \texttt{stream} is a null pointer, the \texttt{fflush} function performs
+this flushing action on all streams for which the behavior is defined above.
+
+The \texttt{fflush} functions returns \texttt{EOF} if a write error occurs,
+otherwise zero.
+
+The reason for having a \texttt{fflush} function is because streams in C can
+have buffered input/output; that is, functions that write to a file actually
+write to a buffer inside the \texttt{FILE} structure. If the buffer is filled
+to capacity, the write functions will call \texttt{fflush} to actually
+``write'' the data that is in the buffer to the file. Because \texttt{fflush}
+is only called every once in a while, calls to the operating system to do a raw
+write are minimized.
+
+\subsubsection{The \texttt{setbuf} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+void setbuf(FILE *stream, char *buf);
+\end{lstlisting}
+
+Except that it returns no value, the \texttt{setbuf} function is equivalent to
+the \texttt{setvbuf} function invoked with the values \texttt{\_IOFBF} for
+\texttt{mode} and \texttt{BUFSIZ} for \texttt{size}, or (if \texttt{buf} is a
+null pointer) with the value \texttt{\_IONBF} for \texttt{mode}.
+
+\subsubsection{The \texttt{setvbuf} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int setvbuf(FILE *stream, char *buf, int mode, size_t size);
+\end{lstlisting}
+
+The \texttt{setvbuf} function may be used only after the stream pointed to by
+\texttt{stream} has been associated with an open file and before any other
+operation is performed on the stream. The argument \texttt{mode} determines how
+the stream will be buffered, as follows: \texttt{\_IOFBF} causes input/output
+to be fully buffered; \texttt{\_IOLBF} causes input/output to be line buffered;
+\texttt{\_IONBF} causes input/output to be unbuffered. If \texttt{buf} is not a
+null pointer, the array it points to may be used instead of a buffer associated
+by the \texttt{setvbuf} function. (The buffer must have a lifetime at least as
+great as the open stream, so the stream should be closed before a buffer that
+has automatic storage duration is deallocated upon block exit.) The argument
+\texttt{size} specifies the size of the array. The contents of the array at any
+time are indeterminate.
+
+The \texttt{setvbuf} function returns zero on success, or nonzero if an invalid
+value is given for \texttt{mode} or if the request cannot be honored.
+
+\subsection{Functions that Modify the File Position Indicator}
+The \texttt{stdio.h} library has five functions that affect the file position
+indicator besides those that do reading or writing: \texttt{fgetpos},
+\texttt{fseek}, \texttt{fsetpos}, \texttt{ftell}, and \texttt{rewind}.
+
+The \texttt{fseek} and \texttt{ftell} functions are older than \texttt{fgetpos}
+and \texttt{fsetpos}.
+
+\subsubsection{The \texttt{fgetpos} and \texttt{fsetpos} functions}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int fgetpos(FILE *stream, fpos_t *pos);
+int fsetpos(FILE *stream, const fpos_t *pos);
+\end{lstlisting}
+
+The \texttt{fgetpos} function stores the current value of the file position
+indicator for the stream pointed to by \texttt{stream} in the object pointed to
+by \texttt{pos}. The value stored contains unspecified information usable by
+the \texttt{fsetpos} function for repositioning the stream to its position at
+the time of the call to the \texttt{fgetpos} function.
+
+If successful, the \texttt{fgetpos} function returns zero; on failure, the
+\texttt{fgetpos} function returns nonzero and stores an implementation-defined
+positive value in \texttt{errno}.
+
+The \texttt{fsetpos} function sets the file position indicator for the stream
+pointed to by \texttt{stream} according to the value of the object pointed to
+by \texttt{pos}, which shall be a value obtained from an earlier call to the
+\texttt{fgetpos} function on the same stream.
+
+A successful call to the \texttt{fsetpos} function clears the end-of-file
+indicator for the stream and undoes any effects of the \texttt{ungetc} function
+on the same stream. After an \texttt{fsetpos} call, the next operation on an
+update stream may be either input or output.
+
+If successful, the \texttt{fsetpos} function returns zero; on failure, the
+\texttt{fsetpos} function returns nonzero and stores an implementation-defined
+positive value in \texttt{errno}.
+
+\subsubsection{The \texttt{fseek} and \texttt{ftell} functions}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int fseek(FILE *stream, long int offset, int whence);
+long int ftell(FILE *stream);
+\end{lstlisting}
+
+The \texttt{fseek} function sets the file position indicator for the stream
+pointed to by \texttt{stream}.
+
+For a binary stream, the new position, measured in characters from the
+beginning of the file, is obtained by adding \texttt{offset} to the position
+specified by \texttt{whence}. Three macros in \texttt{stdio.h} called
+\texttt{SEEK\_SET}, \texttt{SEEK\_CUR}, and \texttt{SEEK\_END} expand to unique
+values. If the position specified by \texttt{whence} is \texttt{SEEK\_SET}, the
+specified position is the beginning of the file; if \texttt{whence} is
+\texttt{SEEK\_END}, the specified position is the end of the file; and if
+\texttt{whence} is \texttt{SEEK\_CUR}, the specified position is the current
+file position. A binary stream need not meaningfully support \texttt{fseek}
+calls with a \texttt{whence} value of \texttt{SEEK\_END}.
+
+For a text stream, either \texttt{offset} shall be zero, or \texttt{offset}
+shall be a value returned by an earlier call to the \texttt{ftell} function on
+the same stream and \texttt{whence} shall be \texttt{SEEK\_SET}.
+
+The \texttt{fseek} function returns nonzero only for a request that cannot be
+satisfied.
+
+The \texttt{ftell} function obtains the current value of the file position
+indicator for the stream pointed to by \texttt{stream}. For a binary stream,
+the value is the number of characters from the beginning of the file; for a
+text stream, its file position indicator contains unspecified information,
+usable by the \texttt{fseek} function for returning the file position indicator
+for the stream to its position at the time of the \texttt{ftell} call; the
+difference between two such return values is not necessarily a meaningful
+measure of the number of characters written or read.
+
+If successful, the \texttt{ftell} function returns the current value of the
+file position indicator for the stream. On failure, the \texttt{ftell} function
+returns \texttt{-1L} and stores an implementation-defined positive value in
+\texttt{errno}.
+
+\subsubsection{The \texttt{rewind} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+void rewind(FILE *stream);
+\end{lstlisting}
+
+The \texttt{rewind} function sets the file position indicator for the stream
+pointed to by \texttt{stream} to the beginning of the file. It is equivalent to
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+(void)fseek(stream, 0L, SEEK_SET)
+\end{lstlisting}
+
+except that the error indicator for the stream is also cleared. 
+
+\subsection{Error Handling Functions}
+\subsubsection{The \texttt{clearerr} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+void clearerr(FILE *stream);
+\end{lstlisting}
+
+The \texttt{clearerr} function clears the end-of-file and error indicators for
+the stream pointed to by \texttt{stream}.
+
+\subsubsection{The \texttt{feof} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int feof(FILE *stream);
+\end{lstlisting}
+
+The \texttt{feof} function tests the end-of-file indicator for the stream
+pointed to by \texttt{stream} and returns nonzero if and only if the
+end-of-file indicator is set for \texttt{stream}, otherwise it returns zero.
+
+\subsubsection{The \texttt{ferror} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int ferror(FILE *stream);
+\end{lstlisting}
+
+The \texttt{ferror} function tests the error indicator for the stream pointed
+to by \texttt{stream} and returns nonzero if and only if the error indicator is
+set for \texttt{stream}, otherwise it returns zero.
+
+\subsubsection{The \texttt{perror} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+void perror(const char *s);
+\end{lstlisting}
+
+The \texttt{perror} function maps the error number in the integer expression
+\texttt{errno} to an error message. It writes a sequence of characters to the
+standard error stream thus: first, if \texttt{s} is not a null pointer and the
+character pointed to by \texttt{s} is not the null character, the string
+pointed to by \texttt{s} followed by a colon (\texttt{:}) and a space; then an
+appropriate error message string followed by a new-line character. The contents
+of the error message are the same as those returned by the \texttt{strerror}
+function with the argument \texttt{errno}, which are implementation-defined.
+
+\subsection{Other Operations on Files}
+The \texttt{stdio.h} library has a variety of functions that do some operation
+on files besides reading and writing.
+
+\subsubsection{The \texttt{remove} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int remove(const char *filename);
+\end{lstlisting}
+
+The \texttt{remove} function causes the file whose name is the string pointed
+to by \texttt{filename} to be no longer accessible by that name. A subsequent
+attempt to open that file using that name will fail, unless it is created anew.
+If the file is open, the behavior of the \texttt{remove} function is
+implementation-defined.
+
+The \texttt{remove} function returns zero if the operation succeeds, nonzero if
+it fails.
+
+\subsubsection{The \texttt{rename} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int rename(const char *old_filename, const char *new_filename);
+\end{lstlisting}
+
+The \texttt{rename} function causes the file whose name is the string pointed
+to by \texttt{old\_filename} to be henceforth known by the name given by the
+string pointed to by \texttt{new\_filename}. The file named
+\texttt{old\_filename} is no longer accessible by that name. If a file named by
+the string pointed to by \texttt{new\_filename} exists prior to the call to the
+\texttt{rename} function, the behavior is implementation-defined.
+
+The \texttt{rename} function returns zero if the operation succeeds, nonzero if
+it fails, in which case if the file existed previously it is still known by its
+original name.
+
+\subsubsection{The \texttt{tmpfile} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+FILE *tmpfile(void);
+\end{lstlisting}
+
+The \texttt{tmpfile} function creates a temporary binary file that will
+automatically be removed when it is closed or at program termination. If the
+program terminates abnormally, whether an open temporary file is removed is
+implementation-defined. The file is opened for update with \texttt{"wb+"} mode.
+
+The \texttt{tmpfile} function returns a pointer to the stream of the file that
+it created. If the file cannot be created, the \texttt{tmpfile} function
+returns a null pointer.
+
+\subsubsection{The \texttt{tmpnam} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+char *tmpnam(char *s);
+\end{lstlisting}
+
+The \texttt{tmpnam} function generates a string that is a valid file name and
+that is not the name of an existing file.
+
+The \texttt{tmpnam} function generates a different string each time it is
+called, up to \texttt{TMP\_MAX} times. (\texttt{TMP\_MAX} is a macro defined in
+\texttt{stdio.h}.) If it is called more than \texttt{TMP\_MAX} times, the
+behavior is implementation-defined.
+
+The implementation shall behave as if no library function calls the
+\texttt{tmpnam} function.
+
+If the argument is a null pointer, the \texttt{tmpnam} function leaves its
+result in an internal static object and returns a pointer to that object.
+Subsequent calls to the \texttt{tmpnam} function may modify the same object. If
+the argument is not a null pointer, it is assumed to point to an array of at
+least \texttt{L\_tmpnam} characters (\texttt{L\_tmpnam} is another macro in
+\texttt{stdio.h}); the \texttt{tmpnam} function writes its result in that array
+and returns the argument as its value.
+
+The value of the macro \texttt{TMP\_MAX} must be at least 25.
+
+\subsection{Reading from Files}
+\subsubsection{Character Input Functions}
+\paragraph{The \texttt{fgetc} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int fgetc(FILE *stream);
+\end{lstlisting}
+
+The \texttt{fgetc} function obtains the next character (if present) as an
+\texttt{unsigned char} converted to an \texttt{int}, from the input stream
+pointed to by \texttt{stream}, and advances the associated file position
+indicator for the stream (if defined). 
+
+The \texttt{fgetc} function returns the next character from the input stream
+pointed to by \texttt{stream}. If the stream is at end-of-file, the end-of-file
+indicator for the stream is set and \texttt{fgetc} returns \texttt{EOF}
+(\texttt{EOF} is a negative value defined in
+\texttt{\textless{}stdio.h\textgreater{}}, usually \texttt{(-1)}). If a read
+error occurs, the error indicator for the stream is set and \texttt{fgetc}
+returns \texttt{EOF}.
+
+\paragraph{The \texttt{fgets} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+char *fgets(char *s, int n, FILE *stream);
+\end{lstlisting}
+
+The \texttt{fgets} function reads at most one less than the number of
+characters specified by \texttt{n} from the stream pointed to by
+\texttt{stream} into the array pointed to by \texttt{s}. No additional
+characters are read after a new-line character (which is retained) or after
+end-of-file. A null character is written immediately after the last character
+read into the array.
+
+The \texttt{fgets} function returns \texttt{s} if successful. If end-of-file is
+encountered and no characters have been read into the array, the contents of
+the array remain unchanged and a null pointer is returned. If a read error
+occurs during the operation, the array contents are indeterminate and a null
+pointed is returned.
+
+Warning: Different operating systems may use different character sequences to
+represent the end-of-line sequence. For example, some filesystems use the
+terminator \texttt{\textbackslash{}r\textbackslash{}n} in text files;
+\texttt{fgets} may read those lines, removing the \texttt{\textbackslash{}n}
+but keeping the \texttt{\textbackslash{}r} as the last character of \texttt{s}.
+This expurious character should be removed in the string \texttt{s} before the
+string is used for anything (unless the programmer doesn't care about it).
+Unixes typically use \texttt{\textbackslash{}n} as its end-of-line sequence,
+MS-DOS and Windows uses \texttt{\textbackslash{}r\textbackslash{}n}, and Mac
+OSes used \texttt{\textbackslash{}r} before OS X.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+/* A example program that reads from stdin and writes to stdout */
+#include <stdio.h>
+
+#define BUFFER_SIZE 100
+
+int main(void) {
+	char buffer[BUFFER_SIZE]; /* a read buffer */
+	while( fgets (buffer, BUFFER_SIZE, stdin) != NULL) {
+	     printf("%s",buffer);
+	}
+	return 0;
+}
+/* end program. */
+\end{lstlisting}
+
+\paragraph{The \texttt{getc} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int getc(FILE *stream);
+\end{lstlisting}
+
+The \texttt{getc} function is equivalent to \texttt{fgetc}, except that it may
+be implemented as a macro. If it is implemented as a macro, the \texttt{stream}
+argument may be evaluated more than once, so the argument should never be an
+expression with side effects (i.e. have an assignment, increment, or decrement
+operators, or be a function call).
+
+The \texttt{getc} function returns the next character from the input stream
+pointed to by \texttt{stream}. If the stream is at end-of-file, the end-of-file
+indicator for the stream is set and \texttt{getc} returns \texttt{EOF}
+(\texttt{EOF} is a negative value defined in
+\texttt{\textless{}stdio.h\textgreater{}}, usually \texttt{(-1)}). If a read
+error occurs, the error indicator for the stream is set and \texttt{getc}
+returns \texttt{EOF}.
+
+\paragraph{The \texttt{getchar} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int getchar(void);
+\end{lstlisting}
+
+The \texttt{getchar} function is equivalent to \texttt{getc} with the argument
+\texttt{stdin}.
+
+The \texttt{getchar} function returns the next character from the input stream
+pointed to by \texttt{stdin}. If \texttt{stdin} is at end-of-file, the
+end-of-file indicator for \texttt{stdin} is set and \texttt{getchar} returns
+\texttt{EOF} (\texttt{EOF} is a negative value defined in
+\texttt{\textless{}stdio.h\textgreater{}}, usually \texttt{(-1)}). If a read
+error occurs, the error indicator for \texttt{stdin} is set and
+\texttt{getchar} returns \texttt{EOF}.
+
+\paragraph{The \texttt{gets} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+char *gets(char *s);
+\end{lstlisting}
+
+The \texttt{gets} function reads characters from the input stream pointed to by
+\texttt{stdin} into the array pointed to by \texttt{s} until an end-of-file is
+encountered or a new-line character is read. Any new-line character is
+discarded, and a null character is written immediately after the last character
+read into the array.
+
+The \texttt{gets} function returns \texttt{s} if successful. If the end-of-file
+is encountered and no characters have been read into the array, the contents of
+the array remain unchanged and a null pointer is returned. If a read error
+occurs during the operation, the array contents are indeterminate and a null
+pointer is returned.
+
+This function and description is only included here for completeness. Most C
+programmers nowadays shy away from using \texttt{gets}, as there is no way for
+the function to know how big the buffer is that the programmer wants to read
+into. Commandment \#5 of
+\href{http://en.wikipedia.org/wiki/Henry_Spencer}{Henry Spencer}'s \emph{The
+Ten Commandments for C Programmers (Annotated Edition)} reads, ``Thou shalt
+check the array bounds of all strings (indeed, all arrays), for surely where
+thou typest \emph{foo} someone someday shall type
+\emph{supercalifragilisticexpialidocious}.'' It mentions \texttt{gets} in the
+annotation: ``As demonstrated by the deeds of the Great Worm, a consequence of
+this commandment is that robust production software should never make use of
+\texttt{gets()}, for it is truly a tool of the Devil. Thy interfaces should
+always inform thy servants of the bounds of thy arrays, and servants who spurn
+such advice or quietly fail to follow it should be dispatched forthwith to the
+Land Of Rm, where they can do no further harm to thee.''
+
+\paragraph{The \texttt{ungetc} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int ungetc(int c, FILE *stream);
+\end{lstlisting}
+
+The \texttt{ungetc} function pushes the character specified by \texttt{c}
+(converted to an \texttt{unsigned char}) back onto the input stream pointed to
+by stream. The pushed-back characters will be returned by subsequent reads on
+that stream in the reverse order of their pushing. A successful intervening
+call (with the stream pointed to by \texttt{stream}) to a file-positioning
+function (\texttt{fseek}, \texttt{fsetpos}, or \texttt{rewind}) discards any
+pushed-back characters for the stream. The external storage corresponding to
+the stream is unchanged.
+
+One character of pushback is guaranteed. If the \texttt{ungetc} function is
+called too many times on the same stream without an intervening read or file
+positioning operation on that stream, the operation may fail.
+
+If the value of \texttt{c} equals that of the macro \texttt{EOF}, the operation
+fails and the input stream is unchanged.
+
+A successful call to the \texttt{ungetc} function clears the end-of-file
+indicator for the stream. The value of the file position indicator for the
+stream after reading or discarding all pushed-back characters shall be the same
+as it was before the characters were pushed back. For a text stream, the value
+of its file-position indicator after a successful call to the \texttt{ungetc}
+function is unspecified until all pushed-back characters are read or discarded.
+For a binary stream, its file position indicator is decremented by each
+successful call to the \texttt{ungetc} function; if its value was zero before a
+call, it is indeterminate after the call.
+
+The \texttt{ungetc} function returns the character pushed back after
+conversion, or \texttt{EOF} if the operation fails.
+
+\subsubsection{Direct input function: the \texttt{fread} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
+\end{lstlisting}
+
+The \texttt{fread} function reads, into the array pointed to by \texttt{ptr},
+up to \texttt{nmemb} elements whose size is specified by \texttt{size}, from
+the stream pointed to by \texttt{stream}. The file position indicator for the
+stream (if defined) is advanced by the number of characters successfully read.
+If an error occurs, the resulting value of the file position indicator for the
+stream is indeterminate. If a partial element is read, its value is
+indeterminate.
+
+The \texttt{fread} function returns the number of elements successfully read,
+which may be less than \texttt{nmemb} if a read error or end-of-file is
+encountered. If \texttt{size} or \texttt{nmemb} is zero, \texttt{fread} returns
+zero and the contents of the array and the state of the stream remain
+unchanged.
+
+\subsubsection{Formatted input functions: the \texttt{scanf} family of functions}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int fscanf(FILE *stream, const char *format, ...);
+int scanf(const char *format, ...);
+int sscanf(const char *s, const char *format, ...);
+\end{lstlisting}
+
+The \texttt{fscanf} function reads input from the stream pointed to by
+\texttt{stream}, under control of the string pointed to by \texttt{format} that
+specifies the admissible sequences and how they are to be converted for
+assignment, using subsequent arguments as pointers to the objects to receive
+converted input. If there are insufficient arguments for the format, the
+behavior is undefined. If the format is exhausted while arguments remain, the
+excess arguments are evaluated (as always) but are otherwise ignored.
+
+The format shall be a multibyte character sequence, beginning and ending in its
+initial shift state. The format is composed of zero or more directives: one or
+more white-space characters; an ordinary multibyte character (neither
+\texttt{\%} or a white-space character); or a conversion specification. Each
+conversion specification is introduced by the character \texttt{\%}. After the
+\texttt{\%}, the following appear in sequence:
+
+\begin{itemize}
+	\item An optional assignment-suppressing character \texttt{*}.
+	\item An optional nonzero decimal integer that specifies the maximum field
+width.
+	\item An optional \texttt{h}, \texttt{l} (ell) or \texttt{L} indicating the
+size of the receiving object. The conversion specifiers \texttt{d}, \texttt{i},
+and \texttt{n} shall be preceded by \texttt{h} if the corresponding argument is
+a pointer to \texttt{short int} rather than a pointer to \texttt{int}, or by
+\texttt{l} if it is a pointer to \texttt{long int}. Similarly, the conversion
+specifiers \texttt{o}, \texttt{u}, and \texttt{x} shall be preceded by
+\texttt{h} if the corresponding argument is a pointer to \texttt{unsigned short
+int} rather than \texttt{unsigned int}, or by \texttt{l} if it is a pointer to
+\texttt{unsigned long int}. Finally, the conversion specifiers \texttt{e},
+\texttt{f}, and \texttt{g} shall be preceded by \texttt{l} if the corresponding
+argument is a pointer to \texttt{double} rather than a pointer to
+\texttt{float}, or by \texttt{L} if it is a pointer to \texttt{long double}. If
+an \texttt{h}, \texttt{l}, or \texttt{L} appears with any other format
+specifier, the behavior is undefined.
+	\item A character that specifies the type of conversion to be applied. The
+valid conversion specifiers are described below.
+\end{itemize}
+
+The \texttt{fscanf} function executes each directive of the format in turn. If
+a directive fails, as detailed below, the \texttt{fscanf} function returns.
+Failures are described as input failures (due to the unavailability of input
+characters) or matching failures (due to inappropriate input).
+
+A directive composed of white-space character(s) is executed by reading input
+up to the first non-white-space character (which remains unread) or until no
+more characters remain unread.
+
+A directive that is an ordinary multibyte character is executed by reading the
+next characters of the stream. If one of the characters differs from one
+comprising the directive, the directive fails, and the differing and subsequent
+characters remain unread.
+
+A directive that is a conversion specification defines a set of matching input
+sequences, as described below for each specifier. A conversion specification is
+executed in the following steps:
+
+Input white-space characters (as specified by the \texttt{isspace} function)
+are skipped, unless the specification includes a \texttt{[}, \texttt{c}, or
+\texttt{n} specifier. (The white-space characters are not counted against the
+specified field width.)
+
+An input item is read from the stream, unless the specification includes an
+\texttt{n} specifier. An input item is defined as the longest matching
+sequences of input characters, unless that exceeds a specified field width, in
+which case it is the initial subsequence of that length in the sequence. The
+first character, if any, after the input item remains unread. If the length of
+the input item is zero, the execution of the directive fails; this condition is
+a matching failure, unless an error prevented input from the stream, in which
+case it is an input failure.
+
+Except in the case of a \texttt{\%} specifier, the input item (or, in the case
+of a \texttt{\%n} directive, the count of input characters) is converted to a
+type appropriate to the conversion specifier. If the input item is not a
+matching sequence, the execution of the directive fails; this condition is a
+matching failure. Unless assignment suppression was indicated by a \texttt{*},
+the result of the conversion is placed in the object pointed to by the first
+argument following the \texttt{format} argument that has not already received a
+conversion result. If this object does not have an appropriate type, or if the
+result of the conversion cannot be represented in the space provided, the
+behavior is undefined.
+
+The following conversion specifiers are valid:
+
+\begin{description}
+	\item[\texttt{d}] Matches an optionally signed decimal integer, whose
+format is the same as expected for the subject sequence of the \texttt{strtol}
+function with the value 10 for the \texttt{base} argument. The corresponding
+argument shall be a pointer to integer.
+	\item[\texttt{i}] Matches an optionally signed integer, whose format is the
+same as expected for the subject sequence of the \texttt{strtol} function with
+the value 0 for the \texttt{base} argument. The corresponding argument shall be
+a pointer to integer.
+	\item[\texttt{o}] Matches an optionally signed octal integer, whose format
+is the same as expected for the subject sequence of the \texttt{strtoul}
+function with the value 8 for the \texttt{base} argument. The corresponding
+argument shall be a pointer to unsigned integer.
+	\item[\texttt{u}] Matches an optionally signed decimal integer, whose
+format is the same as expected for the subject sequence of the \texttt{strtoul}
+function with the value 10 for the \texttt{base} argument. The corresponding
+argument shall be a pointer to unsigned integer.
+	\item[\texttt{x}] Matches an optionally signed hexadecimal integer, whose
+format is the same as expected for the subject sequence of the \texttt{strtoul}
+function with the value 16 for the \texttt{base} argument. The corresponding
+argument shall be a pointer to unsigned integer.
+	\item[\texttt{e}, \texttt{f}, \texttt{g}] Matches an optionally signed
+floating-point number, whose format is the same as expected for the subject
+string of the \texttt{strtod} function. The corresponding argument will be a
+pointer to floating.
+	\item[\texttt{s}] Matches a sequence of non-white-space characters. (No
+special provisions are made for multibyte characters.) The corresponding
+argument shall be a pointer to the initial character of an array large enough
+to accept the sequence and a terminating null character, which will be added
+automatically.
+	\item[\texttt{[}] Matches a nonempty sequence of characters (no special
+provisions are made for multibyte characters) from a set of expected characters
+(the \emph{scanset}). The corresponding argument shall be a pointer to the
+initial character of an array large enough to accept the sequence and a
+terminating null character, which will be added automatically. The conversion
+specifier includes all subsequent characters in the \texttt{format} string, up
+to and including the matching right bracket (\texttt{]}). The characters
+between the brackets (the \emph{scanlist}) comprise the scanset, unless the
+character after the left bracket is a circumflex (\texttt{\^{}}), in which case
+the scanset contains all the characters that do not appear in the scanlist
+between the circumflex and the right bracket. If the conversion specifier
+begins with \texttt{[]} or \texttt{[\^{}]}, the right-bracket character is in
+the scanlist and the next right bracket character is the matching right bracket
+that ends the specification; otherwise, the first right bracket character is
+the one that ends the specification. If a - character is in the scanlist and is
+not the first, nor the second where the first character is a \^, nor the last
+character, the behavior is implementation-defined.
+	\item[\texttt{c}] Matches a sequence of characters (no special provisions
+are made for multibyte characters) of the number specified by the field width
+(1 if no field width is present in the directive). The corresponding argument
+shall be a pointer to the initial character of an array large enough to accept
+the sequence. No null character is added.
+	\item[\texttt{p}] Matches an implementation-defined set of sequences, which
+should be the same as the set of sequences that may be produced by the
+\texttt{\%p} conversion of the \texttt{fprintf} function. The corresponding
+argument shall be a pointer to \texttt{void}. The interpretation of the input
+then is implementation-defined. If the input item is a value converted earlier
+during the same program execution, the pointer that results shall compare equal
+to that value; otherwise the behavior of the \texttt{\%p} conversion is
+undefined.
+	\item[\texttt{n}] No input is consumed. The corresponding argument shall be
+a pointer to integer into which is to be written the number of characters read
+from the input stream so far by this call to the \texttt{fscanf} function.
+Execution of a \texttt{\%n} directive does not increment the assignment count
+returned at the completion of execution of the \texttt{fscanf} function.
+	\item[\texttt{\%}] Matches a single \texttt{\%}; no conversion or
+assignment occurs. The complete conversion specification shall be
+\texttt{\%\%}.
+\end{description}
+
+If a conversion specification is invalid, the behavior is undefined.
+
+The conversion specifiers \texttt{E}, \texttt{G}, and \texttt{X} are also valid
+and behave the same as, respectively, \texttt{e}, \texttt{g}, and \texttt{x}.
+
+If end-of-file is encountered during input, conversion is terminated. If
+end-of-file occurs before any characters matching the current directive have
+been read (other than leading white space, where permitted), execution of the
+current directive terminates with an input failure; otherwise, unless execution
+of the current directive is terminated with a matching failure, execution of
+the following directive (if any) is terminated with an input failure.
+
+If conversion terminates on a conflicting input character, the offending input
+character is left unread in the input stream. Trailing white space (including
+new-line characters) is left unread unless matched by a directive. The success
+of literal matches and suppressed assignments is not directly determinable
+other than via the \texttt{\%n} directive.
+
+The \texttt{fscanf} function returns the value of the macro \texttt{EOF} if an
+input failure occurs before any conversion. Otherwise, the \texttt{fscanf}
+function returns the number of input items assigned, which can be fewer than
+provided for, or even zero, in the event of an early matching failure.
+
+The \texttt{scanf} function is equivalent to \texttt{fscanf} with the argument
+\texttt{stdin} interposed before the arguments to \texttt{scanf}. Its return
+value is similar to that of \texttt{fscanf}.
+
+The \texttt{sscanf} function is equivalent to \texttt{fscanf}, except that the
+argument \texttt{s} specifies a string from which the input is to be obtained,
+rather than from a stream. Reaching the end of the string is equivalent to
+encountering the end-of-file for the \texttt{fscanf} function. If copying takes
+place between objects that overlap, the behavior is undefined.
+
+\subsection{Writing to Files}
+\subsubsection{Character Output Functions}
+\paragraph{The \texttt{fputc} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int fputc(int c, FILE *stream);
+\end{lstlisting}
+
+The \texttt{fputc} function writes the character specified by \texttt{c}
+(converted to an \texttt{unsigned char}) to the stream pointed to by
+\texttt{stream} at the position indicated by the associated file position
+indicator (if defined), and advances the indicator appropriately. If the file
+cannot support positioning requests, or if the stream is opened with append
+mode, the character is appended to the output stream. The function returns the
+character written, unless a write error occurs, in which case the error
+indicator for the stream is set and \texttt{fputc} returns \texttt{EOF}.
+
+\paragraph{The \texttt{fputs} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int fputs(const char *s, FILE *stream);
+\end{lstlisting}
+
+The \texttt{fputs} function writes the string pointed to by \texttt{s} to the
+stream pointed to by \texttt{stream}. The terminating null character is not
+written. The function returns \texttt{EOF} if a write error occurs, otherwise
+it returns a nonnegative value.
+
+\paragraph{The \texttt{putc} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int putc(int c, FILE *stream);
+\end{lstlisting}
+
+The \texttt{putc} function is equivalent to \texttt{fputc}, except that if it
+is implemented as a macro, it may evaluate \texttt{stream} more than once, so
+the argument should never be an expression with side effects. The function
+returns the character written, unless a write error occurs, in which case the
+error indicator for the stream is set and the function returns \texttt{EOF}.
+
+\paragraph{The \texttt{putchar} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int putchar(int c);
+\end{lstlisting}
+
+The \texttt{putchar} function is equivalent to \texttt{putc} with the second
+argument \texttt{stdout}. It returns the character written, unless a write
+error occurs, in which case the error indicator for \texttt{stdout} is set and
+the function returns \texttt{EOF}.
+
+\paragraph{The \texttt{puts} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+int puts(const char *s);
+\end{lstlisting}
+
+The \texttt{puts} function writes the string pointed to by \texttt{s} to the
+stream pointed to by \texttt{stdout}, and appends a new-line character to the
+output. The terminating null character is not written. The function returns
+\texttt{EOF} if a write error occurs; otherwise, it returns a nonnegative
+value.
+
+\subsubsection{Direct output function: the \texttt{fwrite} function}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
+\end{lstlisting}
+
+The \texttt{fwrite} function writes, from the array pointed to by \texttt{ptr},
+up to \texttt{nmemb} elements whose size is specified by \texttt{size} to the
+stream pointed to by \texttt{stream}. The file position indicator for the
+stream (if defined) is advanced by the number of characters successfully
+written. If an error occurs, the resulting value of the file position indicator
+for the stream is indeterminate. The function returns the number of elements
+successfully written, which will be less than \texttt{nmemb} only if a write
+error is encountered.
+
+\subsubsection{Formatted output functions: the \texttt{printf} family of functions}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdarg.h>
+#include <stdio.h>
+int fprintf(FILE *stream, const char *format, ...);
+int printf(const char *format, ...);
+int sprintf(char *s, const char *format, ...);
+int vfprintf(FILE *stream, const char *format, va_list arg);
+int vprintf(const char *format, va_list arg);
+int vsprintf(char *s, const char *format, va_list arg);
+\end{lstlisting}
+
+\emph{Note: Some length specifiers and format specifiers are new in C99. These
+may not be available in older compilers and versions of the stdio library,
+which adhere to the C89/C90 standard. Wherever possible, the new ones will be
+marked with (C99).}
+
+The \texttt{fprintf} function writes output to the stream pointed to by
+\texttt{stream} under control of the string pointed to by \texttt{format} that
+specifies how subsequent arguments are converted for output. If there are
+insufficient arguments for the format, the behavior is undefined. If the format
+is exhausted while arguments remain, the excess arguments are evaluated (as
+always) but are otherwise ignored. The \texttt{fprintf} function returns when
+the end of the format string is encountered.
+
+The format shall be a multibyte character sequence, beginning and ending in its
+initial shift state. The format is composed of zero or more directives:
+ordinary multibyte characters (not \texttt{\%}), which are copied unchanged to
+the output stream; and conversion specifications, each of which results in
+fetching zero or more subsequent arguments, converting them, if applicable,
+according to the corresponding conversion specifier, and then writing the
+result to the output stream.
+
+Each conversion specification is introduced by the character \texttt{\%}. After
+the \texttt{\%}, the following appear in sequence:
+
+\begin{itemize}
+	\item Zero or more flags (in any order) that modify the meaning of the
+conversion specification.
+	\item An optional minimum field width. If the converted value has fewer
+characters than the field width, it is padded with spaces (by default) on the
+left (or right, if the left adjustment flag, described later, has been given)
+to the field width. The field width takes the form of an asterisk \texttt{*}
+(described later) or a decimal integer. (Note that 0 is taken as a flag, not as
+the beginning of a field width.)
+	\item An optional precision that gives the minimum number of digits to
+appear for the \texttt{d}, \texttt{i}, \texttt{o}, \texttt{u}, \texttt{x}, and
+\texttt{X} conversions, the number of digits to appear after the decimal-point
+character for \texttt{a}, \texttt{A}, \texttt{e}, \texttt{E}, \texttt{f}, and
+\texttt{F} conversions, the maximum number of significant digits for the
+\texttt{g} and \texttt{G} conversions, or the maximum number of characters to
+be written from a string in \texttt{s} conversions. The precision takes the
+form of a period (\texttt{.}) followed either by an asterisk \texttt{*}
+(described later) or by an optional decimal integer; if only the period is
+specified, the precision is taken as zero. If a precision appears with any
+other conversion specifier, the behavior is undefined. Floating-point numbers
+are \emph{rounded} to fit the precision; i.e.\
+\texttt{printf("\%1.1f\textbackslash{}n", 1.19);} produces \texttt{1.2}.
+	\item An optional length modifier that specifies the size of the argument.
+	\item A conversion specifier character that specifies the type of
+conversion to be applied.
+\end{itemize}
+
+As noted above, a field width, or precision, or both, may be indicated by an
+asterisk. In this case, an \texttt{int} argument supplies the field width or
+precision. The arguments specifying field width, or precision, or both, shall
+appear (in that order) before the argument (if any) to be converted. A negative
+field width argument is taken as a \texttt{-} flag followed by a positive field
+width. A negative precision argument is taken as if the precision were omitted.
+
+The flag characters and their meanings are:
+\begin{description}
+	\item[\texttt{-}] The result of the conversion is left-justified within the
+field. (It is right-justified if this flag is not specified.)
+	\item[\texttt{+}] The result of a signed conversion always begins with a
+plus or minus sign. (It begins with a sign only when a negative value is
+converted if this flag is not specified. The results of all floating
+conversions of a negative zero, and of negative values that round to zero,
+include a minus sign.)
+	\item[\emph{space}] If the first character of a signed conversion is not a
+sign, or if a signed conversion results in no characters, a space is prefixed
+to the result. If the space and \texttt{+} flags both appear, the space flag is
+ignored.
+	\item[\texttt{\#}] The result is converted to an ``alternative form''. For
+\texttt{o} conversion, it increases the precision, if and only if necessary, to
+force the first digit of the result to be a zero (if the value and precision
+are both 0, a single 0 is printed). For \texttt{x} (or \texttt{X}) conversion,
+a nonzero result has \texttt{0x} (or \texttt{0X}) prefixed to it. For
+\texttt{a}, \texttt{A}, \texttt{e}, \texttt{E}, \texttt{f}, \texttt{F},
+\texttt{g}, and \texttt{G} conversions, the result always contains a
+decimal-point character, even if no digits follow it. (Normally, a
+decimal-point character appears in the result of these conversions only if a
+digit follows it.) For \texttt{g} and \texttt{G} conversions, trailing zeros
+are not removed from the result. For other conversions, the behavior is
+undefined.
+	\item[\texttt{0}] For \texttt{d}, \texttt{i}, \texttt{o}, \texttt{u},
+\texttt{x}, \texttt{X}, \texttt{a}, \texttt{A}, \texttt{e}, \texttt{E},
+\texttt{f}, \texttt{F}, \texttt{g}, and \texttt{G} conversions, leading zeros
+(following any indication of sign or base) are used to pad to the field width;
+no space padding is performed. If the \texttt{0} and \texttt{-} flags both
+appear, the \texttt{0} flag is ignored. For \texttt{d}, \texttt{i}, \texttt{o},
+\texttt{u}, \texttt{x}, and \texttt{X} conversions, if a precision is
+specified, the \texttt{0} flag is ignored. For other conversions, the behavior
+is undefined.
+\end{description}
+
+The length modifiers and their meanings are:
+\begin{description}
+	\item[\texttt{hh}] (C99) Specifies that a following \texttt{d}, \texttt{i},
+\texttt{o}, \texttt{u}, \texttt{x}, or \texttt{X} conversion specifier applies
+to a \texttt{signed char} or \texttt{unsigned char} argument (the argument will
+have been promoted according to the integer promotions, but its value shall be
+converted to \texttt{signed char} or \texttt{unsigned char} before printing);
+or that a following \texttt{n} conversion specifier applies to a pointer to a
+\texttt{signed char} argument.
+	\item[\texttt{h}] Specifies that a following \texttt{d}, \texttt{i},
+\texttt{o}, \texttt{u}, \texttt{x}, or \texttt{X} conversion specifier applies
+to a \texttt{short int} or \texttt{unsigned short int} argument (the argument
+will have been promoted according to the integer promotions, but its value
+shall be converted to \texttt{short int} or \texttt{unsigned short int} before
+printing); or that a following \texttt{n} conversion specifier applies to a
+pointer to a \texttt{short int} argument.
+	\item[\texttt{l} (ell)] Specifies that a following \texttt{d}, \texttt{i},
+\texttt{o}, \texttt{u}, \texttt{x}, or \texttt{X} conversion specifier applies
+to a \texttt{long int} or \texttt{unsigned long int} argument; that a following
+\texttt{n} conversion specifier applies to a pointer to a \texttt{long int}
+argument; (C99) that a following \texttt{c} conversion specifier applies to a
+\texttt{wint\_t} argument; (C99) that a following \texttt{s} conversion
+specifier applies to a pointer to a \texttt{wchar\_t} argument; or has no
+effect on a following \texttt{a}, \texttt{A}, \texttt{e}, \texttt{E},
+\texttt{f}, \texttt{F}, \texttt{g}, or \texttt{G} conversion specifier.
+	\item[\texttt{ll} (ell-ell)] (C99) Specifies that a following \texttt{d},
+\texttt{i}, \texttt{o}, \texttt{u}, \texttt{x}, or \texttt{X} conversion
+specifier applies to a \texttt{long long int} or \texttt{unsigned long long
+int} argument; or that a following \texttt{n} conversion specifier applies to a
+pointer to a \texttt{long long int} argument.
+	\item[\texttt{j}] (C99) Specifies that a following \texttt{d}, \texttt{i},
+\texttt{o}, \texttt{u}, \texttt{x}, or \texttt{X} conversion specifier applies
+to an \texttt{intmax\_t} or \texttt{uintmax\_t} argument; or that a following
+\texttt{n} conversion specifier applies to a pointer to an \texttt{intmax\_t}
+argument.
+	\item[\texttt{z}] (C99) Specifies that a following \texttt{d}, \texttt{i},
+\texttt{o}, \texttt{u}, \texttt{x}, or \texttt{X} conversion specifier applies
+to a \texttt{size\_t} or the corresponding signed integer type argument; or
+that a following \texttt{n} conversion specifier applies to a pointer to a
+signed integer type corresponding to \texttt{size\_t} argument.
+	\item[\texttt{t}] (C99) Specifies that a following \texttt{d}, \texttt{i},
+\texttt{o}, \texttt{u}, \texttt{x}, or \texttt{X} conversion specifier applies
+to a \texttt{ptrdiff\_t} or the corresponding unsigned integer type argument;
+or that a following \texttt{n} conversion specifier applies to a pointer to a
+\texttt{ptrdiff\_t} argument.
+	\item[\texttt{L}] Specifies that a following \texttt{a}, \texttt{A},
+\texttt{e}, \texttt{E}, \texttt{f}, \texttt{F}, \texttt{g}, or \texttt{G}
+conversion specifier applies to a \texttt{long double} argument.
+\end{description}
+
+If a length modifier appears with any conversion specifier other than as
+specified above, the behavior is undefined.
+
+The conversion specifiers and their meanings are:
+\begin{description}
+	\item[\texttt{d}, \texttt{i}] The \texttt{int} argument is converted to
+signed decimal in the style \emph{[}\texttt{\textbf{-}}\emph{]dddd}. The
+precision specifies the minimum number of digits to appear; if the value being
+converted can be represented in fewer digits, it is expanded with leading
+zeros. The default precision is 1. The result of converting a zero value with a
+precision of zero is no characters.
+	\item[\texttt{o}, \texttt{u}, \texttt{x}, \texttt{X}] The \texttt{unsigned
+int} argument is converted to unsigned octal (\texttt{o}), unsigned decimal
+(\texttt{u}), or unsigned hexadecimal notation (\texttt{x} or \texttt{X}) in
+the style \emph{dddd}; the letters \texttt{\textbf{abcdef}} are used for
+\texttt{x} conversion and the letters \texttt{\textbf{ABCDEF}} for \texttt{X}
+conversion. The precision specifies the minimum number of digits to appear; if
+the value being converted can be represented in fewer digits, it is expanded
+with leading zeros. The default precision is 1. The result of converting a zero
+value with a precision of zero is no characters.
+	\item[\texttt{f}, \texttt{F}] A \texttt{double} argument representing a
+(finite) floating-point number is converted to decimal notation in the style
+\emph{[}\texttt{-}\emph{]ddd}\texttt{.}\emph{ddd}, where the number of digits
+after the decimal-point character is equal to the precision specification. If
+the precision is missing, it is taken as 6; if the precision is zero and the
+\texttt{\#} flag is not specified, no decimal-point character appears. If a
+decimal-point character appears, at least one digit appears before it. The
+value is rounded to the appropriate number of digits.\\(C99) A \texttt{double}
+argument representing an infinity is converted in one of the styles
+\emph{[}\texttt{-}\emph{]}\texttt{inf} or
+\emph{[}\texttt{-}\emph{]}\texttt{infinity} --- which style is
+implementation-defined. A double argument representing a NaN is converted in
+one of the styles \emph{[}\texttt{-}\emph{]}\texttt{nan} or
+\emph{[}\texttt{-}\emph{]}\texttt{nan(}\emph{n-char-sequence}\texttt{)} ---
+which style, and the meaning of any \emph{n-char-sequence}, is
+implementation-defined. The \texttt{F} conversion specifier produces
+\texttt{INF}, \texttt{INFINITY}, or \texttt{NAN} instead of \texttt{inf},
+\texttt{infinity}, or \texttt{nan}, respectively. (When applied to infinite and
+NaN values, the \texttt{-}, \texttt{+}, and \emph{space} flags have their usual
+meaning; the \texttt{\#} and \texttt{0} flags have no effect.)
+	\item[\texttt{e}, \texttt{E}] A \texttt{double} argument representing a
+(finite) floating-point number is converted in the style
+\emph{[}\texttt{-}\emph{]d}\texttt{.}\emph{ddd}\texttt{e$\pm$}\emph{dd},
+where there is one digit (which is nonzero if the argument is nonzero) before
+the decimal-point character and the number of digits after it is equal to the
+precision; if the precision is missing, it is taken as 6; if the precision is
+zero and the \texttt{\#} flag is not specified, no decimal-point character
+appears. The value is rounded to the appropriate number of digits. The
+\texttt{E} conversion specifier produces a number with \texttt{E} instead of
+\texttt{e} introducing the exponent. The exponent always contains at least two
+digits, and only as many more digits as necessary to represent the exponent. If
+the value is zero, the exponent is zero.\\(C99) A \texttt{double} argument
+representing an infinity or NaN is converted in the style of an \texttt{f} or
+\texttt{F} conversion specifier.
+	\item[\texttt{g}, \texttt{G}] A \texttt{double} argument representing a
+(finite) floating-point number is converted in style \texttt{f} or \texttt{e}
+(or in style \texttt{F} or \texttt{E} in the case of a \texttt{G} conversion
+specifier), with the precision specifying the number of significant digits. If
+the precision is zero, it is taken as 1. The style used depends on the value
+converted; style \texttt{e} (or \texttt{E}) is used only if the exponent
+resulting from such a conversion is less than --4 or greater than or equal to
+the precision. Trailing zeros are removed from the fractional portion of the
+result unless the \texttt{\#} flag is specified; a decimal-point character
+appears only if it is followed by a digit.\\(C99) A \texttt{double} argument
+representing an infinity or NaN is converted in the style of an \texttt{f} or
+\texttt{F} conversion specifier.
+	\item[\texttt{a}, \texttt{A}] (C99) A double argument representing a
+(finite) floating-point number is converted in the style
+\emph{[}\texttt{-}\emph{]}\texttt{0x}\emph{h}\texttt{.}\emph{hhhh}\texttt{p$\pm$}\emph{d},
+where there is one hexadecimal digit (which is nonzero if the argument is a
+normalized floating-point number and is otherwise unspecified) before the
+decimal-point character (Binary implementations can choose the hexadecimal
+digit to the left of the decimal-point character so that subsequent digits
+align to nibble [4-bit] boundaries.) and the number of hexadecimal digits after
+it is equal to the precision; if the precision is missing and
+\texttt{FLT\_RADIX} is a power of 2, then the precision is sufficient for an
+exact representation of the value; if the precision is missing and
+\texttt{FLT\_RADIX} is not a power of 2, then the precision is sufficient to
+distinguish (The precision \emph{p} is sufficient to distinguish values of the
+source type if 16\(^{\emph{p}--1}\) \textgreater{} \emph{b\(^{n}\)} where
+\emph{b} is \texttt{FLT\_RADIX} and \emph{n} is the number of base-\emph{b}
+digits in the significand of the source type. A smaller \emph{p} might suffice
+depending on the implementation's scheme for determining the digit to the left
+of the decimal-point character.) values of type \texttt{double}, except that
+trailing zeros may be omitted; if the precision is zero and the \texttt{\#}
+flag is not specified, no decimal-point character appears. The letters
+\texttt{\textbf{abcdef}} are used for \texttt{a} conversion and the letters
+\texttt{\textbf{ABCDEF}} for \texttt{A} conversion. The \texttt{A} conversion
+specifier produces a number with \texttt{X} and \texttt{P} instead of
+\texttt{x} and \texttt{p}. The exponent always contains at least one digit, and
+only as many more digits as necessary to represent the decimal exponent of 2.
+If the value is zero, the exponent is zero.\\A \texttt{double} argument
+representing an infinity or NaN is converted in the style of an \texttt{f} or
+\texttt{F} conversion specifier.
+	\item[\texttt{c}] If no \texttt{l} length modifier is present, the
+\texttt{int} argument is converted to an \texttt{unsigned char}, and the
+resulting character is written.\\(C99) If an \texttt{l} length modifier is
+present, the \texttt{wint\_t} argument is converted as if by an \texttt{ls}
+conversion specification with no precision and an argument that points to the
+initial element of a two-element array of \texttt{wchar\_t}, the first element
+containing the \texttt{wint\_t} argument to the \texttt{lc} conversion
+specification and the second a null wide character.
+	\item[\texttt{s}] If no \texttt{l} length modifier is present, the argument
+shall be a pointer to the initial element of an array of character type. (No
+special provisions are made for multibyte characters.) Characters from the
+array are written up to (but not including) the terminating null character. If
+the precision is specified, no more than that many characters are written. If
+the precision is not specified or is greater than the size of the array, the
+array shall contain a null character.\\(C99) If an \texttt{l} length modifier
+is present, the argument shall be a pointer to the initial element of an array
+of \texttt{wchar\_t} type. Wide characters from the array are converted to
+multibyte characters (each as if by a call to the \texttt{wcrtomb} function,
+with the conversion state described by an \texttt{mbstate\_t} object
+initialized to zero before the first wide character is converted) up to and
+including a terminating null wide character. The resulting multibyte characters
+are written up to (but not including) the terminating null character (byte). If
+no precision is specified, the array shall contain a null wide character. If a
+precision is specified, no more than that many characters (bytes) are written
+(including shift sequences, if any), and the array shall contain a null wide
+character if, to equal the multibyte character sequence length given by the
+precision, the function would need to access a wide character one past the end
+of the array. In no case is a partial multibyte character written. (Redundant
+shift sequences may result if multibyte characters have a state-dependent
+encoding.)
+	\item[\texttt{p}] The argument shall be a pointer to \texttt{void}. The
+value of the pointer is converted to a sequence of printable characters, in an
+implementation-defined manner.
+	\item[\texttt{n}] The argument shall be a pointer to signed integer into
+which is written the number of characters written to the output stream so far
+by this call to \texttt{fprintf}. No argument is converted, but one is
+consumed. If the conversion specification includes any flags, a field width, or
+a precision, the behavior is undefined.
+	\item[\texttt{\%}] A \texttt{\%} character is written. No argument is
+converted. The complete conversion specification shall be \texttt{\%\%}.
+\end{description}
+
+If a conversion specification is invalid, the behavior is undefined. If any
+argument is not the correct type for the corresponding coversion specification,
+the behavior is undefined.
+
+In no case does a nonexistent or small field width cause truncation of a field;
+if the result of a conversion is wider than the field width, the field is
+expanded to contain the conversion result.
+
+For \texttt{a} and \texttt{A} conversions, if \texttt{FLT\_RADIX} is a power of
+2, the value is correctly rounded to a hexadecimal floating number with the
+given precision.
+
+It is recommended practice that if \texttt{FLT\_RADIX} is not a power of 2, the
+result should be one of the two adjacent numbers in hexadecimal floating style
+with the given precision, with the extra stipulation that the error should have
+a correct sign for the current rounding direction.
+
+It is recommended practice that for \texttt{e}, \texttt{E}, \texttt{f},
+\texttt{F}, \texttt{g}, and \texttt{G} conversions, if the number of
+significant decimal digits is at most \texttt{DECIMAL\_DIG}, then the result
+should be correctly rounded. (For binary-to-decimal conversion, the result
+format's values are the numbers representable with the given format specifier.
+The number of significant digits is determined by the format specifier, and in
+the case of fixed-point conversion by the source value as well.) If the number
+of significant decimal digits is more than \texttt{DECIMAL\_DIG} but the source
+value is exactly representable with \texttt{DECIMAL\_DIG} digits, then the
+result should be an exact representation with trailing zeros. Otherwise, the
+source value is bounded by two adjacent decimal strings \emph{L \textless{} U},
+both having \texttt{DECIMAL\_DIG} significant digits; the value of the
+resultant decimal string \emph{D} should satisfy \emph{L $ \leq $ D $ \leq $
+U}, with the extra stipulation that the error should have a correct sign for
+the current rounding direction.
+
+The \texttt{fprintf} function returns the number of characters transmitted, or
+a negative value if an output or encoding error occurred.
+
+The \texttt{printf} function is equivalent to \texttt{fprintf} with the
+argument \texttt{stdout} interposed before the arguments to \texttt{printf}. It
+returns the number of characters transmitted, or a negative value if an output
+error occurred.
+
+The \texttt{sprintf} function is equivalent to \texttt{fprintf}, except that
+the argument \texttt{s} specifies an array into which the generated input is to
+be written, rather than to a stream. A null character is written at the end of
+the characters written; it is not counted as part of the returned sum. If
+copying takes place between objects that overlap, the behavior is undefined.
+The function returns the number of characters written in the array, not
+counting the terminating null character.
+
+The \texttt{vfprintf} function is equivalent to \texttt{fprintf}, with the
+variable argument list replaced by \texttt{arg}, which shall have been
+initialized by the \texttt{va\_start} macro (and possibly subsequent
+\texttt{va\_arg} calls). The \texttt{vfprintf} function does not invoke the
+\texttt{va\_end} macro. The function returns the number of characters
+transmitted, or a negative value if an output error occurred.
+
+The \texttt{vprintf} function is equivalent to \texttt{printf}, with the
+variable argument list replaced by \texttt{arg}, which shall have been
+initialized by the \texttt{va\_start} macro (and possibly subsequent
+\texttt{va\_arg} calls). The \texttt{vprintf} function does not invoke the
+\texttt{va\_end} macro. The function returns the number of characters
+transmitted, or a negative value if an output error occurred.
+
+The \texttt{vsprintf} function is equivalent to \texttt{sprintf}, with the
+variable argument list replaced by \texttt{arg}, which shall have been
+initialized by the \texttt{va\_start} macro (and possibly subsequent
+\texttt{va\_arg} calls). The \texttt{vsprintf} function does not invoke the
+\texttt{va\_end} macro. If copying takes place between objects that overlap,
+the behavior is undefined. The function returns the number of characters
+written into the array, not counting the terminating null character.

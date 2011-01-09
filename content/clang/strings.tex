@@ -1,0 +1,809 @@
+\section{Strings}
+A \textbf{string} in C is merely an array of characters. The length of a string
+is determined by a terminating null character: \texttt{'\textbackslash{}0'}.
+So, a string with the contents, say, \texttt{"abc"} has four characters:
+\texttt{'a'}, \texttt{'b'}, \texttt{'c'}, and the terminating null character.
+
+The terminating null character has the value zero.
+
+\subsection{The \texttt{\textless{}string.h\textgreater{}} Standard Header}
+Because programmers find raw strings cumbersome to deal with, they wrote the
+code in the \texttt{\textless{}string.h\textgreater{}} library. It represents
+not a concerted design effort but rather the accretion of contributions made by
+various authors over a span of years.  First, three types of functions exist in
+the string library:
+
+\begin{itemize}
+	\item the \texttt{mem} functions manipulate sequences of arbitrary
+characters without regard to the null character;
+	\item the \texttt{str} functions manipulate null-terminated sequences of
+characters;
+	\item the \texttt{strn} functions manipulate sequences of non-null
+characters.
+\end{itemize}
+
+\subsubsection{The more commonly-used string functions}
+The nine most commonly used functions in the string library are:
+
+\begin{itemize}
+	\item \texttt{strcat} --- concatenate two strings
+	\item \texttt{strchr} --- string scanning operation
+	\item \texttt{strcmp} --- compare two strings
+	\item \texttt{strcpy} --- copy a string
+	\item \texttt{strlen} --- get string length
+	\item \texttt{strncat} --- concatenate one string with part of another
+	\item \texttt{strncmp} --- compare parts of two strings
+	\item \texttt{strncpy} --- copy part of a string
+	\item \texttt{strrchr} --- string scanning operation
+\end{itemize}
+
+\paragraph{The \texttt{strcat} function}
+\texttt{char *strcat(char * restrict s1, const char * restrict s2);}
+
+\emph{Some people recommend using} \texttt{strncat()} \emph{or}
+\texttt{strlcat()} \emph{instead of strcat, in order to avoid buffer overflow.}
+
+The \texttt{strcat()} function shall append a copy of the string pointed to by
+\texttt{s2} (including the terminating null byte) to the end of the string
+pointed to by \texttt{s1}. The initial byte of \texttt{s2} overwrites the null
+byte at the end of \texttt{s1}. If copying takes place between objects that
+overlap, the behavior is undefined. The function returns \texttt{s1}.
+
+This function is used to attach one string to the end of another string. It is
+imperative that the first string (\texttt{s1}) have the space needed to store
+both strings.
+
+Example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+#include <string.h>
+...
+static const char *colors[] = {"Red","Orange","Yellow","Green","Blue","Purple" };
+static const char *widths[] = {"Thin","Medium","Thick","Bold" };
+...
+char penText[20];
+...
+int penColor = 3, penThickness = 2;
+strcpy(penText, colors[penColor]);
+strcat(penText, widths[penThickness]);
+printf("My pen is %s\n", penText); // prints 'My pen is GreenThick'
+\end{lstlisting}
+
+Before calling \texttt{strcat()}, the destination must currently contain a null
+terminated string or the first character must have been initialized with the
+null character (e.g. \texttt{penText[0] = '\textbackslash{}0';}).
+
+The following is a public-domain implementation of \texttt{strcat}:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* strcat */
+char *(strcat)(char *restrict s1, const char *restrict s2) {
+	char *s = s1;
+	/* Move s so that it points to the end of s1.  */
+	while (*s != '\0')
+	    s++;
+	/* Copy the contents of s2 into the space at the end of s1.  */
+	strcpy(s, s2);
+	return s1;
+}
+\end{lstlisting}
+
+\paragraph{The \texttt{strchr} function}
+\texttt{char *strchr(const char *s, int c);}
+
+The \texttt{strchr()} function shall locate the first occurrence of \texttt{c}
+(converted to a \texttt{char}) in the string pointed to by \texttt{s}. The
+terminating null byte is considered to be part of the string. The function
+returns the location of the found character, or a null pointer if the character
+was not found.
+
+This function is used to find certain characters in strings.
+
+At one point in history, this function was named \texttt{index}. The
+\texttt{strchr} name, however cryptic, fits the general pattern for naming.
+
+The following is a public-domain implementation of \texttt{strchr}:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* strchr */
+char *(strchr)(const char *s, int c) {
+	/* Scan s for the character.  When this loop is finished,
+	   s will either point to the end of the string or the
+	   character we were looking for.  */
+	while (*s != '\0' && *s != (char)c)
+		s++;
+	return ( (*s == c) ? (char *) s : NULL );
+}
+\end{lstlisting}
+
+\paragraph{The \texttt{strcmp} function}
+\texttt{int strcmp(const char *s1, const char *s2);}
+A rudimentary form of string comparison is done with the strcmp() function. It
+takes two strings as arguments and returns a value less than zero if the first
+is lexographically less than the second, a value greater than zero if the first
+is lexographically greater than the second, or zero if the two strings are
+equal. The comparison is done by comparing the coded (ascii) value of the
+chararacters, character by character.
+
+This simple type of string comparison is nowadays generally considered
+unacceptable when sorting lists of strings.  More advanced algorithms exist
+that are capable of producing lists in dictionary sorted order. They can also
+fix problems such as strcmp() considering the string ``Alpha2'' greater than
+``Alpha12''. (In the previous example, ``Alpha2'' compares greater than
+``Alpha12'' because '2' comes after '1' in the character set.) What we're
+saying is, don't use this \texttt{strcmp()} alone for general string sorting in
+any commercial or professional code.
+
+The \texttt{strcmp()} function shall compare the string pointed to by
+\texttt{s1} to the string pointed to by \texttt{s2}. The sign of a non-zero
+return value shall be determined by the sign of the difference between the
+values of the first pair of bytes (both interpreted as type \texttt{unsigned
+char}) that differ in the strings being compared. Upon completion,
+\texttt{strcmp()} shall return an integer greater than, equal to, or less than
+0, if the string pointed to by \texttt{s1} is greater than, equal to, or less
+than the string pointed to by \texttt{s2}, respectively.
+
+Since comparing pointers by themselves is not practically useful unless one is
+comparing pointers within the same array, this function lexically compares the
+strings that two pointers point to.
+
+This function is useful in comparisons, e.g.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+if (strcmp(s, "whatever") == 0) /* do something */
+    ;
+\end{lstlisting}
+
+The collating sequence used by \texttt{strcmp()} is equivalent to the machine's
+native character set. The only guarantee about the order is that the digits
+from \texttt{'0'} to \texttt{'9'} are in consecutive order.
+
+The following is a public-domain implementation of \texttt{strcmp}:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* strcmp */
+int (strcmp)(const char *s1, const char *s2) {
+	unsigned char uc1, uc2;
+	/* Move s1 and s2 to the first differing characters 
+	   in each string, or the ends of the strings if they
+	   are identical.  */
+	while (*s1 != '\0' && *s1 == *s2) {
+		s1++;
+		s2++;
+	}
+	/* Compare the characters as unsigned char and
+	   return the difference.  */
+	uc1 = (*(unsigned char *) s1);
+	uc2 = (*(unsigned char *) s2);
+	return ((uc1 < uc2) ? -1 : (uc1 > uc2));
+}
+\end{lstlisting}
+
+\paragraph{The \texttt{strcpy} function}
+\texttt{char *strcpy(char *restrict s1, const char *restrict s2);}
+
+\emph{Some people recommend always using} \texttt{strncpy()} \emph{instead of
+strcpy, to avoid buffer overflow.}
+
+The \texttt{strcpy()} function shall copy the C string pointed to by
+\texttt{s2} (including the terminating null byte) into the array pointed to by
+\texttt{s1}. If copying takes place between objects that overlap, the behavior
+is undefined. The function returns \texttt{s1}. There is no value used to
+indicate an error: if the arguments to \texttt{strcpy()} are correct, and the
+destination buffer is large enough, the function will never fail.
+
+Example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <stdio.h>
+#include <string.h>
+/* ... */
+static const char *penType="round";
+/* ... */
+char penText[20];
+/* ... */
+strcpy(penText, penType);
+\end{lstlisting}
+
+Important: You must ensure that the destination buffer (\texttt{s1}) is able to
+contain all the characters in the source array, including the terminating null
+byte. Otherwise, \texttt{strcpy()} will overwrite memory past the end of the
+buffer, causing a buffer overflow, which can cause the program to crash, or can
+be exploited by hackers to compromise the security of the computer.
+
+The following is a public-domain implementation of \texttt{strcpy}:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* strcpy */
+char *(strcpy)(char *restrict s1, const char *restrict s2) {
+	char *dst = s1;
+	const char *src = s2;
+	/* Do the copying in a loop.  */
+	while ((*dst++ = *src++) != '\0')
+	    ;               /* The body of this loop is left empty. */
+	/* Return the destination string.  */
+	return s1;
+}
+\end{lstlisting}
+
+\paragraph{The \texttt{strlen} function}
+\texttt{size\_t strlen(const char *s);}
+
+The \texttt{strlen()} function shall compute the number of bytes in the string
+to which \texttt{s} points, not including the terminating null byte.  It
+returns the number of bytes in the string. No value is used to indicate an
+error.
+
+The following is a public-domain implementation of \texttt{strlen}:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* strlen */
+size_t (strlen)(const char *s) {
+	const char *p = s;
+	/* Loop over the data in s.  */
+	while (*p != '\0')
+		p++;
+	return (size_t)(p - s);
+}
+\end{lstlisting}
+
+\paragraph{The \texttt{strncat} function}
+\texttt{char *strncat(char *restrict s1, const char *restrict s2, size\_t n);}
+
+The \texttt{strncat()} function shall append not more than \texttt{n} bytes (a
+null byte and bytes that follow it are not appended) from the array pointed to
+by \texttt{s2} to the end of the string pointed to by \texttt{s1}. The initial
+byte of \texttt{s2} overwrites the null byte at the end of \texttt{s1}. A
+terminating null byte is always appended to the result. If copying takes place
+between objects that overlap, the behavior is undefined. The function returns
+\texttt{s1}.
+
+The following is a public-domain implementation of \texttt{strncat}:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* strncat */
+char *(strncat)(char *restrict s1, const char *restrict s2, size_t n) {
+	char *s = s1;
+	/* Loop over the data in s1.  */
+	while (*s != '\0')
+		s++;
+	/* s now points to s1's trailing null character, now copy
+	   up to n bytes from s1 into s stopping if a null character
+	   is encountered in s2.
+	   It is not safe to use strncpy here since it copies EXACTLY n
+	   characters, NULL padding if necessary.  */
+	while (n != 0 && (*s = *s2++) != '\0') {
+		n--;
+		s++;
+	}
+	if (*s != '\0')
+		*s = '\0';
+	return s1;
+}
+\end{lstlisting}
+
+\paragraph{The \texttt{strncmp} function}
+\texttt{int strncmp(const char *s1, const char *s2, size\_t n);}
+
+The \texttt{strncmp()} function shall compare not more than \texttt{n} bytes
+(bytes that follow a null byte are not compared) from the array pointed to by
+\texttt{s1} to the array pointed to by \texttt{s2}. The sign of a non-zero
+return value is determined by the sign of the difference between the values of
+the first pair of bytes (both interpreted as type \texttt{unsigned char}) that
+differ in the strings being compared. See \texttt{strcmp} for an explanation of
+the return value.
+
+This function is useful in comparisons, as the \texttt{strcmp} function is.
+
+The following is a public-domain implementation of \texttt{strncmp}:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* strncmp */
+int (strncmp)(const char *s1, const char *s2, size_t n) {
+	unsigned char uc1, uc2;
+	/* Nothing to compare?  Return zero.  */
+	if (n == 0)
+		return 0;
+	/* Loop, comparing bytes.  */
+	while (n-- > 0 && *s1 == *s2) {
+	    /* If we've run out of bytes or hit a null, return zero
+	        since we already know *s1 == *s2.  */
+	    if (n == 0 || *s1 == '\0')
+	      	return 0;
+	    s1++;
+	    s2++;
+	}
+	uc1 = (*(unsigned char *) s1);
+	uc2 = (*(unsigned char *) s2);
+	return ((uc1 < uc2) ? -1 : (uc1 > uc2));
+}
+\end{lstlisting}
+
+\paragraph{The \texttt{strncpy} function}
+\texttt{char *strncpy(char *restrict s1, const char *restrict s2, size\_t n);}
+
+The \texttt{strncpy()} function shall copy not more than \texttt{n} bytes
+(bytes that follow a null byte are not copied) from the array pointed to by
+\texttt{s2} to the array pointed to by \texttt{s1}. If copying takes place
+between objects that overlap, the behavior is undefined. If the array pointed
+to by \texttt{s2} is a string that is shorter than \texttt{n} bytes, null bytes
+shall be appended to the copy in the array pointed to by \texttt{s1}, until
+\texttt{n} bytes in all are written. The function shall return s1; no return
+value is reserved to indicate an error.
+
+It is possible that the function will \textbf{not} return a null-terminated
+string, which happens if the \texttt{s2} string is longer than \texttt{n}
+bytes.
+
+The following is a public-domain version of \texttt{strncpy}:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* strncpy */
+char *(strncpy)(char *restrict s1, const char *restrict s2, size_t n) {
+	char *dst = s1;
+	const char *src = s2;
+	/* Copy bytes, one at a time.  */
+	while (n > 0) {
+		n--;
+		if ((*dst++ = *src++) == '\0') {
+			/* If we get here, we found a null character at the end
+			   of s2, so use memset to put null bytes at the end of
+			   s1.  */
+			memset(dst, '\0', n);
+			break;
+		}
+	}
+	return s1;
+}
+\end{lstlisting}
+
+\paragraph{The \texttt{strrchr} function}
+\texttt{char *strrchr(const char *s, int c);}
+
+\texttt{strrchr} is similar to \texttt{strchr}, except the string is searched
+right to left.
+
+The \texttt{strrchr()} function shall locate the last occurrence of \texttt{c}
+(converted to a \texttt{char}) in the string pointed to by \texttt{s}. The
+terminating null byte is considered to be part of the string. Its return value
+is similar to \texttt{strchr}'s return value.
+
+At one point in history, this function was named \texttt{rindex}. The
+\texttt{strrchr} name, however cryptic, fits the general pattern for naming.
+
+The following is a public-domain implementation of \texttt{strrchr}:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* strrchr */
+char *(strrchr)(const char *s, int c) {
+	const char *last = NULL;
+	/* If the character we're looking for is the terminating null,
+	   we just need to look for that character as there's only one
+	   of them in the string.  */
+	if (c == '\0')
+		return strchr(s, c);
+	/* Loop through, finding the last match before hitting NULL.  */
+	while ((s = strchr(s, c)) != NULL) {
+		last = s;
+		s++;
+	}
+	return (char *) last;
+}
+\end{lstlisting}
+
+\subsubsection{The less commonly-used string functions}
+The less-used functions are:
+
+\begin{itemize}
+	\item \texttt{memchr} --- Find a byte in memory
+	\item \texttt{memcmp} --- Compare bytes in memory
+	\item \texttt{memcpy} --- Copy bytes in memory
+	\item \texttt{memmove} --- Copy bytes in memory with overlapping areas
+	\item \texttt{memset} --- Set bytes in memory
+	\item \texttt{strcoll} --- Compare bytes according to a locale-specific collating sequence
+	\item \texttt{strcspn} --- Get the length of a complementary substring
+	\item \texttt{strerror} --- Get error message
+	\item \texttt{strpbrk} --- Scan a string for a byte
+	\item \texttt{strspn} --- Get the length of a substring
+	\item \texttt{strstr} --- Find a substring
+	\item \texttt{strtok} --- Split a string into tokens
+	\item \texttt{strxfrm} --- Transform string
+\end{itemize}
+
+\paragraph{Copying functions}
+\subparagraph{The \texttt{memcpy} function}
+\texttt{void *memcpy(void * restrict s1, const void * restrict s2, size\_t n);}
+
+The \texttt{memcpy()} function shall copy \texttt{n} bytes from the object
+pointed to by \texttt{s2} into the object pointed to by \texttt{s1}. If copying
+takes place between objects that overlap, the behavior is undefined. The
+function returns \texttt{s1}.
+
+Because the function does not have to worry about overlap, it can do the
+simplest copy it can.
+
+The following is a public-domain implementation of \texttt{memcpy}:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* memcpy */
+void *(memcpy)(void * restrict s1, const void * restrict s2, size_t n) {
+	char *dst = s1;
+	const char *src = s2;
+	/* Loop and copy.  */
+	while (n-- != 0)
+		*dst++ = *src++;
+	return s1;
+}
+\end{lstlisting}
+
+\subparagraph{The \texttt{memmove} function}
+\texttt{void *memmove(void *s1, const void *s2, size\_t n);}
+
+The \texttt{memmove()} function shall copy \texttt{n} bytes from the object
+pointed to by \texttt{s2} into the object pointed to by \texttt{s1}. Copying
+takes place as if the \texttt{n} bytes from the object pointed to by
+\texttt{s2} are first copied into a temporary array of \texttt{n} bytes that
+does not overlap the objects pointed to by \texttt{s1} and \texttt{s2}, and
+then the \texttt{n} bytes from the temporary array are copied into the object
+pointed to by \texttt{s1}. The function returns the value of \texttt{s1}.
+
+The easy way to implement this without using a temporary array is to check for
+a condition that would prevent an ascending copy, and if found, do a descending
+copy.
+
+The following is a public-domain, though not completely portable,
+implementation of \texttt{memmove}:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* memmove */
+void *(memmove)(void *s1, const void *s2, size_t n) {
+   /* note: these don't have to point to unsigned chars */
+   char *p1 = s1;
+   const char *p2 = s2;
+   /* test for overlap that prevents an ascending copy */
+   if (p2 < p1 && p1 < p2 + n) {
+	   /* do a descending copy */
+	   p2 += n;
+	   p1 += n;
+	   while (n-- != 0) 
+		   *--p1 = *--p2;
+   } else 
+	   while (n-- != 0) 
+		   *p1++ = *p2++;
+   return s1; 
+}
+\end{lstlisting}
+
+\subsubsection{Comparison functions}
+
+\paragraph{The \texttt{memcmp} function}
+\texttt{int memcmp(const void *s1, const void *s2, size\_t n);}
+
+The \texttt{memcmp()} function shall compare the first \texttt{n} bytes (each
+interpreted as \texttt{unsigned char}) of the object pointed to by \texttt{s1}
+to the first \texttt{n} bytes of the object pointed to by \texttt{s2}. The sign
+of a non-zero return value shall be determined by the sign of the difference
+between the values of the first pair of bytes (both interpreted as type
+\texttt{unsigned char}) that differ in the objects being compared.
+
+The following is a public-domain implementation of \texttt{memcmp}:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* memcmp */
+int (memcmp)(const void *s1, const void *s2, size_t n) {
+	const unsigned char *us1 = (const unsigned char *) s1;
+	const unsigned char *us2 = (const unsigned char *) s2;
+	while (n-- != 0) {
+		if (*us1 != *us2)
+			return (*us1 < *us2) ? -1 : +1;
+		us1++;
+		us2++;
+	}
+	return 0;
+}
+\end{lstlisting}
+
+\paragraph{The \texttt{strcoll} and \texttt{strxfrm} functions}
+\texttt{int strcoll(const char *s1, const char *s2);}
+
+\texttt{size\_t strxfrm(char *s1, const char *s2, size\_t n);}
+
+The ANSI C Standard specifies two locale-specific comparison functions.
+
+The \texttt{strcoll} function compares the string pointed to by \texttt{s1} to
+the string pointed to by \texttt{s2}, both interpreted as appropriate to the
+\texttt{LC\_COLLATE} category of the current locale. The return value is
+similar to \texttt{strcmp}.
+
+The \texttt{strxfrm} function transforms the string pointed to by \texttt{s2}
+and places the resulting string into the array pointed to by \texttt{s1}. The
+transformation is such that if the \texttt{strcmp} function is applied to the
+two transformed strings, it returns a value greater than, equal to, or less
+than zero, corresponding to the result of the \texttt{strcoll} function applied
+to the same two original strings. No more than \texttt{n} characters are placed
+into the resulting array pointed to by \texttt{s1}, including the terminating
+null character. If \texttt{n} is zero, \texttt{s1} is permitted to be a null
+pointer. If copying takes place between objects that overlap, the behavior is
+undefined. The function returns the length of the transformed string.
+
+These functions are rarely used and nontrivial to code, so there is no code for
+this section.
+
+\subsubsection{Search functions}
+
+\paragraph{The \texttt{memchr} function}
+\texttt{void *memchr(const void *s, int c, size\_t n);}
+
+The \texttt{memchr()} function shall locate the first occurrence of \texttt{c}
+(converted to an \texttt{unsigned char}) in the initial \texttt{n} bytes (each
+interpreted as \texttt{unsigned char}) of the object pointed to by \texttt{s}.
+If \texttt{c} is not found, \texttt{memchr} returns a null pointer.
+
+The following is a public-domain implementation of \texttt{memchr}:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* memchr */
+void *(memchr)(const void *s, int c, size_t n) {
+	const unsigned char *src = s;
+	unsigned char uc = c;
+	while (n-- != 0) {
+		if (*src == uc)
+			return (void *) src;
+		src++;
+	}
+	return NULL;
+}
+\end{lstlisting}
+
+\paragraph{The \texttt{strcspn}, \texttt{strpbrk}, and \texttt{strspn} functions}
+\texttt{size\_t strcspn(const char *s1, const char *s2);}
+
+\texttt{char *strpbrk(const char *s1, const char *s2);}
+
+\texttt{size\_t strspn(const char *s1, const char *s2);}
+
+The \texttt{strcspn} function computes the length of the maximum initial
+segment of the string pointed to by \texttt{s1} which consists entirely of
+characters \textbf{not} from the string pointed to by \texttt{s2}.
+
+The \texttt{strpbrk} function locates the first occurrence in the string
+pointed to by \texttt{s1} of any character from the string pointed to by
+\texttt{s2}, returning a pointer to that character or a null pointer if not
+found.
+
+The \texttt{strspn} function computes the length of the maximum initial segment
+of the string pointed to by \texttt{s1} which consists entirely of characters
+from the string pointed to by \texttt{s2}.
+
+All of these functions are similar except in the test and the return value.
+
+The following are public-domain implementations of \texttt{strcspn},
+\texttt{strpbrk}, and \texttt{strspn}:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* strcspn */
+size_t (strcspn)(const char *s1, const char *s2) {
+	const char *sc1;
+	for (sc1 = s1; *sc1 != '\0'; sc1++)
+		if (strchr(s2, *sc1) != NULL)
+			return (sc1 - s1);
+	return sc1 - s1;			/* terminating nulls match */
+}
+\end{lstlisting}
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* strpbrk */
+char *(strpbrk)(const char *s1, const char *s2) {
+	const char *sc1;
+	for (sc1 = s1; *sc1 != '\0'; sc1++)
+		if (strchr(s2, *sc1) != NULL)
+			return (char *)sc1;
+	return NULL;				/* terminating nulls match */
+}
+\end{lstlisting}
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* strspn */
+size_t (strspn)(const char *s1, const char *s2) {
+	const char *sc1;
+	for (sc1 = s1; *sc1 != '\0'; sc1++)
+		if (strchr(s2, *sc1) == NULL)
+			return (sc1 - s1);
+	return sc1 - s1;			/* terminating nulls don't match */
+}
+\end{lstlisting}
+
+\paragraph{The \texttt{strstr} function}
+\texttt{char *strstr(const char *haystack, const char *needle);}
+
+The \texttt{strstr()} function shall locate the first occurrence in the string
+pointed to by \texttt{haystack} of the sequence of bytes (excluding the
+terminating null byte) in the string pointed to by \texttt{needle}. The
+function returns the pointer to the matching string in \texttt{haystack} or a
+null pointer if a match is not found. If \texttt{needle} is an empty string,
+the function returns \texttt{haystack}.
+
+The following is a public-domain implementation of \texttt{strstr}:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* strstr */
+char *(strstr)(const char *haystack, const char *needle) {
+	size_t needlelen;
+	/* Check for the null needle case.  */
+	if (*needle == '\0')
+		return (char *) haystack;
+	needlelen = strlen(needle);
+	for (; (haystack = strchr(haystack, *needle)) != NULL; haystack++)
+		if (strncmp(haystack, needle, needlelen) == 0)
+			return (char *) haystack;
+	return NULL;
+}
+\end{lstlisting}
+
+\paragraph{The \texttt{strtok} function}
+\texttt{char *strtok(char *restrict s1, const char *restrict delimiters);}
+
+A sequence of calls to \texttt{strtok()} breaks the string pointed to by
+\texttt{s1} into a sequence of tokens, each of which is delimited by a byte
+from the string pointed to by \texttt{delimiters}. The first call in the
+sequence has \texttt{s1} as its first argument, and is followed by calls with a
+null pointer as their first argument. The separator string pointed to by
+\texttt{delimiters} may be different from call to call.
+
+The first call in the sequence searches the string pointed to by \texttt{s1}
+for the first byte that is not contained in the current separator string
+pointed to by \texttt{delimiters}. If no such byte is found, then there are no
+tokens in the string pointed to by \texttt{s1} and \texttt{strtok()} shall
+return a null pointer. If such a byte is found, it is the start of the first
+token.
+
+The \texttt{strtok()} function then searches from there for a byte (or
+multiple, consecutive bytes) that is contained in the current separator string.
+If no such byte is found, the current token extends to the end of the string
+pointed to by \texttt{s1}, and subsequent searches for a token shall return a
+null pointer. If such a byte is found, it is overwritten by a null byte, which
+terminates the current token. The \texttt{strtok()} function saves a pointer to
+the following byte, from which the next search for a token shall start.
+
+Each subsequent call, with a null pointer as the value of the first argument,
+starts searching from the saved pointer and behaves as described above.
+
+The \texttt{strtok()} function need not be reentrant. A function that is not
+required to be reentrant is not required to be thread-safe.
+
+Because the \texttt{strtok()} function must save state between calls, and you
+could not have two tokenizers going at the same time, the Single Unix Standard
+defined a similar function, \texttt{strtok\_r()}, that does not need to save
+state. Its prototype is this:
+
+\texttt{char *strtok\_r(char *s, const char *delimiters, char **lasts);}
+
+The \texttt{strtok\_r()} function considers the null-terminated string
+\texttt{s} as a sequence of zero or more text tokens separated by spans of one
+or more characters from the separator string \texttt{delimiters}. The argument
+lasts points to a user-provided pointer which points to stored information
+necessary for \texttt{strtok\_r()} to continue scanning the same string.
+
+In the first call to \texttt{strtok\_r()}, \texttt{s} points to a
+null-terminated string, \texttt{delimiters} to a null-terminated string of
+separator characters, and the value pointed to by \texttt{lasts} is ignored.
+The \texttt{strtok\_r()} function shall return a pointer to the first character
+of the first token, write a null character into \texttt{s} immediately
+following the returned token, and update the pointer to which \texttt{lasts}
+points.
+
+In subsequent calls, \texttt{s} is a null pointer and \texttt{lasts} shall be
+unchanged from the previous call so that subsequent calls shall move through
+the string \texttt{s}, returning successive tokens until no tokens remain. The
+separator string \texttt{delimiters} may be different from call to call. When
+no token remains in \texttt{s}, a NULL pointer shall be returned.
+
+The following public-domain code for \texttt{strtok} and \texttt{strtok\_r}
+codes the former as a special case of the latter:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* strtok_r */
+char *(strtok_r)(char *s, const char *delimiters, char **lasts) {
+	char *sbegin, *send;
+	sbegin = s ? s : *lasts;
+	sbegin += strspn(sbegin, delimiters);
+	if (*sbegin == '\0') {
+		*lasts = "";
+		return NULL;
+	}
+	send = sbegin + strcspn(sbegin, delimiters);
+	if (*send != '\0')
+		*send++ = '\0';
+	*lasts = send;
+	return sbegin;
+}
+/* strtok */
+char *(strtok)(char *restrict s1, const char *restrict delimiters) {
+	static char *ssave = "";
+	return strtok_r(s1, delimiters, &ssave);
+}
+\end{lstlisting}
+
+\subsubsection{Miscellaneous functions}
+These functions do not fit into one of the above categories.
+
+\paragraph{The \texttt{memset} function}
+\texttt{void *memset(void *s, int c, size\_t n);}
+
+The \texttt{memset()} function converts \texttt{c} into \texttt{unsigned char},
+then stores the character into the first \texttt{n} bytes of memory pointed to
+by \texttt{s}.
+
+The following is a public-domain implementation of \texttt{memset}:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt,label=lst:]
+#include <string.h>
+/* memset */
+void *(memset)(void *s, int c, size_t n) {
+	unsigned char *us = s;
+	unsigned char uc = c;
+	while (n-- != 0)
+		*us++ = uc;
+	return s;
+}
+\end{lstlisting}
+
+\paragraph{The \texttt{strerror} function}
+\texttt{char *strerror(int errorcode);}
+
+This function returns a locale-specific error message corresponding to the
+parameter. Depending on the circumstances, this function could be trivial to
+implement, but this author will not do that as it varies.
+
+The Single Unix System Version 3 has a variant, \texttt{strerror\_r}, with this
+prototype:
+
+\texttt{int strerror\_r(int errcode, char *buf, size\_t buflen);}
+
+This function stores the message in \texttt{buf}, which has a length of size
+\texttt{buflen}.
