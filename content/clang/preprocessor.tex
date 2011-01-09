@@ -78,369 +78,485 @@ directive. \\
 
 \paragraph{Headers}
 \textbf{The C90 standard headers list:}
-\begin{tabular}{c c c}
+
+\begin{tabular}{p{2.3cm} p{2.3cm} p{2.3cm}}
 \begin{itemize}
-	\item \texttt{\textless{}assert.h\textgreater{}}
-	\item \texttt{\textless{}ctype.h\textgreater{}}
-	\item \texttt{\textless{}errno.h\textgreater{}}
-	\item \texttt{\textless{}float.h\textgreater{}}
-	\item \texttt{\textless{}limits.h\textgreater{}}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item \textless{}assert.h\textgreater{}
+	\item \textless{}ctype.h\textgreater{}
+	\item \textless{}errno.h\textgreater{}
+	\item \textless{}float.h\textgreater{}
+	\item \textless{}limits.h\textgreater{}
 \end{itemize}
 &
 \begin{itemize}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Locale.h}{\textless{}locale.h\textgreater{}}}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Math.h}{\textless{}math.h\textgreater{}}}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Setjmp.h}{\textless{}setjmp.h\textgreater{}}}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Signal.h}{\textless{}signal.h\textgreater{}}}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Stdarg.h}{\textless{}stdarg.h\textgreater{}}}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item \textless{}locale.h\textgreater{}
+	\item \textless{}math.h\textgreater{}
+	\item \textless{}setjmp.h\textgreater{}
+	\item \textless{}signal.h\textgreater{}
+	\item \textless{}stdarg.h\textgreater{}
 \end{itemize}
 &
 \begin{itemize}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Stddef.h}{\textless{}stddef.h\textgreater{}}}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Stdio.h}{\textless{}stdio.h\textgreater{}}}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Stdlib.h}{\textless{}stdlib.h\textgreater{}}}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/String.h}{\textless{}string.h\textgreater{}}}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Time.h}{\textless{}time.h\textgreater{}}}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item \textless{}stddef.h\textgreater{}
+	\item \textless{}stdio.h\textgreater{}
+	\item \textless{}stdlib.h\textgreater{}
+	\item \textless{}string.h\textgreater{}
+	\item \textless{}time.h\textgreater{}
 \end{itemize}
 \end{tabular}
 
 \textbf{Headers added since C90:}
-\textless{}table\textgreater{}
-\textless{}td\textgreater{}
 \begin{itemize}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Complex.h}{\textless{}complex.h\textgreater{}}}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Fenv.h}{\textless{}fenv.h\textgreater{}}}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Inttypes.h}{\textless{}inttypes.h\textgreater{}}}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item \texttt{\textless{}complex.h\textgreater{}}
+	\item \texttt{\textless{}fenv.h\textgreater{}}
+	\item \texttt{\textless{}inttypes.h\textgreater{}}
 \end{itemize}
 
-\textless{}/td\textgreater{}\textless{}td\textgreater{}
 \begin{itemize}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Iso646.h}{\textless{}iso646.h\textgreater{}}}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Stdbool.h}{\textless{}stdbool.h\textgreater{}}}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Stdint.h}{\textless{}stdint.h\textgreater{}}}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item \texttt{\textless{}iso646.h\textgreater{}}
+	\item \texttt{\textless{}stdbool.h\textgreater{}}
+	\item \texttt{\textless{}stdint.h\textgreater{}}
 \end{itemize}
 
-\textless{}/td\textgreater{}\textless{}td\textgreater{}
 \begin{itemize}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Tgmath.h}{\textless{}tgmath.h\textgreater{}}}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Wchar.h}{\textless{}wchar.h\textgreater{}}}
-	\item \texttt{\href{http://en.wikipedia.org/wiki/Wctype.h}{\textless{}wctype.h\textgreater{}}}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item \texttt{\textless{}tgmath.h\textgreater{}}
+	\item \texttt{\textless{}wchar.h\textgreater{}}
+	\item \texttt{\textless{}wctype.h\textgreater{}}
 \end{itemize}
 
-\textless{}/td\textgreater{}
-\textless{}/table\textgreater{}
-
-\subsection{\#pragma}
-The \textbf{pragma} (pragmatic information) directive is part of the standard, but the meaning of any pragma depends on the software implementation of the standard that is used.
+\subsubsection{\#pragma}
+The \textbf{pragma} (pragmatic information) directive is part of the standard,
+but the meaning of any pragma depends on the software implementation of the
+standard that is used.
 
 Pragmas are used within the source program.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#pragma token(s)
+\end{lstlisting}
 
-\begin{verbatim}
-	#pragma token(s)
-\end{verbatim}
+You should check the software implementation of the C standard you intend on
+using for a list of the supported tokens. 
 
-You should check the software implementation of the C standard you intend on using for a list of the supported tokens. 
+For instance one of the most implemented preprocessor directives,
+\texttt{\#pragma once} when placed at the beginning of a header file, indicates
+that the file where it resides will be skipped if included several times by the
+preprocessor.
 
-For instance one of the most implemented preprocessor directives, \texttt{\#pragma once} when placed at the beginning of a header file, indicates that the file where it resides will be skipped if included several times by the preprocessor.
+NOTE: Other methods exist to do this action that is commonly refered as using
+\textbf{include guards}.
 
-\begin{table}[H]
-	\begin{tabular}{ p{2.00\textwidth} }
-		 NOTE: Other methods exist to do this action that is commonly refered as using \textbf{include guards}. \\
-	\end{tabular}
-\end{table}
+\subsubsection{\texttt{\#define}}
+WARNING: Preprocessor macros, although tempting, can produce quite unexpected
+results if not done right. Always keep in mind that macros are textual
+substitutions done to your source code before anything is compiled. The
+compiler does not know anything about the macros and never gets to see them.
+This can produce obscure errors, amongst other negative effects. Prefer to use
+language features, if there are equivalent (In example use \texttt{const int}
+or \texttt{enum} instead of \texttt{\#define}d constants).That said, there are
+cases, where macros are very usefull (see the \texttt{debug} macro below for an
+example).
 
-\subsection{\texttt{\#define}}
+The \texttt{\#define} directive is used to define values or macros that are
+used by the preprocessor to manipulate the program source code before it is
+compiled. Because preprocessor definitions are substituted before the compiler
+acts on the source code, any errors that are introduced by \texttt{\#define}
+are difficult to trace. 
 
-\begin{table}[H]
-	\begin{tabular}{ p{2.00\textwidth} }
-		 WARNING: Preprocessor macros, although tempting, can produce quite unexpected results if not done right. Always keep in mind that macros are textual substitutions done to your source code before anything is compiled. The compiler does not know anything about the macros and never gets to see them. This can produce obscure errors, amongst other negative effects. Prefer to use language features, if there are equivalent (In example use \texttt{const int} or \texttt{enum} instead of \texttt{\#define}d constants).That said, there are cases, where macros are very usefull (see the \texttt{debug} macro below for an example). \\
-	\end{tabular}
-\end{table}
+By convention, values defined using \texttt{\#define} are named in uppercase.
+Although doing so is not a requirement, it is considered very bad practice to
+do otherwise. This allows the values to be easily identified when reading the
+source code.
 
-The \texttt{\#define} directive is used to define values or macros that are used by the preprocessor to manipulate the program source code before it is compiled. Because preprocessor definitions are substituted before the compiler acts on the source code, any errors that are introduced by \texttt{\#define} are difficult to trace. 
+Today, \texttt{\#define} is primarily used to handle compiler and platform
+differences. E.g, a define might hold a constant which is the appropriate error
+code for a system call. The use of \texttt{\#define} should thus be limited
+unless absolutely necessary; \texttt{typedef} statements and constant variables
+can often perform the same functions more safely. 
 
-By convention, values defined using \texttt{\#define} are named in uppercase. Although doing so is not a requirement, it is considered very bad practice to do otherwise. This allows the values to be easily identified when reading the source code.
-
-Today, \texttt{\#define} is primarily used to handle compiler and platform differences. E.g, a define might hold a constant which is the appropriate error code for a system call. The use of \texttt{\#define} should thus be limited unless absolutely necessary; \texttt{typedef} statements and constant variables can often perform the same functions more safely. 
-
-Another feature of the \texttt{\#define} command is that it can take arguments, making it rather useful as a pseudo-function creator. Consider the following code: 
-
-\begin{verbatim}
-	#define ABSOLUTE_VALUE( x ) ( ((x) < 0) ? -(x) : (x) )
-	...
-	int x = -1;
-	while( ABSOLUTE_VALUE( x ) ) {
-	...
-	}
-\end{verbatim}
+Another feature of the \texttt{\#define} command is that it can take arguments,
+making it rather useful as a pseudo-function creator. Consider the following
+code: 
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#define ABSOLUTE_VALUE( x ) ( ((x) < 0) ? -(x) : (x) )
+...
+int x = -1;
+while( ABSOLUTE_VALUE( x ) ) {
+...
+}
+\end{lstlisting}
 		
-It's generally a good idea to use extra parentheses when using complex macros. Notice that in the above example, the variable ``x'' is always within its own set of parentheses. This way, it will be evaluated in whole, before being compared to 0 or multiplied by -1. Also, the entire macro is surrounded by parentheses, to prevent it from being contaminated by other code. If you're not careful, you run the risk of having the compiler misinterpret your code.
+It's generally a good idea to use extra parentheses when using complex macros.
+Notice that in the above example, the variable ``x'' is always within its own
+set of parentheses. This way, it will be evaluated in whole, before being
+compared to 0 or multiplied by -1. Also, the entire macro is surrounded by
+parentheses, to prevent it from being contaminated by other code. If you're not
+careful, you run the risk of having the compiler misinterpret your code.
 
-Because of side-effects it is considered a very bad idea to use macro functions as described above.
+Because of side-effects it is considered a very bad idea to use macro functions
+as described above.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+int x = -10;
+int y = ABSOLUTE_VALUE( x++ );
+\end{lstlisting}
 
-\begin{verbatim}
-	int x = -10;
-	int y = ABSOLUTE_VALUE( x++ );
-\end{verbatim}
+If ABSOLUTE\_VALUE() were a real function 'x' would now have the value of '-9',
+but because it was an argument in a macro it was expanded 3 times (in this
+case) and thus has a value of -7.
+Example:To illustrate the dangers of macros, consider this naive macro
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#define MAX(a,b) a>b?a:b
+\end{lstlisting}
 
-If ABSOLUTE\_VALUE() were a real function 'x' would now have the value of '-9', but because it was an argument in a macro it was expanded 3 times (in this case) and thus has a value of -7.
-\begin{comment}
-\begin{table}[H]
-	\begin{tabular}{ p{2.00\textwidth}  p{2.00\textwidth} }
-		 Example:To illustrate the dangers of macros, consider this naive macro\begin{verbatim}
-	#define MAX(a,b) a>b?a:b
-\end{verbatim}and the code
-\begin{verbatim}
-	i = MAX(2,3)+5;
-	j = MAX(3,2)+5;
-\end{verbatim}Take a look at this and consider what the the value after execution might be. The statements are turned into \begin{verbatim}
-	int i = 2>3?2:3+5;
-	int j = 3>2?3:2+5;
-\end{verbatim}Thus, after execution \texttt{i=8} and \texttt{j=3} instead of the expected result of \texttt{i=j=8}! This is why you were cautioned to use an extra set of parenthesis above, but even with these, the road is fraught with dangers. The alert reader might quickly realize that if \texttt{a} or \texttt{b} contains expressions, the definition must parenthesize every use of \texttt{a,b} in the macro definition, like this:\begin{verbatim}
-	#define MAX(a,b) ((a)>(b)?(a):(b))
-\end{verbatim}This works, provided \texttt{a,b} have no side effects. Indeed, \begin{verbatim}
-	i = 2;
-	j = 3;
-	k = MAX(i++, j++);
-\end{verbatim}would result in \texttt{k=4}, \texttt{i=3} and \texttt{j=5}. This would be highly surprising to anyone expecting \texttt{MAX()} to behave like a function.So what is the correct solution? The solution is not to use macro at all. A global, inline function, like this\begin{verbatim}
-	inline int max(int a, int b) { 
-	  return a>b?a:b 
-	}
-\end{verbatim}has none of the pitfalls above, but will not work with all types.\{\textbar{} WIDTH=``95\%'' &  NOTE: The explicit \texttt{inline} declaration is not really necessary unless the definition is in a header file, since your compiler can inline functions for you (with gcc this can be done with \texttt{-finline-functions} or \texttt{-O3}). The compiler is often better than the programmer at predicting which functions are worth inlining. Also, function calls are not really expensive (they used to be). The compiler is actually free to ignore the \texttt{inline} keyword. It is only a hint (except that \texttt{inline} is necessary in order to allow a function to be defined in a header file without generating an error message due to the function being defined in more than one translation unit). \\
-	\end{tabular}
-\end{table}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+i = MAX(2,3)+5;
+j = MAX(3,2)+5;
+\end{lstlisting}
 
-\end{comment}
+Take a look at this and consider what the the value after execution might be.
+The statements are turned into
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+int i = 2>3?2:3+5;
+int j = 3>2?3:2+5;
+\end{lstlisting}
+
+Thus, after execution \texttt{i=8} and \texttt{j=3} instead of the expected
+result of \texttt{i=j=8}! This is why you were cautioned to use an extra set of
+parenthesis above, but even with these, the road is fraught with dangers. The
+alert reader might quickly realize that if \texttt{a} or \texttt{b} contains
+expressions, the definition must parenthesize every use of \texttt{a,b} in the
+macro definition, like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#define MAX(a,b) ((a)>(b)?(a):(b))
+\end{lstlisting}
+
+This works, provided \texttt{a,b} have no side effects. Indeed, 
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+i = 2;
+j = 3;
+k = MAX(i++, j++);
+\end{lstlisting}
+
+would result in \texttt{k=4}, \texttt{i=3} and \texttt{j=5}. This would be
+highly surprising to anyone expecting \texttt{MAX()} to behave like a
+function.So what is the correct solution? The solution is not to use macro at
+all. A global, inline function, like this
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+inline int max(int a, int b) { 
+  return a>b?a:b 
+}
+\end{lstlisting}
+
+has none of the pitfalls above, but will not work with all types.\{\textbar{}
+WIDTH=``95\%'' 
+NOTE: The explicit \texttt{inline} declaration is not really
+necessary unless the definition is in a header file, since your compiler can
+inline functions for you (with gcc this can be done with
+\texttt{-finline-functions} or \texttt{-O3}). The compiler is often better than
+the programmer at predicting which functions are worth inlining. Also, function
+calls are not really expensive (they used to be). The compiler is actually free
+to ignore the \texttt{inline} keyword. It is only a hint (except that
+\texttt{inline} is necessary in order to allow a function to be defined in a
+header file without generating an error message due to the function being
+defined in more than one translation unit). \\
+
 (\textbf{\#, \#\#})
 
-The \textbf{\#} and \textbf{\#\#} operators are used with the \texttt{\#define} macro. Using \# causes the first argument after the \textbf{\#} to be returned as a string in quotes. For example, the command 
-
-\begin{verbatim}
-	#define as_string( s ) # s
-\end{verbatim}
+The \textbf{\#} and \textbf{\#\#} operators are used with the \texttt{\#define}
+macro. Using \# causes the first argument after the \textbf{\#} to be returned
+as a string in quotes. For example, the command 
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#define as_string( s ) # s
+\end{lstlisting}
 		
 will make the compiler turn this command 
-
-\begin{verbatim}
-	puts( as_string( Hello World! ) ) ;
-\end{verbatim}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+puts( as_string( Hello World! ) ) ;
+\end{lstlisting}
 		
 into 
-
-\begin{verbatim}
-	puts( "Hello World!" );
-\end{verbatim}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+puts( "Hello World!" );
+\end{lstlisting}
 		
 Using \textbf{\#\#} concatenates what's before the \textbf{\#\#} with what's after it. For example, the command 
-
-\begin{verbatim}
-	#define concatenate( x, y ) x ## y
-	...
-	int xy = 10;
-	...
-\end{verbatim}
-	
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+...
+int xy = 10;
+...
+\end{lstlisting}
 will make the compiler turn 
-
-\begin{verbatim}
-	printf( "%d", concatenate( x, y ));
-\end{verbatim}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+printf( "%d", concatenate( x, y ));
+\end{lstlisting}
 		
 into 
-
-\begin{verbatim}
-	printf( "%d", xy);
-\end{verbatim}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+printf( "%d", xy);
+\end{lstlisting}
 		
 which will, of course, display \texttt{10} to standard output.
 
-It is possible to concatenate a macro argument with a constant prefix or suffix to obtain a valid identifier as in
+It is possible to concatenate a macro argument with a constant prefix or suffix
+to obtain a valid identifier as in
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#define make_function( name ) int my_ ## name (int foo) {}
+make_function( bar )
+\end{lstlisting}
 
-\begin{verbatim}
-	#define make_function( name ) int my_ ## name (int foo) {}
-	make_function( bar )
-\end{verbatim}
-
-which will define a function called \texttt{my\_bar()}. But it isn't possible to integrate a macro argument into a constant string using the concatenation operator. In order to obtain such an effect, one can use the ANSI C property that two or more consecutive string constants are considered equivalent to a single string constant when encountered. Using this property, one can write
-
-\begin{verbatim}
-	#define eat( what ) puts( "I'm eating " #what " today." )
-	eat( fruit )
-\end{verbatim}
+which will define a function called \texttt{my\_bar()}. But it isn't possible
+to integrate a macro argument into a constant string using the concatenation
+operator. In order to obtain such an effect, one can use the ANSI C property
+that two or more consecutive string constants are considered equivalent to a
+single string constant when encountered. Using this property, one can write
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#define eat( what ) puts( "I'm eating " #what " today." )
+eat( fruit )
+\end{lstlisting}
 
 which the macro-processor will turn into
-
-\begin{verbatim}
-	puts( "I'm eating " "fruit" " today." )
-\end{verbatim}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+puts( "I'm eating " "fruit" " today." )
+\end{lstlisting}
 
 which in turn will be interpreted by the C parser as a single string constant.
 
-The following trick can be used to turn a numeric constants into string literals
+The following trick can be used to turn a numeric constants into string
+literals
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#define num2str(x) str(x)
+#define str(x) #x
+#define CONST 23
 
-\begin{verbatim}
-	#define num2str(x) str(x)
-	#define str(x) #x
-	#define CONST 23
-	
-	puts(num2str(CONST));
-\end{verbatim}
+puts(num2str(CONST));
+\end{lstlisting}
 
-This is a bit tricky, since it is expanded in 2 steps. First \texttt{num2str(CONST)} is replaced with \texttt{str(23)}, which in turn is replaced with \texttt{"23"}. This can be useful in the following example:
+This is a bit tricky, since it is expanded in 2 steps. First
+\texttt{num2str(CONST)} is replaced with \texttt{str(23)}, which in turn is
+replaced with \texttt{"23"}. This can be useful in the following example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#ifdef DEBUG
+#define debug(msg) fputs(__FILE__ ":" num2str(__LINE__) " - " msg, stderr)
+#else
+#define debug(msg)
+#endif
+\end{lstlisting}
 
-\begin{verbatim}
-	#ifdef DEBUG
-	#define debug(msg) fputs(__FILE__ ":" num2str(__LINE__) " - " msg, stderr)
-	#else
-	#define debug(msg)
-	#endif
-\end{verbatim}
+This will give you a nice debug message including the file and the line where
+the message was issued. If DEBUG is not defined however the debugging message
+will completely vanish from your code. Be careful not to use this sort of
+construct with anything that has side effects, since this can lead to bugs,
+that appear and disappear depending on the compilation parameters.
 
-This will give you a nice debug message including the file and the line where the message was issued. If DEBUG is not defined however the debugging message will completely vanish from your code. Be careful not to use this sort of construct with anything that has side effects, since this can lead to bugs, that appear and disappear depending on the compilation parameters.
-
-\subsection{macros}
-
-Macros aren't type-checked and so they do not evaluate arguments. Also, they do not obey scope properly, but simply take the string passed to them and replace each occurrence of the macro argument in the text of the macro with the actual string for that parameter (the code is literally copied into the location it was called from).
+\subsubsection{macros}
+Macros aren't type-checked and so they do not evaluate arguments. Also, they do
+not obey scope properly, but simply take the string passed to them and replace
+each occurrence of the macro argument in the text of the macro with the actual
+string for that parameter (the code is literally copied into the location it
+was called from).
 
 An example on how to use a macro:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#include <stdio.h>
 
-\begin{verbatim}
-	#include <stdio.h>
+#define SLICES 8
+#define ADD(x) ( (x) / SLICES )
+
+int main() {
+	int a = 0, b = 10, c = 6;
 	
-	 #define SLICES 8
-	 #define ADD(x) ( (x) / SLICES )
-	
-	 int main() 
-	 {
-	   int a = 0, b = 10, c = 6;
-	
-	   a = ADD(b + c);
-	   printf("%d\n", a);
-	   return 0;
-	 }
-\end{verbatim}
-
--- the result of ``a'' should be ``2'' (b + c = 16 -\textgreater{} passed to ADD -\textgreater{} 16 / SLICES -\textgreater{} result is ``2'')
-
-\begin{table}[H]
-	\begin{tabular}{ p{2.00\textwidth} }
-		 NOTE:\\It is usually bad practice to define macros in headers.A macro should be defined only when it is not possible to achieve the same result with a function or some other mechanism. Some compilers are able to optimize code to where calls to small functions are replaced with inline code, negating any possible speed advantage.Using typedefs, enums, and \texttt{inline} (in C99) is often a better option. \\
-	\end{tabular}
-\end{table}
-
-\subsection{\#error}
-The \textbf{\#error} directive halts compilation. When one is encountered the standard specifies that the compiler should emit a diagnostic containing the remaining tokens in the directive. This is mostly used for debugging purposes.
-
-\begin{verbatim}
-	#error message
-\end{verbatim}
-
-\subsection{\#undef}
-The \textbf{\#undef} directive undefines a macro. The identifier need not have been previously defined.
-
-\subsection{\#if,\#else,\#elif,\#endif (conditionals)}
-The \textbf{\#if} command checks whether a controlling conditional expression evaluates to zero or nonzero, and excludes or includes a block of code respectively. For example:
-
-\begin{verbatim}
-	#if 1
-	 /* This block will be included */
-	 #endif
-	 #if 0
-	 /* This block will not be included */
-	 #endif
-\end{verbatim}
-
-The conditional expression could contain any C operator except for the assignment operators, the increment and decrement operators, the address-of operator, and the sizeof operator.
-
-One unique operator used in preprocessing and nowhere else is the \textbf{defined} operator. It returns 1 if the macro name, optionally enclosed in parentheses, is currently defined; 0 if not.
-
-The \textbf{\#endif} command ends a block started by \texttt{\#if}, \texttt{\#ifdef}, or \texttt{\#ifndef}.
-
-The \textbf{\#elif} command is similar to \texttt{\#if}, except that it is used to extract one from a series of blocks of code. E.g.:
-
-\begin{verbatim}
-	#if /* some expression */
-	   :
-	   :
-	   :
-	 #elif /* another expression */
-	   :
-	 /* imagine many more #elifs here ... */
-	   :
-	 #else
-	 /* The optional #else block is selected if none of the previous #if or
-	    #elif blocks are selected */
-	   :
-	   :
-	 #endif /* The end of the #if block */
-\end{verbatim}
-
-\subsection{\#ifdef,\#ifndef}
-
-The \textbf{\#ifdef} command is similar to \texttt{\#if}, except that the code block following it is selected if a macro name is defined. In this respect,
-
-\begin{verbatim}
-	#ifdef NAME
-\end{verbatim}
-
-is equivalent to
-
-\begin{verbatim}
-	#if defined NAME
-\end{verbatim}
-
-The \textbf{\#ifndef} command is similar to \textbf{\#ifdef}, except that the test is reversed:
-
-\begin{verbatim}
-	#ifndef NAME
-\end{verbatim}
-
-is equivalent to
-
-\begin{verbatim}
-	#if !defined NAME
-\end{verbatim}
-
-\section{Useful Preprocessor Macros for Debugging}
-ANSI C defines some useful preprocessor macros and variables,\footnote{
-\href{http://docs.hp.com/en/B3901-90003/ch07s04.html}{HP C Compiler Reference Manual}
-}\footnote{
-\href{http://www.cppreference.com/wiki/preprocessor/preprocessor_vars}{C++ reference: Predefined preprocessor variables}
+	a = ADD(b + c);
+	printf("%d\n", a);
+	return 0;
 }
-also called ``magic constants'', include:
+\end{lstlisting}
+
+-- the result of ``a'' should be ``2'' (b + c = 16 -\textgreater{} passed to
+ADD -\textgreater{} 16 / SLICES -\textgreater{} result is ``2'')
+
+NOTE:It is usually bad practice to define macros in headers.A macro should
+be defined only when it is not possible to achieve the same result with a
+function or some other mechanism. Some compilers are able to optimize code to
+where calls to small functions are replaced with inline code, negating any
+possible speed advantage.Using typedefs, enums, and \texttt{inline} (in C99) is
+often a better option.
+
+\subsubsection{\#error}
+The \textbf{\#error} directive halts compilation. When one is encountered the
+standard specifies that the compiler should emit a diagnostic containing the
+remaining tokens in the directive. This is mostly used for debugging purposes.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#error message
+\end{lstlisting}
+
+\subsubsection{\#undef}
+The \textbf{\#undef} directive undefines a macro. The identifier need not have
+been previously defined.
+
+\subsubsection{\#if,\#else,\#elif,\#endif (conditionals)}
+The \textbf{\#if} command checks whether a controlling conditional expression
+evaluates to zero or nonzero, and excludes or includes a block of code
+respectively. For example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#if 1
+/* This block will be included */
+#endif
+#if 0
+/* This block will not be included */
+#endif
+\end{lstlisting}
+
+The conditional expression could contain any C operator except for the
+assignment operators, the increment and decrement operators, the address-of
+operator, and the sizeof operator.
+
+One unique operator used in preprocessing and nowhere else is the
+\textbf{defined} operator. It returns 1 if the macro name, optionally enclosed
+in parentheses, is currently defined; 0 if not.
+
+The \textbf{\#endif} command ends a block started by \texttt{\#if},
+\texttt{\#ifdef}, or \texttt{\#ifndef}.
+
+The \textbf{\#elif} command is similar to \texttt{\#if}, except that it is used
+to extract one from a series of blocks of code. E.g.:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#if /* some expression */
+  :
+  :
+  :
+#elif /* another expression */
+  :
+/* imagine many more #elifs here ... */
+  :
+#else
+/* The optional #else block is selected if none of the previous #if or
+   #elif blocks are selected */
+  :
+  :
+#endif /* The end of the #if block */
+\end{lstlisting}
+
+\subsubsection{\#ifdef,\#ifndef}
+The \textbf{\#ifdef} command is similar to \texttt{\#if}, except that the code
+block following it is selected if a macro name is defined. In this respect,
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#ifdef NAME
+\end{lstlisting}
+
+is equivalent to
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#if defined NAME
+\end{lstlisting}
+
+The \textbf{\#ifndef} command is similar to \textbf{\#ifdef}, except that the
+test is reversed:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#ifndef NAME
+\end{lstlisting}
+
+is equivalent to
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#if !defined NAME
+\end{lstlisting}
+
+\subsection{Useful Preprocessor Macros for Debugging}
+ANSI C defines some useful preprocessor macros and variables, also called ``magic constants'', include:
 
 \_\_FILE\_\_ =\textgreater{} The name of the current file, as a string literal\\
+
 \_\_LINE\_\_ =\textgreater{} Current line of the source file, as a numeric literal\\
+
 \_\_DATE\_\_ =\textgreater{} Current system date, as a string\\
+
 \_\_TIME\_\_ =\textgreater{} Current system time, as a string\\
+
 \_\_TIMESTAMP\_\_ =\textgreater{} Date and time (non-standard)\\
+
 \_\_cplusplus =\textgreater{} undefined when your C code is being compiled by a C compiler; 199711L when your C code is being compiled by a C++ compiler compliant with 1998 C++ standard.
+
 \_\_func\_\_ =\textgreater{} Current function name of the source file, as a string (part of C99)
+
 \_\_PRETTY\_FUNCTION\_\_ =\textgreater{} ``decorated'' Current function name of the source file, as a string (in GCC; non-standard)
 
-Some people\footnote{
-\href{http://www.jaggersoft.com/pubs/CVu11_3.html}{``Compile Time Assertions in C''} by Jon Jagger 1999
-}
-define a preprocessor macro to allow compile-time assertions, something like:
 
-\begin{verbatim}
-	#define COMPILE_TIME_ASSERT(pred) switch(0){case 0:case pred:;}
-	
-	COMPILE_TIME_ASSERT( BOOLEAN CONDITION );
-\end{verbatim}
+Some people define a preprocessor macro to allow compile-time assertions,
+something like:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#define COMPILE_TIME_ASSERT(pred) switch(0){case 0:case pred:;}
 
-Such compile-time assertions can help you debug faster than using only run-time assert() statements,
-because the compile-time assertions are all tested at compile time,
-while it is possible that a test run of a program may fail to exercise some run-time assert() statements.
+COMPILE_TIME_ASSERT( BOOLEAN CONDITION );
+\end{lstlisting}
 
-% commented out template(Wikipediapar)
-\begin{comment}
-\textbar{}C preprocessor
-\end{comment}
-
-% commented out template(reflist)
-
-\href{http://en.wikibooks.org.org/wiki/de:C-Programmierung:_Präprozessor}{de:C-Programmierung: Präprozessor}
-\href{http://en.wikibooks.org.org/wiki/fr:Programmation_C/Préprocesseur}{fr:Programmation C/Préprocesseur}
-\href{http://en.wikibooks.org.org/wiki/it:C/Compilatore_e_precompilatore/Direttive}{it:C/Compilatore e precompilatore/Direttive}
-\href{http://en.wikibooks.org.org/wiki/pl:C/Preprocesor}{pl:C/Preprocesor}
+Such compile-time assertions can help you debug faster than using only run-time
+assert() statements, because the compile-time assertions are all tested at
+compile time, while it is possible that a test run of a program may fail to
+exercise some run-time assert() statements.
