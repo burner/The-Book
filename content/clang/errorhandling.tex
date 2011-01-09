@@ -1,0 +1,147 @@
+\section{Error handling}
+C does not provide direct support for error handling (also known as exception
+handling). By convention, the programmer is expected to prevent errors from
+occurring in the first place, and test return values from functions. For
+example, -1 and NULL are used in several functions such as socket() (Unix
+socket programming) or malloc() respectively to indicate problems that the
+programmer should be aware about. In a worst case scenario where there is an
+unavoidable error and no way to recover from it, a C programmer usually tries
+to log the error and ``gracefully'' terminate the program. 
+
+There is an external variable called ``errno'', accessible by the programs
+after including \textless{}errno.h\textgreater{} --- that file comes from the
+definition of the possible errors that can occur in some Operating Systems
+(e.g. Linux --- in this case, the definition is in include/asm-generic/errno.h)
+when programs ask for resources. Such variable indexes error descriptions, that
+is accessible by the function 'strerror( errno )'. 
+
+The following code tests the return value from the library function malloc to
+see if dynamic memory allocation completed properly:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#include <stdio.h>        /* fprintf */
+#include <errno.h>        /* errno */
+#include <stdlib.h>       /* malloc, free, exit */
+#include <string.h>       /* strerror */
+
+extern int errno;
+
+int main( void ) {
+	/* pointer to char, requesting dynamic allocation of 2,000,000,000
+	 * storage elements (declared as an integer constant of type
+	 * unsigned long int). (If your system has less than 2GB of memory
+	 * available, then this call to malloc will fail) */
+	char *ptr = malloc( 2000000000UL );
+	
+	if( ptr == NULL ) {
+	puts("malloc failed");
+	puts(strerror(errno));
+	} else {
+		/* the rest of the code hereafter can assume that 2,000,000,000
+		 * chars were successfully allocated... 
+		 */
+		free( ptr );
+	}
+	exit(EXIT_SUCCESS); /* exiting program */
+}
+\end{lstlisting}
+
+The code snippet above shows the use of the return value of the library
+function malloc to check for errors. Many library functions have return values
+that flag errors, and thus should be checked by the astute programmer. In the
+snippet above, a NULL pointer returned from malloc signals an error in
+allocation, so the program exits. In more complicated implementations, the
+program might try to handle the error and try to recover from the failed memory
+allocation.
+
+\subsection{Preventing divide by zero errors}
+A common pitfall made by C programmers is not checking if a divisor is zero
+before a division command. The following code will produce a runtime error and
+in most cases, exit.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+int dividend = 50;
+int divisor = 0;
+int quotient;
+
+quotient = (dividend/divisor); /* This will produce a runtime error! */
+\end{lstlisting}
+
+For reasons beyond the scope of this document, you must check or make sure that
+a divisor is never zero. Alternatively, for *nix processes, you can stop the OS
+from terminating your process by blocking the SIGFPE signal. 
+
+The code below fixes this by checking if the divisor is zero before dividing.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#include <stdio.h> /* for fprintf and stderr */
+#include <stdlib.h> /* for exit */
+int main( void ) {
+	int dividend = 50;
+	int divisor = 0;
+	int quotient;
+	
+	if(divisor == 0) {
+		/* Example handling of this error. Writing a message to stderr, and
+		 * exiting with failure. */
+		fprintf(stderr, "Division by zero! Aborting...\n");
+		exit(EXIT_FAILURE); /* indicate failure.*/
+	}
+	quotient = dividend / divisor;
+	exit(EXIT_SUCCESS); /* indicate success.*/
+}
+\end{lstlisting}
+
+\subsection{Signals}
+In some cases, the environment may respond to a programming error in C by
+raising a signal. Signals are events raised by the host environment or
+operating system to indicate that a specific error or critical event has
+occurred (e.g. a division by zero, interrupt, and so on.) However, these
+signals are not meant to be used as a means of error catching; they usually
+indicate a critical event that will interfere with normal program flow. 
+
+To handle signals, a program needs to use the \texttt{signal.h} header file. A
+signal handler will need to be defined, and the signal() function is then
+called to allow the given signal to be handled. Some signals that are raised to
+an exception within your code (e.g. a division by zero) are unlikely to allow
+your program to recover. These signal handlers will be required to instead
+ensure that some resources are properly cleaned up before the program
+terminates.
+
+\subsection{setjmp}
+The setjmp function can be used to emulate the exception handling feature of
+other programming languages. The first call to setjmp provides a reference
+point to returning to a given function, and is valid as long as the function
+containing setjmp() doesn't return or exit. A call to longjmp causes the
+execution to return to the point of the associated setjmp call.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#include <stdio.h>
+#include <setjmp.h>
+
+jmp_buf test1;
+
+void tryjump() {
+	longjmp(test1, 3);
+}
+
+int main(void) {
+	if(setjmp(test1)==0) {
+		printf ("setjmp() returned 0.");
+		tryjump();
+	} else {
+		printf ("setjmp returned from a longjmp call."):
+	}
+}
+\end{lstlisting}
+
+The values of non-volatile variables may be corrupted when setjmp returns from
+a longjmp call. 
+
+While setjmp() and longjmp() may be used for error handling, it is generally
+preferred to use the return value of a function to indicate an error, if
+possible. 

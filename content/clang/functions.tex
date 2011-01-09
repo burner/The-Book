@@ -1,0 +1,559 @@
+\section{Procedures and functions}
+In C programming, all executable code resides within a \textbf{function}. A
+function is a named block of code that performs a task and then returns control
+to a caller. Note that other programming languages may distinguish between a
+function, subroutine, subprogram, procedure, or method --
+in C, these are all functions.
+
+A function is often executed (called) several times, from several different
+places, during a single execution of the program.  After finishing a
+subroutine, the program will branch back (return) to the point after the call.
+
+Functions are a powerful programming tool.
+
+As a basic example, suppose you are writing code to print out the first 5
+squares of numbers, do some intermediate processing, then print the first 5
+squares again. We could write it like this:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#include <stdio.h>
+
+int main(void) {
+	int i;
+	for(i=1; i <= 5; i++) {
+	   printf("%d ", i*i);
+	}
+	for(i=1; i <= 5; i++) {
+	   printf("%d ", i*i);
+	}
+return 0;
+\end{lstlisting}
+
+We have to write the same loop twice. We may want to somehow put this code in a
+separate place and simply jump to this code when we want to use it. This would
+look like:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+#include <stdio.h>
+
+void Print_Squares(void) {
+int i;
+for(i=1; i <=5; i++) {
+	printf("%d ", i*i);
+}
+
+int main(void) {
+	Print_Squares();
+	Print_Squares();
+	return 0;
+}
+\end{lstlisting}
+
+This is precisely what functions are for.
+
+\subsection{More on functions}
+A function is like a black box. It takes in input, does something with it, then
+spits out an answer.
+
+Note that a function may not take any inputs at all, or it may not return
+anything at all. In the above example, if we were to make a function of that
+loop, we may not need any inputs, and we aren't returning anything at all (Text
+output doesn't count --- when we speak of \emph{returning} we mean to say
+meaningful data that the program can use).
+
+We have some terminology to refer to functions:
+\begin{itemize}
+	\item A function, call it \emph{f}, that uses another function \emph{g}, is
+said to \emph{call} \emph{g}. For example, \emph{f} calls \emph{g} to print the
+squares of ten numbers.
+	\item A function's inputs are known as its \emph{arguments}
+	\item A function \emph{g} that gives some kind of answer back to \emph{f}
+is said to \emph{return} that answer. For example, \emph{g} returns the sum of
+its arguments.
+\end{itemize}
+
+\section{Writing functions in C}
+It's always good to learn by example. Let's write a function that will return the square of a number.
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+int square(int x) {
+	  int square_of_x;
+	  square_of_x = x * x;
+	  return square_of_x;
+}
+\end{lstlisting}
+
+To understand how to write such a function like this, it may help to look at
+what this function does as a whole. It takes in an \texttt{int}, x, and squares
+it, storing it in the variable square\_of\_x. Now this value is returned. 
+
+The first int at the beginning of the function declaration is the type of data
+that the function returns. In this case when we square an integer we get an
+integer, and we are returning this integer, and so we write \texttt{int} as the
+return type.
+
+Next is the name of the function. It is good practice to use meaningful and
+descriptive names for functions you may write. It may help to name the function
+after what it is written to do. In this case we name the function ``square'',
+because that's what it does --- it squares a number.
+
+Next is the function's first and only argument, an \texttt{int}, which will be
+referred to in the function as x. This is the function's \emph{input}. 
+
+In between the braces is the actual guts of the function. It declares an
+integer variable called square\_of\_x that will be used to hold the value of
+the square of x. Note that the variable square\_of\_x can \textbf{only} be used
+within this function, and not outside. We'll learn more about this sort of
+thing later, and we will see that this property is very useful. 
+
+We then assign x multiplied by x, or x squared, to the variable square\_of\_x,
+which is what this function is all about. Following this is a \texttt{return}
+statement. We want to return the value of the square of x, so we must say that
+this function returns the contents of the variable square\_of\_x.
+
+Our brace to close, and we have finished the declaration.
+
+Written in a more concise manner, this code performs the exact same function as
+the above:
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+int square(int x) {
+	return x * x;
+}
+\end{lstlisting}
+
+Note this should look familiar --- you have been writing functions already, in
+fact --- main is a function that is always written.
+
+\subsubsection{In general}
+In general, if we want to declare a function, we write
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+{
+  /* code */
+} 
+\end{lstlisting}
+
+We've previously said that a function can take no arguments, or can return
+nothing, or both. What do we write if we want the function to return nothing?
+We use C's \texttt{void} keyword. \texttt{void} basically means ``nothing'' ---
+so if we want to write a function that returns nothing, for example, we write
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+void sayhello(int number\_of\_times) {
+	 int i;
+	 for(i=1; i <= number_of_times; i++)
+	 {
+	    printf("Hello!\n");
+	 }
+}
+\end{lstlisting}
+
+Notice that there is no \texttt{return} statement in the function above. Since
+there's none, we write \texttt{void} as the return type.
+
+What about a function that takes no arguments? If we want to do this, we can
+write for example
+
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+float calculate_number(void) {
+	float to_return=1;
+	int i;
+	for(i=0; i < 100; i++) {
+		to_return += 1;
+		to_return = 1/to_return;
+	}
+	return to_return;
+}
+\end{lstlisting}
+
+Notice this function doesn't take any inputs, but merely returns a number
+calculated by this function.
+
+Naturally, you can combine both void return and void in arguments together to
+get a valid function, also.
+
+\subsubsection{Recursion}
+Here's a simple function that does an infinite loop. It prints a line and calls
+itself, which again prints a line and calls itself again, and this continues
+until the stack overflows and the program crashes. A function calling itself is
+called recursion, and normally you will have a conditional that would stop the
+recursion after a small, finite number of steps.
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+	     // don't run this!
+void infinite_recursion() {
+	printf("Infinite loop!\n");
+	infinite_recursion();
+}
+\end{lstlisting}
+
+A simple check can be done like this. Note that ++depth is used so the
+increment will take place before the value is passed into the function.
+Alternatively you can increment on a separate line before the recursion call.
+If you say print\_me(3,0); the function will print the line Recursion 3 times.
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+void print_me(int j, int depth) {
+	if(depth < j) {
+	    printf("Recursion! depth = %d j = %d\n",depth,j); //j keeps its value
+	    print_me(j, ++depth);
+	}
+}
+\end{lstlisting}
+
+Recursion is most often used for jobs such as directory tree scans, seeking for
+the end of a linked list, parsing a tree structure in a database and
+factorising numbers (and finding primes) among other things.
+
+\subsubsection{Static Functions}
+If a function is to be called only from within the file in which it is
+declared, it is appropriate to declare it as a static function. When a function
+is declared static, the compiler will now compile to an object file in a way
+that prevents the function from being called from code in other files. Example:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+static short compare( short a, short b ) {
+	return (a+4 < b)? a : b;
+}
+\end{lstlisting}
+
+\subsection{Using C functions}
+We can now \emph{write} functions, but how do we use them? When we write main,
+we place the function outside the braces that encompass main.
+
+When we want to use that function, say, using our \texttt{calculate\_number}
+function above, we can write something like
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+float f;
+f = calculate_number();
+\end{lstlisting}
+
+If a function takes in arguments, we can write something like
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+int square_of_10;
+square_of_10 = square(10);
+\end{lstlisting}
+
+If a function doesn't return anything, we can just say
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+say_hello();
+\end{lstlisting}
+
+since we don't need a variable to catch its return value.
+
+\subsection{Functions from the C Standard Library}
+While the C language doesn't itself contain functions, it is usually linked
+with the C Standard Library. To use this library, you need to add an \#include
+directive at the top of the C file, which may be one of the following:
+\begin{itemize}
+\item \texttt{\textless{}assert.h\textgreater{}}
+\item \texttt{\textless{}ctype.h\textgreater{}}
+\item \texttt{\textless{}errno.h\textgreater{}}
+\item \texttt{\textless{}float.h\textgreater{}}
+\end{itemize}
+\begin{itemize}
+\item \texttt{\textless{}limits.h\textgreater{}}
+\item \texttt{\textless{}locale.h\textgreater{}}
+\item \texttt{\textless{}math.h\textgreater{}}
+\item \texttt{\textless{}setjmp.h\textgreater{}}
+\end{itemize}
+\begin{itemize}
+\item \texttt{\textless{}signal.h\textgreater{}}
+\item \texttt{\textless{}stdarg.h\textgreater{}}
+\item \texttt{\textless{}stddef.h\textgreater{}}
+\item \texttt{\textless{}stdio.h\textgreater{}}
+\end{itemize}
+\begin{itemize}
+\item \texttt{\textless{}stdlib.h\textgreater{}}
+\item \texttt{\textless{}string.h\textgreater{}}
+\item \texttt{\textless{}time.h\textgreater{}}
+\end{itemize}
+
+The functions available are:
+\begin{table*}[h]
+\scriptsize
+\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{6.5cm}|}
+\hline
+\textbf{ \texttt{\textless{}assert.h\textgreater{}}} & \textbf{ \texttt{\textless{}limits.h\textgreater{}}} & \textbf{ \texttt{\textless{}signal.h\textgreater{}}} & \textbf{ \texttt{\textless{}stdlib.h\textgreater{}}} \\ \hline
+\begin{itemize}
+	\item assert(int)
+\end{itemize}
+ &  \begin{itemize}
+	\item (constants only)
+\end{itemize}
+ &  \begin{itemize}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item int raise(int sig). This
+	\item void* signal(int sig, void (*func)(int))
+\end{itemize}
+ &  \begin{itemize}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item atof(char*), atoi(char*), atol(char*)
+	\item strtod(char * str, char ** endptr ), strtol(char *str, char **endptr), strtoul(char *str, char **endptr)
+	\item rand(), srand()
+	\item malloc(size\_t), calloc (size\_t elements, size\_t elementSize), realloc(void*, int)
+	\item free (void*)
+	\item exit(int), abort()
+	\item atexit(void (*func)())
+	\item getenv
+	\item system
+	\item qsort(void *, size\_t number, size\_t size, int (*sortfunc)(void*, void*))
+	\item abs, labs
+	\item div, ldiv
+\end{itemize}
+ \\ \hline
+		\textbf{ \texttt{\textless{}ctype.h\textgreater{}}} & \textbf{ \texttt{\textless{}locale.h\textgreater{}}} & \textbf{ \texttt{\textless{}stdarg.h\textgreater{}}} & \textbf{ \texttt{\textless{}string.h\textgreater{}}} \\ \hline
+		 \begin{itemize}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item isalnum, isalpha, isblank
+	\item iscntrl, isdigit, isgraph
+	\item islower, isprint, ispunct
+	\item isspace, isupper, isxdigit
+	\item tolower, toupper
+\end{itemize}
+ &  \begin{itemize}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item struct lconv* localeconv(void);
+	\item char* setlocale(int, const char*);
+\end{itemize}
+ &  \begin{itemize}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item va\_start (va\_list, ap)
+	\item va\_arg (ap, (type))
+	\item va\_end (ap)
+	\item va\_copy (va\_list, va\_list)
+\end{itemize}
+ &  \begin{itemize}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item memcpy, memmove
+	\item memchr, memcmp, memset
+	\item strcat, strncat, strchr, strrchr
+	\item strcmp, strncmp, strccoll
+	\item strcpy, strncpy
+	\item strerror
+	\item strlen
+	\item strspn, strcspn
+	\item strpbrk
+	\item strstr
+	\item strtok
+	\item strxfrm
+\end{itemize}
+ \\ \hline
+		\textbf{ errno.h} & \textbf{ math.h} & \textbf{ stddef.h} & \textbf{ time.h} \\ \hline
+		 \begin{itemize}
+	\item (errno)
+\end{itemize}
+ &  \begin{itemize}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item sin, cos, tan
+	\item asin, acos, atan, atan2
+	\item sinh, cosh, tanh
+	\item ceil
+	\item exp
+	\item fabs
+	\item floor
+	\item fmod
+	\item frexp
+	\item ldexp
+	\item log, log10
+	\item modf
+	\item pow
+	\item sqrt
+\end{itemize}
+ &  \begin{itemize}
+	\item offsetof macro
+\end{itemize}
+ &  \begin{itemize}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item asctime (struct tm* tmptr)
+	\item clock\_t clock()
+	\item char* ctime(const time\_t* timer)
+	\item double difftime(time\_t timer2, time\_t timer1)
+	\item struct tm* gmtime(const time\_t* timer)
+	\item struct tm* gmtime\_r(const time\_t* timer, struct tm* result)
+	\item struct tm* localtime(const time\_t* timer)
+	\item time\_t mktime(struct tm* ptm)
+	\item time\_t time(time\_t* timer)
+	\item char * strptime(const char* buf, const char* format, struct tm* tptr)
+	\item time\_t timegm(struct tm *brokentime)
+\end{itemize}
+ \\ \hline
+		\textbf{ float.h} & \textbf{ setjmp.h} & \multicolumn{2}{|c|}{\textbf{ stdio.h}} \\ \hline
+		 \begin{itemize}
+	\item (constants
+\end{itemize}
+ &  \begin{itemize}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item int setjmp(jmp\_buf env)
+	\item void longjmp(jmp\_buf env, int value)
+\end{itemize}
+ &  \begin{itemize}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item fclose
+	\item fopen, freopen
+	\item remove
+	\item rename
+	\item rewind
+	\item tmpfile
+	\item clearerr
+	\item feof, ferror
+	\item fflush
+	\item fgetpos, fsetpos
+	\item fgetc, fputc
+	\item fgets, fputs
+	\item ftell, fseek
+\end{itemize}
+ &  \begin{itemize}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+	\item fread, fwrite
+	\item getc, putc
+	\item getchar, putchar, fputchar
+	\item gets, puts
+	\item printf, vprintf
+	\item fprintf, vfprintf
+	\item sprintf, snprintf, vsprintf, vsnprintf
+	\item perror
+	\item scanf, vscanf
+	\item fscanf, vfscanf
+	\item sscanf, vsscanf
+	\item setbuf, setvbuf
+	\item tmpnam
+	\item ungetc
+\end{itemize}
+ \\ \hline
+	\end{tabular}
+\end{table*}
+
+\subsection{Variable-length argument lists}
+Functions with variable-length argument lists are functions that can take a
+varying number of arguments. An example in the C standard library is the
+\texttt{printf} function, which can take any number of arguments depending on
+how the programmer wants to use it.
+
+C programmers rarely find the need to write new functions with variable-length
+arguments.  If they want to pass a bunch of things to a function, they
+typically define a structure to hold all those things -- perhaps a linked list,
+or an array -- and call that function with the data in the arguments.
+
+However, you may occasionally find the need to write a new function that
+supports a variable-length argument list.  To create a function that can accept
+a variable-length argument list, you must first include the standard library
+header \texttt{stdarg.h}. Next, declare the function as you would normally.
+Next, add as the last argument an elipsis (``...''). This indicates to the
+compiler that a variable list of arguments is to follow. For example, the
+following function declaration is for a function that returns the average of a
+list of numbers:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+	 float average (int n_args, ...);
+\end{lstlisting}
+
+Note that because of the way variable-length arguments work, we must somehow,
+in the arguments, specify the number of elements in the variable-length part of
+the arguments. In the \texttt{average} function here, it's done through an
+argument called \texttt{n\_args.} In the \texttt{printf} function, it's done
+with the format codes that you specify in that first string in the arguments
+you provide.
+
+Now that the function has been declared as using variable-length arguments, we
+must next write the code that does the actual work in the function.  To access
+the numbers stored in the variable-length argument list for our
+\texttt{average} function, we must first declare a variable for the list
+itself:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+	 va_list myList;
+\end{lstlisting}
+
+The \texttt{va\_list} type is a type declared in the \texttt{stdarg.h} header
+that basically allows you to keep track of your list. To start actually using
+\texttt{myList}, however, we must first assign it a value. After all, simply
+declaring it by itself wouldn't do anything. To do this, we must call
+\texttt{va\_start}, which is actually a macro defined in \texttt{stdarg.h.} In
+the arguments to \texttt{va\_start}, you must provide the \texttt{va\_list}
+variable you plan on using, as well as the name of the last variable appearing
+before the ellipsis in your function declaration:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+float average (int n\_args, ...) {
+	va_list myList;
+	va_start (myList, n_args);
+}
+\end{lstlisting}
+
+Now that \texttt{myList} has been prepped for usage, we can finally start
+accessing the variables stored in it. To do so, use the \texttt{va\_arg} macro,
+which pops off the next argument on the list. In the arguments to
+\texttt{va\_arg}, provide the \texttt{va\_list} variable you're using, as well
+as the primitive data type (e.g. \texttt{int}, \texttt{char}) that the variable
+you're accessing should be:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+float average (int n\_args, ...) {
+	va_list myList;
+	va_start (myList, n_args);
+	
+	int myNumber = va_arg (myList, int);
+}
+\end{lstlisting}
+
+By popping \texttt{n\_args} integers off of the variable-length argument list,
+we can manage to find the average of the numbers:
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+float average (int n\_args, ...) {
+	va_list myList;
+	va_start (myList, n_args);
+	
+	int numbersAdded = 0;
+	int sum = 0;
+	 
+	while (numbersAdded < n_args) {
+		int number = va_arg (myList, int); // Get next number from list
+		sum += number;
+		numbersAdded += 1;
+	}
+	 
+	float avg = (float)(sum) / (float)(numbersAdded); // Find the average
+	return avg;
+}
+\end{lstlisting}
+
+By calling \texttt{average (2, 10, 20)}, we get the average of \texttt{10} and
+\texttt{20}, which is \texttt{15.}
