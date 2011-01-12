@@ -59,7 +59,6 @@ scripts, namely angle brackets:
 
 Note the spaces between the brackets and the actual condition -- don't forget
 them in your own scripts. The equivalent of the example above in shorthand is 
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=A shorter test for string equality,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:A shorter test for string equality]
@@ -73,6 +72,10 @@ conditions, but Bourne Shell recognizes the following:
 
 \textbf{File conditions}
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 	\item[-b \emph{file}] \emph{file} exists and is a block special file
 	\item[-c \emph{file}] \emph{file} exists and is a character special file
 	\item[-d \emph{file}] \emph{file} exists and is a directory
@@ -91,6 +94,10 @@ n is optional, default 1
 
 \textbf{String conditions}
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 	\item[-n \emph{s}] \emph{s} has non-zero length
 	\item[-z \emph{s}] \emph{s} has zero length
 	\item[\emph{s0} = \emph{s1}] \emph{s0} and \emph{s1} are identical
@@ -101,6 +108,10 @@ environment variable has a value)
 
 \textbf{Integer conditions}
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 	\item[\emph{n0} -eq \emph{n1}] \emph{n0} is equal to \emph{n1}
 	\item[\emph{n0} -ge \emph{n1}] \emph{n0} is greater than or equal to \emph{n1}
 	\item[\emph{n0} -gt \emph{n1}] \emph{n0} is strictly greater than \emph{n1}
@@ -111,6 +122,10 @@ environment variable has a value)
 
 Finally, conditions can be combined and grouped:
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 	\item[\textbackslash{}(\emph{B}\textbackslash{})] Parentheses are used for
 grouping conditions (don't forget the backslashes). A grouped condition
 (\emph{B}) is true if \emph{B} is true.
@@ -132,22 +147,25 @@ supports two forms of conditional execution, the \textbf{if}-statement and the
 \textbf{case}-statement.
 
 The \textbf{if}-statement is the most general of the two. It's general form is
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:]
-\textbf{if} \emph{command-list}\\
-\textbf{then} \emph{command-list}\\
-\textbf{elif} \emph{command-list}\\
-\textbf{then} \emph{command-list}\\
+t}
+then command-list
+elif command-list
+then command-list
 ...
-\textbf{else} \emph{command-list}\\
-\textbf{fi}
+else command-list
+fi
 \end{lstlisting}
 
 This command is to be interpreted as follows:
 
 \begin{enumerate}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 	\item The command list following the \textbf{if} is executed.
 	\item If the last command returns a status zero, the command list following
 the first \textbf{then} is executed and the statement terminates after
@@ -175,8 +193,6 @@ the last one executed in the list.
 In most cases though, for the sake of readability and maintainability, you will
 want to limit yourself to one command for a condition. In most cases this
 command will be a use of the 'test' tool.
-
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Example of a simple if statement,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:Example of a simple if statement]
@@ -191,7 +207,6 @@ fi
 YES
 \end{verbatim}
 \normalsize
-
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Example of an if statement with an else clause,language={bash},
@@ -209,7 +224,6 @@ fi
 NO
 \end{verbatim}
 \normalsize
-
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Example of a full if statement with an else clause and two elifs,language={bash},
@@ -244,16 +258,14 @@ arguments to scripts. For example, if you write a script that uses switches to
 identify command line arguments, you know that there are only a limited number
 of legal switches. The \textbf{case}-statement is an elegant alternative to a
 potentially messy \textbf{if}-statement in such a case.
-
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=The general form of the case statement is,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:The general form of the case statement is]
-\textbf{case} \emph{value} \textbf{in}\\
-\emph{pattern0} \textbf{)} \emph{command-list-0} \textbf{;;}\\
-\emph{pattern1} \textbf{)} \emph{command-list-1} \textbf{;;}\\
-...\\
-\textbf{esac}
+case value in
+pattern0 ) command-list-0 ;;
+pattern1 ) command-list-1 ;;
+...
+esac
 \end{lstlisting}
 
 The value can be any value, including an environment variable. Each pattern is
@@ -261,8 +273,6 @@ a regular expression and the command list executed is the one for the first
 pattern that matches the value (so make sure you don't have overlapping
 patterns). Each command list must end with a double semicolon. The return
 status is zero if the statement terminates without syntax errors.
-
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=The last 'if'-example revisited,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:The last 'if'-example revisited]
@@ -295,7 +305,6 @@ system, this means that the \textbf{if}-statement is more general than the
 \textbf{case}-statement.
 
 Let's look at a slightly larger example, just to put the two together and compare:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:]
@@ -325,10 +334,9 @@ to see if the value of variable \$2 is not null and the exit status of 'test'
 to determine how the \textbf{if}-statement proceeds. If there are enough
 arguments, we assume the first argument is a name and start building the
 sentence that is the result of our script. Otherwise we write an error message
-(to stderr, the place to write errors; read all about it in
-\href{http://en.wikibooks.org.org/wiki/Bourne_Shell_Scripting/Files_and_streams}{Files
-and streams}) and exit the script with a non-zero return value. Note that this
-else statement has a command list with more than one command in it.
+(to stderr, the place to write errors; read all about it in Files and streams)
+and exit the script with a non-zero return value. Note that this else statement
+has a command list with more than one command in it.
 
 Assuming we got through the \textbf{if}-statement without trouble, we get to
 the \textbf{case}-statement. Here we check the value of variable \$2, which
@@ -376,15 +384,20 @@ The \textbf{while}-statement is the simplest and most straightforward form of
 repetition statement in Bourne shell. It is also the most general. Its general
 form is this:
 
-% commented out template(bcode:Example)
-\begin{comment}
-\textbf{while} \emph{command-list1}
-\textbf{do} \emph{command-list2}
-\textbf{done}
-\end{comment}
+\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={C},
+breaklines=true,xleftmargin=15pt, label=lst:]
+while command-list1
+do command-list2
+done
+\end{lstlisting}
 
 The \textbf{while}-statement is interpreted as follows:
 \begin{enumerate}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 	\item Execute the commands in command list 1.
 	\item If the exit status of the last command is non-zero, the statement
 terminates.
@@ -399,7 +412,6 @@ the \textbf{while}-statement and only the last command in that list actually
 controls the statement. But in reality you will probably want to limit yourself
 to one command and, as with the \textbf{if}-statement, you will usually use the
 'test' program for that command.
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=A while loop that prints all the values between 0 and 10,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:A while loop that prints all the values between 0 and 10]
@@ -433,7 +445,6 @@ The \textbf{while}-statement is commonly used to deal with situations where a
 script can have an indeterminate number of command-line arguments, by using the
 \textbf{shift} command and the special '\$\#' variable that indicates the
 number of command-line arguments:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Printing all the command-line arguments,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:Printing all the command-line arguments]
@@ -450,7 +461,6 @@ done
 The \textbf{until}-statement is also a repetition statement, but it is sort of
 the semantic opposite of the \textbf{while}-statement. The general form of the
 \textbf{until}-statement is
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:]
@@ -471,7 +481,6 @@ poll for the existence of some condition or to wait until some condition is
 met. For instance, assume some process is running that will write 10000 lines
 to a certain file. The following \textbf{until}-statement waits for the file to
 have grown to 10000 lines:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Waiting for myfile.txt to grow to 10000 lines,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:Waiting for myfile.txt to grow to 10000 lines]
@@ -492,7 +501,6 @@ available in the shell.
 
 The \textbf{for}-statement loops over a fixed, finite set of values. Its
 general form is
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:]
@@ -643,7 +651,6 @@ The parentheses are far more interesting. When you group a command list with
 parentheses, it is executed... in a separate process. This means that whatever
 you do in the command list doesn't affect the environment in which you gave the
 command. Consider the example above again, with braces and parentheses:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Create a directory and change into it all in one go grouped with curly braces,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:Create a directory and change into it all in one go grouped with curly braces]
@@ -672,20 +679,20 @@ Note that your working directory is still the same
 \normalsize
 
 Here's another one:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Creating shell variables in the current and in a new environment,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:Creating shell variables in the current and in a new environment]
 $ VAR0=A
 $ (VAR1=B)
-$ echo \"$VAR0\" \"$VAR1\"
+$ echo "$VAR0" "$VAR1"
 \end{lstlisting}
 
 \scriptsize
 \begin{verbatim}
 "A""
-VAR1 was created in a separate process with its own environment,
-so it doesn't exist in the original environment
+VAR1 was created in a separate process with its own 
+environment, so it doesn't exist in the original 
+environment
 \end{verbatim}
 \normalsize
 
@@ -702,7 +709,6 @@ original Bourne Shell used grave accents (`\emph{command}`), which is still
 generally supported by most shells. Later on the POSIX 1003.1 standard added
 the \textbf{\$(} \emph{command} \textbf{)} notation. Consider the following
 examples:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Making a daily backup (old-skool),language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:Making a daily backup (old-skool)]
@@ -750,6 +756,10 @@ to the shell and are automatically recognized as part of regular expressions.
 The Bourne shell recognizes the following metacharacters:
 
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 	\item[\textbf{*}] Matches any string.
 	\item[?] Matches any single character.
 	\item[[\emph{characters}]] Matches any character enclosed in the angle
@@ -873,6 +883,10 @@ together) the quoting mechanisms will help you deal with that problem as well.
 There are three quoting mechanisms in the Bourne Shell:
 
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 	\item[\textbackslash{}] backslash, for single character quoting.
 	\item[''] single quotes, to quote entire strings.
 	\item[``''] double quotes, to quote entire strings but still allow for some special characters.

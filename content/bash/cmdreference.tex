@@ -31,15 +31,15 @@ your shell scripts. The following table gives an overview: See the table \ref{ta
 		 read variable [...] &  Read a line from the input and assign each individual word to a listed variable (in order). Any leftover words are assigned to the last variable. \\ \hline
 		 readonly name ... &  Make the listed variables read-only. \\ \hline
 		 return [n] &  Return from a shell function. If an integer argument is specified it will be the exit status of the function. \\ \hline
-		 set [\{ -options \textbar{} +options \textbar{} -- \}] arg ... &  The set command performs three different functions.With no arguments, it lists the values of all shell variables.If options are given, it sets the specified option flags or clears them.The third use of the set command is to set the values of the shell's positional parameters to the specified args. To change the positional parameters without changing any options, use “--” as the first argument to set. If no args are present, the set command will clear all the positional parameters (equivalent to executing “shift \$\#”.) \\ \hline
 	\end{tabular}
 	\caption{Bourne Shell command reference 1}
 	\label{tab:refcmd1} 
 \end{table*}
 
 \begin{table*}[H]
-	\begin{tabular}{|c|p{10cm}|}
+	\begin{tabular}{|c|p{8cm}|}
 		\hline
+		 set [\{ -options \textbar{} +options \textbar{} -- \}] arg ... &  The set command performs three different functions.With no arguments, it lists the values of all shell variables.If options are given, it sets the specified option flags or clears them.The third use of the set command is to set the values of the shell's positional parameters to the specified args. To change the positional parameters without changing any options, use “--” as the first argument to set. If no args are present, the set command will clear all the positional parameters (equivalent to executing “shift \$\#”.) \\ \hline
 		 shift [n] &  Shift the positional parameters n times. \\ \hline
 		 test &  See Control flow. \\ \hline
 		 trap [action] signal ... &  Cause the shell to parse and execute action when any of the specified signals are received. \\ \hline
