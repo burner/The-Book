@@ -1,4 +1,5 @@
 \section{Strings}
+\newcounter{stringcnt}
 A \textbf{string} in C is merely an array of characters. The length of a string
 is determined by a terminating null character: \texttt{'\textbackslash{}0'}.
 So, a string with the contents, say, \texttt{"abc"} has four characters:
@@ -55,8 +56,8 @@ both strings.
 
 Example:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <stdio.h>
 #include <string.h>
 ...
@@ -70,6 +71,7 @@ strcpy(penText, colors[penColor]);
 strcat(penText, widths[penThickness]);
 printf("My pen is %s\n", penText); // prints 'My pen is GreenThick'
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 Before calling \texttt{strcat()}, the destination must currently contain a null
 terminated string or the first character must have been initialized with the
@@ -77,8 +79,8 @@ null character (e.g. \texttt{penText[0] = '\textbackslash{}0';}).
 
 The following is a public-domain implementation of \texttt{strcat}:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* strcat */
 char *(strcat)(char *restrict s1, const char *restrict s2) {
@@ -91,6 +93,7 @@ char *(strcat)(char *restrict s1, const char *restrict s2) {
 	return s1;
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \paragraph{The \texttt{strchr} function}
 \texttt{char *strchr(const char *s, int c);}
@@ -108,8 +111,8 @@ At one point in history, this function was named \texttt{index}. The
 
 The following is a public-domain implementation of \texttt{strchr}:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* strchr */
 char *(strchr)(const char *s, int c) {
@@ -121,6 +124,7 @@ char *(strchr)(const char *s, int c) {
 	return ( (*s == c) ? (char *) s : NULL );
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \paragraph{The \texttt{strcmp} function}
 \texttt{int strcmp(const char *s1, const char *s2);}
@@ -155,11 +159,12 @@ strings that two pointers point to.
 
 This function is useful in comparisons, e.g.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 if (strcmp(s, "whatever") == 0) /* do something */
     ;
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 The collating sequence used by \texttt{strcmp()} is equivalent to the machine's
 native character set. The only guarantee about the order is that the digits
@@ -167,8 +172,8 @@ from \texttt{'0'} to \texttt{'9'} are in consecutive order.
 
 The following is a public-domain implementation of \texttt{strcmp}:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* strcmp */
 int (strcmp)(const char *s1, const char *s2) {
@@ -187,6 +192,7 @@ int (strcmp)(const char *s1, const char *s2) {
 	return ((uc1 < uc2) ? -1 : (uc1 > uc2));
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \paragraph{The \texttt{strcpy} function}
 \texttt{char *strcpy(char *restrict s1, const char *restrict s2);}
@@ -203,8 +209,8 @@ destination buffer is large enough, the function will never fail.
 
 Example:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <stdio.h>
 #include <string.h>
 /* ... */
@@ -214,6 +220,7 @@ char penText[20];
 /* ... */
 strcpy(penText, penType);
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 Important: You must ensure that the destination buffer (\texttt{s1}) is able to
 contain all the characters in the source array, including the terminating null
@@ -223,8 +230,8 @@ be exploited by hackers to compromise the security of the computer.
 
 The following is a public-domain implementation of \texttt{strcpy}:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* strcpy */
 char *(strcpy)(char *restrict s1, const char *restrict s2) {
@@ -237,6 +244,7 @@ char *(strcpy)(char *restrict s1, const char *restrict s2) {
 	return s1;
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \paragraph{The \texttt{strlen} function}
 \texttt{size\_t strlen(const char *s);}
@@ -249,8 +257,8 @@ error.
 The following is a public-domain implementation of \texttt{strlen}:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* strlen */
 size_t (strlen)(const char *s) {
@@ -261,6 +269,7 @@ size_t (strlen)(const char *s) {
 	return (size_t)(p - s);
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \paragraph{The \texttt{strncat} function}
 \texttt{char *strncat(char *restrict s1, const char *restrict s2, size\_t n);}
@@ -275,8 +284,8 @@ between objects that overlap, the behavior is undefined. The function returns
 
 The following is a public-domain implementation of \texttt{strncat}:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* strncat */
 char *(strncat)(char *restrict s1, const char *restrict s2, size_t n) {
@@ -298,6 +307,7 @@ char *(strncat)(char *restrict s1, const char *restrict s2, size_t n) {
 	return s1;
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \paragraph{The \texttt{strncmp} function}
 \texttt{int strncmp(const char *s1, const char *s2, size\_t n);}
@@ -315,8 +325,8 @@ This function is useful in comparisons, as the \texttt{strcmp} function is.
 The following is a public-domain implementation of \texttt{strncmp}:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* strncmp */
 int (strncmp)(const char *s1, const char *s2, size_t n) {
@@ -338,6 +348,7 @@ int (strncmp)(const char *s1, const char *s2, size_t n) {
 	return ((uc1 < uc2) ? -1 : (uc1 > uc2));
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \paragraph{The \texttt{strncpy} function}
 \texttt{char *strncpy(char *restrict s1, const char *restrict s2, size\_t n);}
@@ -357,8 +368,8 @@ bytes.
 
 The following is a public-domain version of \texttt{strncpy}:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* strncpy */
 char *(strncpy)(char *restrict s1, const char *restrict s2, size_t n) {
@@ -378,6 +389,7 @@ char *(strncpy)(char *restrict s1, const char *restrict s2, size_t n) {
 	return s1;
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \paragraph{The \texttt{strrchr} function}
 \texttt{char *strrchr(const char *s, int c);}
@@ -395,8 +407,8 @@ At one point in history, this function was named \texttt{rindex}. The
 
 The following is a public-domain implementation of \texttt{strrchr}:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* strrchr */
 char *(strrchr)(const char *s, int c) {
@@ -414,6 +426,7 @@ char *(strrchr)(const char *s, int c) {
 	return (char *) last;
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \subsubsection{The less commonly-used string functions}
 The less-used functions are:
@@ -448,8 +461,8 @@ simplest copy it can.
 
 The following is a public-domain implementation of \texttt{memcpy}:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* memcpy */
 void *(memcpy)(void * restrict s1, const void * restrict s2, size_t n) {
@@ -461,6 +474,7 @@ void *(memcpy)(void * restrict s1, const void * restrict s2, size_t n) {
 	return s1;
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \subparagraph{The \texttt{memmove} function}
 \texttt{void *memmove(void *s1, const void *s2, size\_t n);}
@@ -480,8 +494,8 @@ copy.
 The following is a public-domain, though not completely portable,
 implementation of \texttt{memmove}:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* memmove */
 void *(memmove)(void *s1, const void *s2, size_t n) {
@@ -501,6 +515,7 @@ void *(memmove)(void *s1, const void *s2, size_t n) {
    return s1; 
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \subsubsection{Comparison functions}
 
@@ -516,8 +531,8 @@ between the values of the first pair of bytes (both interpreted as type
 
 The following is a public-domain implementation of \texttt{memcmp}:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* memcmp */
 int (memcmp)(const void *s1, const void *s2, size_t n) {
@@ -532,6 +547,7 @@ int (memcmp)(const void *s1, const void *s2, size_t n) {
 	return 0;
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \paragraph{The \texttt{strcoll} and \texttt{strxfrm} functions}
 \texttt{int strcoll(const char *s1, const char *s2);}
@@ -571,8 +587,8 @@ If \texttt{c} is not found, \texttt{memchr} returns a null pointer.
 
 The following is a public-domain implementation of \texttt{memchr}:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* memchr */
 void *(memchr)(const void *s, int c, size_t n) {
@@ -586,6 +602,7 @@ void *(memchr)(const void *s, int c, size_t n) {
 	return NULL;
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \paragraph{The \texttt{strcspn}, \texttt{strpbrk}, and \texttt{strspn} functions}
 \texttt{size\_t strcspn(const char *s1, const char *s2);}
@@ -612,8 +629,8 @@ All of these functions are similar except in the test and the return value.
 The following are public-domain implementations of \texttt{strcspn},
 \texttt{strpbrk}, and \texttt{strspn}:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* strcspn */
 size_t (strcspn)(const char *s1, const char *s2) {
@@ -624,10 +641,11 @@ size_t (strcspn)(const char *s1, const char *s2) {
 	return sc1 - s1;			/* terminating nulls match */
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* strpbrk */
 char *(strpbrk)(const char *s1, const char *s2) {
@@ -638,10 +656,11 @@ char *(strpbrk)(const char *s1, const char *s2) {
 	return NULL;				/* terminating nulls match */
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* strspn */
 size_t (strspn)(const char *s1, const char *s2) {
@@ -652,6 +671,7 @@ size_t (strspn)(const char *s1, const char *s2) {
 	return sc1 - s1;			/* terminating nulls don't match */
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \paragraph{The \texttt{strstr} function}
 \texttt{char *strstr(const char *haystack, const char *needle);}
@@ -665,8 +685,8 @@ the function returns \texttt{haystack}.
 
 The following is a public-domain implementation of \texttt{strstr}:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* strstr */
 char *(strstr)(const char *haystack, const char *needle) {
@@ -681,6 +701,7 @@ char *(strstr)(const char *haystack, const char *needle) {
 	return NULL;
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \paragraph{The \texttt{strtok} function}
 \texttt{char *strtok(char *restrict s1, const char *restrict delimiters);}
@@ -743,8 +764,8 @@ no token remains in \texttt{s}, a NULL pointer shall be returned.
 The following public-domain code for \texttt{strtok} and \texttt{strtok\_r}
 codes the former as a special case of the latter:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* strtok_r */
 char *(strtok_r)(char *s, const char *delimiters, char **lasts) {
@@ -767,6 +788,7 @@ char *(strtok)(char *restrict s1, const char *restrict delimiters) {
 	return strtok_r(s1, delimiters, &ssave);
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \subsubsection{Miscellaneous functions}
 These functions do not fit into one of the above categories.
@@ -780,8 +802,8 @@ by \texttt{s}.
 
 The following is a public-domain implementation of \texttt{memset}:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{stringcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{stringcnt}]
 #include <string.h>
 /* memset */
 void *(memset)(void *s, int c, size_t n) {
@@ -792,6 +814,7 @@ void *(memset)(void *s, int c, size_t n) {
 	return s;
 }
 \end{lstlisting}
+\stepcounter{stringcnt}
 
 \paragraph{The \texttt{strerror} function}
 \texttt{char *strerror(int errorcode);}

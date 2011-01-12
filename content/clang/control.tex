@@ -1,4 +1,5 @@
 \section{Control}
+\newcounter{controlcnt}
 Very few programs follow exactly one control path and have each instruction
 stated explicitly. In order to program effectively, it is necessary to
 understand how one can alter the steps taken by a program due to user input or
@@ -70,21 +71,23 @@ an error, if == got mispelled with =.
 Note that C does not have a dedicated boolean type as many other languages do.
 0 means false and anything else true. So the following are equivalent:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 if(foo()) {
 	//do something
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 and
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 if(foo() != 0) {
 	//do something
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 Often \texttt{\#define TRUE 1} and \texttt{\#define FALSE 0} are used to work
 around the lack of a boolean type. This is bad practice, since it makes
@@ -92,12 +95,13 @@ assumptions that do not hold. It is a better idea to indicate what you are
 actually expecting as a result from a function call, as there are many
 different ways of indicating error conditions, depending on the situation.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 if(strstr("foo", bar) >= 0) {
 	//bar contains "foo"
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 Here, \texttt{strstr} returns the index where the substring foo is found and -1
 if it was not found. Note that this would fail with the \texttt{TRUE}
@@ -112,28 +116,30 @@ might. Mathematically, this would test whether or not \emph{value} is between
 first compared with \emph{myMin}. This produces either a 0 or a 1. It is this
 value that is compared against myMax. Example:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 int value = 20;
 /* ... */
 if( 0 < value < 10) { // don't do this! it always evaluates to "true"!
 	/* do some stuff */
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 Because \emph{value} is greater than 0, the first comparison produces a value
 of 1. Now 1 is compared to be less than 10, which is true, so the statements in
 the if are executed. This probably is not what the programmer expected. The
 appropriate code would be
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 int value = 20;
 /* ... */
 if ( 0 < value && value < 20) {   // the && means "and"
 	/* do some stuff */
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 \subsubsection{Logical Expressions}
 \begin{description}
@@ -144,10 +150,11 @@ if ( 0 < value && value < 20) {   // the && means "and"
 
 Here's an example of a larger logical expression. In the statement:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 e = ((a && b) || (c > d));
 \end{lstlisting}
+\stepcounter{controlcnt}
 e is set equal to 1 if a and b are non-zero, or if c is greater than d. In all
 other cases, e is set to 0.
 
@@ -155,13 +162,14 @@ C uses short circuit evaluation of logical expressions. That is to say, once it
 is able to determine the truth of a logical expression, it does no further
 evaluation. This is often useful as in the following:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 int myArray[12];
 ....
 if ( i < 12 && myArray[i] > 3) { 
 ....
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 In the snippet of code, the comparison of i with 12 is done first. If it
 evaluates to 0 (false), \textbf{i} would be out of bounds as an index to
@@ -172,10 +180,11 @@ element if it is already known that i is greater than or equal to zero.
 A similar thing happens with expressions involving the or \textbar{}\textbar{}
 operator.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 while( doThis() || doThat()) ...
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 doThat() is never called if doThis() returns a non-zero (true) value.
 
@@ -225,14 +234,15 @@ support binary notation, which would be really verbose anyway.
 If-Else provides a way to instruct the computer to execute a block of code only
 if certain conditions have been met. The syntax of an If-Else construct is:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 if(/* condition goes here */) {
 	/* if the condition is non-zero (true), this code will execute */
 } else {
 	/* if the condition is 0 (false), this code will execute */
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 The first block of code executes if the condition in parentheses directly after
 the \emph{if} evaluates to non-zero (true); otherwise, the second block
@@ -257,8 +267,8 @@ good coding practice.
 The following code sets a variable c equal to the greater of two variables a
 and b, or 0 if a and b are equal.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 if(a > b) {
 	c = a;
 } else if(b > a) {
@@ -267,13 +277,14 @@ if(a > b) {
 	c = 0;
 }
 \end{lstlisting} 
+\stepcounter{controlcnt}
 
 Consider this question: why can't you just forget about \emph{else} and write
 the code like:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 if(a > b) {
 	c = a;
 }
@@ -286,6 +297,7 @@ if(a == b) {
 	c = 0;
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 There are several answers to this. Most importantly, if your conditionals are
 not mutually exclusive, \emph{two} cases could execute instead of only one. If
@@ -303,10 +315,11 @@ conditional will not evaluate to non-zero (true).
 A conditional expression is a way to set values conditionally in a more
 shorthand fashion than If-Else. The syntax is:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 (/* logical expression goes here */) ? (/* if non-zero (true) */) : (/* if 0 (false) */)
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 The logical expression is evaluated. If it is non-zero (true), the overall
 conditional expression evaluates to the expression placed between the ? and :,
@@ -315,10 +328,11 @@ example (changing its function slightly such that c is set to b when a and b
 are equal) becomes:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 c = (a > b) ? a : b;
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 Conditional expressions can sometimes clarify the intent of the code. Nesting
 the conditional operator should usually be avoided. It's best to use
@@ -335,21 +349,22 @@ associated letter grade. If you implemented this using If-Else, your code would
 look something like this:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 if(grade == 1) {
 	printf("A\n");
 } else if(grade == 2) {
 	printf("B\n");
 } else if /* etc. etc. */
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 Having a long chain of if-else-if-else-if-else can be a pain, both for the
 programmer and anyone reading the code. Fortunately, there's a solution: the
 Switch-Case construct, of which the basic syntax is:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 switch(/* integer or enum goes here */) {
 	case /* potential value of the aforementioned int or enum */:
 		/* code */
@@ -360,6 +375,7 @@ switch(/* integer or enum goes here */) {
 		/* more code */
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 The Switch-Case construct takes a variable, usually an int or an enum, placed
 after \emph{switch}, and compares it to the value following the \emph{case}
@@ -382,8 +398,8 @@ fall through. Otherwise another programmer maintaining the code could consider
 the omission of the 'break' to be an error, and inadvertently 'correct' the
 problem. Here's an example:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 switch ( someVariable ) {
 	case 1:
 		printf("This code handles case 1\n");
@@ -396,6 +412,7 @@ switch ( someVariable ) {
 		break;
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 If a \emph{default} case is specified, the associated statements are executed
 if none of the other cases match. A \emph{default} case is optional. Here's a
@@ -404,8 +421,8 @@ above.
 
 Back to our example above. Here's what it would look like as Switch-Case:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 switch (grade) {
 	case 1:
 		printf("A\n");
@@ -424,14 +441,15 @@ switch (grade) {
 		break;
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 A set of statements to execute can be grouped with more than one value of the
 variable as in the following example. (the fall-through comment is not
 necessary here because the intended behavior is obvious)
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 switch (something) {
 	case 2:
 	case 3:
@@ -444,6 +462,7 @@ switch (something) {
 		break;
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 Switch-Case constructs are particularly useful when used in conjunction with
 user defined \emph{enum} data types. Some compilers are capable of warning
@@ -468,33 +487,35 @@ program will appear to lock up and you will have to manually close the program
 down. A situation where the conditions for exiting the loop will never become
 true is called an infinite loop. 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 int a=1;
 while(42) {
 	a = a*2;
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 Here is another example of a while loop. It prints out all the powers of two
 less than 100.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 int a=1;
 while(a<100) {
 	printf("a is %d \n",a);
 	a = a*2;
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 The flow of all loops can also be controlled by \textbf{break} and
 \textbf{continue} statements. A break statement will immediately exit the
 enclosing loop. A continue statement will skip the remainder of the block and
 start at the controlling conditional statement again. For example:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 int a=1;
 while (42) { // loops until the break statement in the loop is executed
 	printf("a is %d ",a);
@@ -507,6 +528,7 @@ while (42) { // loops until the break statement in the loop is executed
 	printf("a is not 64\n");
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 In this example, the computer prints the value of a as usual, and prints a
 notice that a is not 64 (unless it was skipped by the continue statement).
@@ -514,11 +536,12 @@ notice that a is not 64 (unless it was skipped by the continue statement).
 Similar to If above, braces for the block of code associated with a While loop
 can be omitted if the code consists of only one statement, for example:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 int a=1;
 while(a < 100) a = a*2;
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 This will merely increase a until a is not less than 100.
 
@@ -540,13 +563,14 @@ a While loop immediately upon reaching a certain condition, consider using
 
 A common idiom is to write:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 int i = 5;
 while(i--) {
 	printf("java and c# can't do this\n");
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 This executes the code in the while loop 5 times, with i having values that
 range from 4 down to 0 (inside the loop). Conveniently, these are the values
@@ -555,12 +579,13 @@ needed to access every item of an array containing 5 elements.
 \subsubsection{For loops}
 For loops generally look something like this:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 for(initialization; test; increment) {
 	/* code */
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 The \emph{initialization} statement is executed exactly once --- before the
 first evaluation of the \emph{test} condition. Typically, it is used to assign
@@ -588,24 +613,26 @@ Because of the free-form nature of the for statement, some fairly fancy things
 can be done with it. Often a for loop is used to loop through items in an
 array, processing each item at a time. 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 int  myArray[12];
 int ix;
 for (ix = 0; ix<12; ix++) {
 	myArray[ix] = 5 * ix + 3;
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 The above for loop initializes each of the 12 elements of myArray.  The loop
 index can start from any value. In the following case it starts from 1.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 for(ix = 1; ix <= 10; ix++) {
 	printf("%d ", ix);
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 which will print
 \scriptsize
@@ -622,12 +649,13 @@ The \emph{increment} action can do other things, such as \emph{decrement}. So
 this kind of loop is common:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 for (i = 5; i > 0; i--) {
 	printf("%d ",i);
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 which yields
 \scriptsize
@@ -640,12 +668,13 @@ Here's an example where the test condition is simply a variable. If the
 variable has a value of 0 or NULL, the loop exits, otherwise the statements in
 the body of the loop are executed.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 for (t = list_head; t; t = NextItem(t) ) {
 	/*body of loop */
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 A WHILE loop can be used to do the same thing as a FOR loop, however a FOR loop
 is a more condensed way to perform a set number of repetitions since all of the
@@ -654,12 +683,13 @@ necessary information is in a one line statement.
 A FOR loop can also be given no conditions, for example:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 for(;;) {
 	/* block of statements */
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 This is called a infinite loop since it will loop forever unless there is a
 break statement within the statements of the for loop. The empty test condition
@@ -668,25 +698,27 @@ effectively evaluates as true.
 It is also common to use the comma operator in for loops to execute multiple
 statements. 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 int i, j, n = 10;
 for(i = 0, j = 0; i <= n; i++,j+=2) {
 	printf("i = %d , j = %d \n",i,j);
 }
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 \subsubsection{Do-While loops}
 A DO-WHILE loop is a post-check while loop, which means that it checks the
 condition after each run. As a result, even if the condition is zero (false),
 it will run at least once. It follows the form of:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 do {
 	/* do stuff */
 } while (condition);
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 Note the terminating semicolon. This is required for correct syntax. Since this
 is also a type of while loop, \textbf{break} and \textbf{continue} statements
@@ -706,20 +738,21 @@ consists of a name followed by a colon (:) on a line by itself. Then, you can
 type goto \emph{label}; at the desired point in your program. The code will
 then continue executing beginning with \emph{label}. This looks like:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 MyLabel:
 /* some code */
 goto MyLabel;
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 The ability to transfer the flow of control enabled by gotos is so powerful
 that, in addition to the simple if, all other control constructs can be written
 using gotos instead. Here, we can let S and T be any arbitrary
 statements:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 if (''cond'') {
 	S;
 } else {
@@ -727,11 +760,12 @@ if (''cond'') {
 }
 /* ... */
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 The same statement could be accomplished using two gotos and two labels:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 if (''cond'') goto Label1;
 	T;
 	goto Label2;
@@ -740,12 +774,13 @@ if (''cond'') goto Label1;
 	Label2:
 /* ... */
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 Here, the first goto is conditional on the value of ``cond''. The second goto
 is unconditional. We can perform the same translation on a loop:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 while (''cond1'') {
 	S;
 	if (''cond2'') break;
@@ -753,11 +788,12 @@ while (''cond1'') {
 }
 /* ... */
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 Which can be written as:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{controlcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{controlcnt}]
 Start:
 if (!''cond1'') goto End;
 S;
@@ -767,6 +803,7 @@ goto Start;
 End:
 /* ... */
 \end{lstlisting}
+\stepcounter{controlcnt}
 
 As these cases demonstrate, often the structure of what your program is doing
 can usually be expressed without using gotos. Undisciplined use of gotos can

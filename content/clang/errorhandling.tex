@@ -1,4 +1,5 @@
 \section{Error handling}
+\newcounter{errorcnt}
 C does not provide direct support for error handling (also known as exception
 handling). By convention, the programmer is expected to prevent errors from
 occurring in the first place, and test return values from functions. For
@@ -18,8 +19,8 @@ is accessible by the function 'strerror( errno )'.
 The following code tests the return value from the library function malloc to
 see if dynamic memory allocation completed properly:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{errorcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{errorcnt}]
 #include <stdio.h>        /* fprintf */
 #include <errno.h>        /* errno */
 #include <stdlib.h>       /* malloc, free, exit */
@@ -46,6 +47,7 @@ int main( void ) {
 	exit(EXIT_SUCCESS); /* exiting program */
 }
 \end{lstlisting}
+\stepcounter{errorcnt}
 
 The code snippet above shows the use of the return value of the library
 function malloc to check for errors. Many library functions have return values
@@ -60,14 +62,15 @@ A common pitfall made by C programmers is not checking if a divisor is zero
 before a division command. The following code will produce a runtime error and
 in most cases, exit.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{errorcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{errorcnt}]
 int dividend = 50;
 int divisor = 0;
 int quotient;
 
 quotient = (dividend/divisor); /* This will produce a runtime error! */
 \end{lstlisting}
+\stepcounter{errorcnt}
 
 For reasons beyond the scope of this document, you must check or make sure that
 a divisor is never zero. Alternatively, for *nix processes, you can stop the OS
@@ -75,8 +78,8 @@ from terminating your process by blocking the SIGFPE signal.
 
 The code below fixes this by checking if the divisor is zero before dividing.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{errorcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{errorcnt}]
 #include <stdio.h> /* for fprintf and stderr */
 #include <stdlib.h> /* for exit */
 int main( void ) {
@@ -94,6 +97,7 @@ int main( void ) {
 	exit(EXIT_SUCCESS); /* indicate success.*/
 }
 \end{lstlisting}
+\stepcounter{errorcnt}
 
 \subsection{Signals}
 In some cases, the environment may respond to a programming error in C by
@@ -118,8 +122,8 @@ point to returning to a given function, and is valid as long as the function
 containing setjmp() doesn't return or exit. A call to longjmp causes the
 execution to return to the point of the associated setjmp call.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{errorcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{errorcnt}]
 #include <stdio.h>
 #include <setjmp.h>
 
@@ -138,6 +142,7 @@ int main(void) {
 	}
 }
 \end{lstlisting}
+\stepcounter{errorcnt}
 
 The values of non-volatile variables may be corrupted when setjmp returns from
 a longjmp call. 

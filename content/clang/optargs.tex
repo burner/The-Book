@@ -1,4 +1,5 @@
 \section{Opt Args}
+\newcounter{optcnt}
 A \emph{library} in C is a group of functions and declarations, exposed for use
 by other programs. The library therefore consists of an \emph{interface}
 expressed in a \texttt{.h} file (named the ``header'') and an
@@ -10,30 +11,33 @@ Standard C or math libraries to do various tasks.)
 We're going to use as example a function to parse arguments from the command
 line. Arguments on the command line could be by themselves:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{optcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{optcnt}]
 -i
 \end{lstlisting}
+\stepcounter{optcnt}
 
 have an optional argument that is concatenated to the letter:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{optcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{optcnt}]
 -ioptarg
 \end{lstlisting}
+\stepcounter{optcnt}
 
 or have the argument in a separate argv-element:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{optcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{optcnt}]
 -i optarg
 \end{lstlisting}
+\stepcounter{optcnt}
 
 In order to parse all these types of arguments, we have written the following
 ``getopt.c'' file:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{optcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{optcnt}]
 #include <stdio.h>              /* for fprintf() and EOF */
 #include <string.h>             /* for strchr() */
 #include "getopt.h"             /* consistency check */
@@ -112,11 +116,12 @@ int getopt (int argc, char **argv, char *opts) {
 	return optopt;
 } 
 \end{lstlisting}
+\stepcounter{optcnt}
 
 The interface would be the following ``getopt.h'' file:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{optcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{optcnt}]
 #ifndef GETOPT_H
 	#define GETOPT_H
  
@@ -128,6 +133,7 @@ breaklines=true,xleftmargin=15pt,label=lst:]
 	int getopt(int, char **, char *);
 #endif
 \end{lstlisting}
+\stepcounter{optcnt}
 
 At a minimum, a programmer has the interface file to figure out how to use a
 library, although, in general, the library programmer also wrote documentation

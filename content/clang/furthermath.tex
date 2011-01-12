@@ -1,4 +1,5 @@
 \section{Further math}
+\newcounter{furthermathcnt}
 The \texttt{\textless{}math.h\textgreater{}} header contains prototypes for
 several functions that deal with mathematics. In the 1990 version of the ISO
 standard, only the \texttt{double} versions of the functions were specified;
@@ -17,8 +18,8 @@ arccosine returns a value in the range \url{0,&pi;}; the arcsine returns a
 value in the range \url{-&pi;/2,+&pi;/2}.
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float asinf(float x); /* C99 */
 float acosf(float x); /* C99 */
@@ -27,6 +28,7 @@ double acos(double x);
 long double asinl(long double x); /* C99 */
 long double acosl(long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsubsection{The \texttt{atan} and \texttt{atan2} functions}
 The \texttt{atan} functions return the arctangent of their arguments in
@@ -39,8 +41,8 @@ functions return a value in the range \url{-&pi;,+&pi;}. For \texttt{atan2}, a
 domain error may occur if both arguments are zero.
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float atanf(float x); /* C99 */
 float atan2f(float y, float x); /* C99 */
@@ -49,14 +51,15 @@ double atan2(double y, double x);
 long double atanl(long double x); /* C99 */
 long double atan2l(long double y, long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsubsection{The \texttt{cos}, \texttt{sin}, and \texttt{tan} functions}
 The \texttt{cos}, \texttt{sin}, and \texttt{tan} functions return the cosine,
 sine, and tangent of the argument, expressed in radians.
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float cosf(float x); /* C99 */
 float sinf(float x); /* C99 */
@@ -68,6 +71,7 @@ long double cosl(long double x); /* C99 */
 long double sinl(long double x); /* C99 */
 long double tanl(long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsection{Hyperbolic functions}
 The \texttt{cosh}, \texttt{sinh} and \texttt{tanh} functions compute the
@@ -85,8 +89,8 @@ argument. A domain error occurs if the argument is not in the interval
 \href{-1,}{+1}. A range error may occur if the argument equals -1 or +1.
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float coshf(float x); /* C99 */
 float sinhf(float x); /* C99 */
@@ -107,6 +111,7 @@ long double acoshl(long double x); /* C99 */
 long double asinhl(long double x); /* C99 */
 long double atanhl(long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsection{Exponential and logarithmic functions}
 \subsubsection{The \texttt{exp}, \texttt{exp2}, and \texttt{expm1} functions}
@@ -123,8 +128,8 @@ the argument, minus 1. A range error occurs in the magnitude of \texttt{x} is
 too large.
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float expf(float x); /* C99 */
 double exp(double x);
@@ -136,6 +141,7 @@ float expm1f(float x); /* C99 */
 double expm1(double x); /* C99 */
 long double expm1l(long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsubsection{The \texttt{frexp}, \texttt{ldexp}, \texttt{modf},
 \texttt{scalbn}, and \texttt{scalbln} functions}
@@ -176,8 +182,8 @@ The \texttt{scalbn} and \texttt{scalbln} compute \texttt{x} \&times;
 functions are equivalent to \texttt{ldexp}.
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float frexpf(float value, int *ex); /* C99 */
 double frexp(double value, int *ex);
@@ -195,6 +201,7 @@ float scalblnf(float x, long int ex); /* C99 */
 double scalbln(double x, long int ex); /* C99 */
 long double scalblnl(long double x, long int ex); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 Most C floating point libraries also implement the IEEE754-recommended
 nextafter(), nextUp( ), and nextDown( ) functions.
@@ -218,8 +225,8 @@ The \texttt{log2} functions compute the base-2 logarithm of the argument and
 return the result. A domain error occurs if the argument is negative. A range
 error may occur if the argument is zero.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float logf(float x); /* C99 */
 double log(double x);
@@ -234,6 +241,7 @@ float log2f(float x); /* C99 */
 double log2(double x); /* C99 */
 long double log2l(long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsubsection{The \texttt{ilogb} and \texttt{logb} functions}
 The \texttt{ilogb} functions extract the exponent of \texttt{x} as a signed int
@@ -252,8 +260,8 @@ $1 \leq x \times FLT\_RADIX^{-logb(x)} < FLT\_RADIX$.
 \texttt{FLT\_RADIX} is the radix for floating-point numbers, defined in the
 \texttt{float.h} header.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 int ilogbf(float x); /* C99 */
 int ilogb(double x); /* C99 */
@@ -262,6 +270,7 @@ float logbf(float x); /* C99 */
 double logb(double x); /* C99 */
 long double logbl(long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsection{Power functions}
 \subsubsection{The \texttt{pow} functions}
@@ -271,48 +280,52 @@ and return the result. A domain error occurs if \texttt{x} is negative and
 be represented when \texttt{x} is zero and \texttt{y} is less than or equal to
 zero. A range error may occur.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float powf(float x, float y); /* C99 */
 double pow(double x, double y);
 long double powl(long double x, long double y); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsubsection{The sqrt functions}
 The sqrt functions compute the nonnegative square root of x and return the
 result. A domain error occurs if the argument is negative.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float sqrtf(float x); /* C99 */
 double sqrt(double x);
 long double sqrtl(long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsubsection{The cbrt functions}
 The cbrt functions compute the cube root of x and return the result.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float cbrtf(float x); /* C99 */
 double cbrt(double x); /* C99 */
 long double cbrtl(long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsubsection{The hypot functions}
 The hypot functions compute the square root of the sums of the squares of x and
 y, without overflow or underflow, and return the result.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float hypotf(float x, float y); /* C99 */
 double hypot(double x, double y); /* C99 */
 long double hypotl(long double x, long double y); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsection{Nearest integer, absolute value, and remainder functions}
 \subsubsection{The ceil and floor functions}
@@ -320,8 +333,8 @@ The ceil functions compute the smallest integral value not less than x and
 return the result; the floor functions compute the largest integral value not
 greater than x and return the result.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float ceilf(float x); /* C99 */
 double ceil(double x);
@@ -330,18 +343,20 @@ float floorf(float x); /* C99 */
 double floor(double x);
 long double floorl(long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsection{The fabs functions}
 The fabs functions compute the absolute value of a floating-point number x and
 return the result.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float fabsf(float x); /* C99 */
 double fabs(double x); 
 long double fabsl(long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsection{The fmod functions}
 The fmod functions compute the floating-point remainder of x/y and return the
@@ -350,13 +365,14 @@ the same sign as x and magnitude less than the magnitude of y. If y is zero,
 whether a domain error occurs or the fmod functions return zero is
 implementation-defined.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float fmodf(float x, float y); /* C99 */
 double fmod(double x, double y);
 long double fmodl(long double x, long double y); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsection{The nearbyint, rint, lrint, and llrint functions}
 The nearbyint functions round their argument to an integer value in
@@ -369,8 +385,8 @@ to the current rounding direction. If the result is outside the range of values
 of the return type, the numeric result is undefined and a range error may occur
 if the magnitude of the argument is too large.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float nearbyintf(float x); /* C99 */
 double nearbyint(double x); /* C99 */
@@ -385,6 +401,7 @@ long long int llrintf(float x); /* C99 */
 long long int llrint(double x); /* C99 */
 long long int llrintl(long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsection{The round, lround, and llround functions}
 The round functions round the argument to the nearest integer value in
@@ -397,8 +414,8 @@ rounding direction. If the result is outside the range of values of the return
 type, the numeric result is undefined and a range error may occur if the
 magnitude of the argument is too large.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float roundf(float x); /* C99 */
 double round(double x); /* C99 */
@@ -410,18 +427,20 @@ long long int llroundf(float x); /* C99 */
 long long int llround(double x); /* C99 */
 long long int llroundl(long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsection{The trunc functions}
 The functions round their argument to the integer value in floating-point
 format that is nearest but no larger in magnitude than the argument.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float truncf(float x); /* C99 */
 double trunc(double x); /* C99 */
 long double truncl(long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsection{The remainders functions}
 The functions compute the remainder REM as defined by IEC 60559. The definition
@@ -433,13 +452,14 @@ of \emph{x}/\emph{y}; whenever \textbar{}\emph{n} ---
 remainder is always exact. If \emph{r} = 0, its sign shall be that of \emph{x}.
 This definition is applicable for all implementations.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float remainderf(float x, float y); /* C99 */
 double remainder(double x, double y); /* C99 */
 long double remainderl(long double x, long double y); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \subsection{The remquo code functions}
 The remquo functions return the same remainder as the remainder functions. In
@@ -448,13 +468,14 @@ and whose magnitude is congruent modulo 2n to the magnitude of the integral
 quotient of x/y, where n is an implementation-defined integer greater than or
 equal to 3.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float remquof(float x, float y, int *quo); /* C99 */
 double remquo(double x, double y, int *quo); /* C99 */
 long double remquol(long double x, long double y, int *quo); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}
 
 \section{Error and gamma functions}
 The functions compute the error function of the argument $2/(\pi^{frac{1}{2}}
@@ -471,8 +492,8 @@ The tgamma functions compute the gamma of the argument (that is, \&Gamma;(x)).
 A domain error occurs if the argument is a negative integer or if the result
 cannot be represented when the argument is zero. A range error may occur.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{furthermathcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{furthermathcnt}]
 #include <math.h>
 float erff(float x); /* C99 */
 double erf(double x); /* C99 */
@@ -487,3 +508,4 @@ float tgammaf(float x); /* C99 */
 double tgamma(double x); /* C99 */
 long double tgammal(long double x); /* C99 */
 \end{lstlisting}
+\stepcounter{furthermathcnt}

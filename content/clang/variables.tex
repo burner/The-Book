@@ -1,4 +1,5 @@
 \section{Variables}
+\newcounter{varcnt}
 Like most programming languages, C is able to use and process named variables
 and their contents. \textbf{Variables} are simply names used to refer to some
 location in memory --- a location that holds a value with which we are working. 
@@ -28,8 +29,8 @@ Here is an example of declaring an integer, which we've called
 \texttt{some\_number}. (Note the semicolon at the end of the line; that is how
 your compiler separates one program \emph{statement} from another.)
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 int some_number;
 \end{lstlisting}
 
@@ -40,17 +41,19 @@ keywords to do this --- we'll look at them in the next section.
 
 Multiple variables can be declared with one statement, like this:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 int anumber, anothernumber, yetanothernumber;
 \end{lstlisting}
+\stepcounter{varcnt}
 
 We can also declare \emph{and} assign some content to a variable at the same time.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 int some_number=3;
 \end{lstlisting}
+\stepcounter{varcnt}
 
 This is called \emph{initialization}.
 
@@ -62,24 +65,27 @@ fellow programmers (maintainability).
 
 After declaring variables, you can assign a value to a variable later on using a statement like this:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 some_number=3;
 \end{lstlisting}
+\stepcounter{varcnt}
 
 You can also assign a variable the value of another variable, like so:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 anumber = anothernumber;
 \end{lstlisting}
+\stepcounter{varcnt}
 
 Or assign multiple variables the same value with one statement:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 anumber = anothernumber = yetanothernumber = 3;
 \end{lstlisting}
+\stepcounter{varcnt}
 
 This is because the assignment \texttt{x = y} returns the value of the
 assignment. \texttt{x = y = z} is really shorthand for \texttt{x = (y = z)}.
@@ -92,8 +98,8 @@ not use any special prefix characters on variable names.
 
 Some examples of valid (but not very descriptive) C variable names:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 foo
 Bar
 BAZ
@@ -102,16 +108,18 @@ _foo42
 _
 QuUx
 \end{lstlisting}
+\stepcounter{varcnt}
 
 Some examples of invalid C variable names:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 2foo (must not begin with a digit)
 my foo (spaces not allowed in names)
 $foo ($ not allowed -- only letters, digits, and _)
 while (language keywords cannot be used as names)
 \end{lstlisting}
+\stepcounter{varcnt}
 
 As the last example suggests, certain words are reserved as keywords in the
 language, and these cannot be used as variable names.
@@ -160,10 +168,11 @@ If you want to declare a new int variable, use the \texttt{int} keyword. For
 example:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 int numberOfStudents, i, j=5;
 \end{lstlisting}
+\stepcounter{varcnt}
 
 In this declaration we declare 3 variables, numberOfStudents, i and j, j here
 is assigned the literal 5.
@@ -189,10 +198,11 @@ preferred, the other way is \textbf{\emph{bad}} programming practice.
 
 The first way is to write
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 char letter1 = 'a';
 \end{lstlisting}
+\stepcounter{varcnt}
 
 This is \emph{good} programming practice in that it allows a person reading
 your code to understand that letter1 is being initialized with the letter 'a'
@@ -201,10 +211,11 @@ to start off with.
 The second way, which should \emph{not} be used when you are coding letter
 characters, is to write
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 char letter2 = 97; /* in ASCII, 97 = 'a' */
 \end{lstlisting}
+\stepcounter{varcnt}
 
 This is considered by some to be extremely \textbf{\emph{bad}} practice, if we
 are using it to store a character, not a small number, in that if someone reads
@@ -259,11 +270,12 @@ important to mention that \texttt{sizeof} is a compile-time unary operator, not
 a function.) Its syntax is:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 sizeof object
 sizeof(type)
 \end{lstlisting}
+\stepcounter{varcnt}
 
 The two expressions above return the size of the object and type specified, in
 bytes. The return type is \texttt{size\_t} (defined in the header
@@ -271,12 +283,13 @@ bytes. The return type is \texttt{size\_t} (defined in the header
 an example usage:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 size_t size;
 int i;
 size = sizeof(i);
 \end{lstlisting}
+\stepcounter{varcnt}
 
 \texttt{size} will be set to 4, assuming \texttt{CHAR\_BIT} is defined as 8,
 and an integer is 32 bits wide. The value of \texttt{sizeof}'s result is the
@@ -286,10 +299,11 @@ Note that when \texttt{sizeof} is applied to a \texttt{char}, the result is 1;
 that is:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 sizeof(char)
 \end{lstlisting}
+\stepcounter{varcnt}
 
 always returns 1.
 
@@ -323,12 +337,13 @@ and seldom used since all types (except \texttt{char}) are signed by default.
 
 To use a modifier, just declare a variable with the data type and relevant modifiers:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 unsigned short int usi; /* fully qualified --- unsigned short int */
 short si; /* short int */
 unsigned long uli; /* unsigned long int */
 \end{lstlisting}
+\stepcounter{varcnt}
 
 \subsection{\texttt{const} qualifier}
 When the \textbf{const} qualifier is used, the declared variable must be
@@ -452,8 +467,8 @@ imagine it is in a file called jfile.c:
 
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 include <stdio.h>
 static int j = 0;
 	
@@ -487,6 +502,7 @@ int main(void) {
 	return 0;
 }
 \end{lstlisting}
+\stepcounter{varcnt}
 
 The j var is accessible by both up and down and retains its value. the k vars
 also retain their value, but they are two different variables in each their
@@ -496,14 +512,15 @@ be made to a variable except through function calls.
 
 Running the program above will produce the following output:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{varcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{varcnt}]
 up() called. k= 1, j= 1
 up() called. k= 2, j= 2
 up() called. k= 3, j= 3
 down() called. k= -1, j= 2
 down() called. k= -2, j= 1
 \end{lstlisting}
+\stepcounter{varcnt}
 
 \textbf{extern} is used when a file needs to access a variable in another file
 that it may not have \textit{\#included} directly.  Therefore, \emph{extern}

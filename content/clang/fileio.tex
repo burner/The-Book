@@ -1,4 +1,5 @@
 \section{File IO}
+\newcounter{filecnt}
 \subsection{Introduction}
 The \texttt{stdio.h} header declares a broad assortment of functions that
 perform input and output to files and devices such as the console. It was one
@@ -81,8 +82,8 @@ for output. These streams are sequences of bytes.
 Consider the following program:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 	/* A example program. */
 	int main()
 	{
@@ -92,6 +93,7 @@ breaklines=true,xleftmargin=15pt,label=lst:]
 	}
 	/* end program. */
 \end{lstlisting}
+\stepcounter{filecnt}
 
 By default \texttt{stdin} points to the keyboard and \texttt{stdout} and
 \texttt{stderr} point to the screen. It is possible under Unix and may be
@@ -121,12 +123,13 @@ To open and close files, the \texttt{\textless{}stdio.h\textgreater{}} library
 has three functions: \texttt{fopen}, \texttt{freopen}, and \texttt{fclose}.
 \subsubsection{Opening Files}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 	#include <stdio.h>
 	FILE *fopen(const char *filename, const char *mode);
 	FILE *freopen(const char *filename, const char *mode, FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{fopen} and \texttt{freopen} functions open files.
 
@@ -192,11 +195,12 @@ fails, or the value \texttt{stream} if the open operation succeeds.
 
 \subsubsection{Closing Files}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int fclose(FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{fclose} function causes the stream pointed to by \texttt{stream} to
 be flushed and the associated file to be closed. Any unwritten buffered data
@@ -209,11 +213,12 @@ if any errors were detected.
 \subsection{Other file access functions}
 \subsubsection{The \texttt{fflush} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int fflush(FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 If \texttt{stream} points to an output stream or an update stream in which the
 most recent operation was not input, the \texttt{fflush} function causes any
@@ -236,11 +241,12 @@ write are minimized.
 
 \subsubsection{The \texttt{setbuf} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 void setbuf(FILE *stream, char *buf);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 Except that it returns no value, the \texttt{setbuf} function is equivalent to
 the \texttt{setvbuf} function invoked with the values \texttt{\_IOFBF} for
@@ -249,11 +255,12 @@ null pointer) with the value \texttt{\_IONBF} for \texttt{mode}.
 
 \subsubsection{The \texttt{setvbuf} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int setvbuf(FILE *stream, char *buf, int mode, size_t size);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{setvbuf} function may be used only after the stream pointed to by
 \texttt{stream} has been associated with an open file and before any other
@@ -281,12 +288,13 @@ and \texttt{fsetpos}.
 
 \subsubsection{The \texttt{fgetpos} and \texttt{fsetpos} functions}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int fgetpos(FILE *stream, fpos_t *pos);
 int fsetpos(FILE *stream, const fpos_t *pos);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{fgetpos} function stores the current value of the file position
 indicator for the stream pointed to by \texttt{stream} in the object pointed to
@@ -314,12 +322,13 @@ positive value in \texttt{errno}.
 
 \subsubsection{The \texttt{fseek} and \texttt{ftell} functions}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int fseek(FILE *stream, long int offset, int whence);
 long int ftell(FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{fseek} function sets the file position indicator for the stream
 pointed to by \texttt{stream}.
@@ -358,41 +367,45 @@ returns \texttt{-1L} and stores an implementation-defined positive value in
 
 \subsubsection{The \texttt{rewind} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 void rewind(FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{rewind} function sets the file position indicator for the stream
 pointed to by \texttt{stream} to the beginning of the file. It is equivalent to
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 (void)fseek(stream, 0L, SEEK_SET)
 \end{lstlisting}
+\stepcounter{filecnt}
 
 except that the error indicator for the stream is also cleared. 
 
 \subsection{Error Handling Functions}
 \subsubsection{The \texttt{clearerr} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 void clearerr(FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{clearerr} function clears the end-of-file and error indicators for
 the stream pointed to by \texttt{stream}.
 
 \subsubsection{The \texttt{feof} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int feof(FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{feof} function tests the end-of-file indicator for the stream
 pointed to by \texttt{stream} and returns nonzero if and only if the
@@ -400,11 +413,12 @@ end-of-file indicator is set for \texttt{stream}, otherwise it returns zero.
 
 \subsubsection{The \texttt{ferror} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int ferror(FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{ferror} function tests the error indicator for the stream pointed
 to by \texttt{stream} and returns nonzero if and only if the error indicator is
@@ -412,11 +426,12 @@ set for \texttt{stream}, otherwise it returns zero.
 
 \subsubsection{The \texttt{perror} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 void perror(const char *s);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{perror} function maps the error number in the integer expression
 \texttt{errno} to an error message. It writes a sequence of characters to the
@@ -433,11 +448,12 @@ on files besides reading and writing.
 
 \subsubsection{The \texttt{remove} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int remove(const char *filename);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{remove} function causes the file whose name is the string pointed
 to by \texttt{filename} to be no longer accessible by that name. A subsequent
@@ -450,11 +466,12 @@ it fails.
 
 \subsubsection{The \texttt{rename} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int rename(const char *old_filename, const char *new_filename);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{rename} function causes the file whose name is the string pointed
 to by \texttt{old\_filename} to be henceforth known by the name given by the
@@ -469,11 +486,12 @@ original name.
 
 \subsubsection{The \texttt{tmpfile} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 FILE *tmpfile(void);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{tmpfile} function creates a temporary binary file that will
 automatically be removed when it is closed or at program termination. If the
@@ -486,11 +504,12 @@ returns a null pointer.
 
 \subsubsection{The \texttt{tmpnam} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 char *tmpnam(char *s);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{tmpnam} function generates a string that is a valid file name and
 that is not the name of an existing file.
@@ -517,11 +536,12 @@ The value of the macro \texttt{TMP\_MAX} must be at least 25.
 \subsubsection{Character Input Functions}
 \paragraph{The \texttt{fgetc} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int fgetc(FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{fgetc} function obtains the next character (if present) as an
 \texttt{unsigned char} converted to an \texttt{int}, from the input stream
@@ -538,11 +558,12 @@ returns \texttt{EOF}.
 
 \paragraph{The \texttt{fgets} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 char *fgets(char *s, int n, FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{fgets} function reads at most one less than the number of
 characters specified by \texttt{n} from the stream pointed to by
@@ -568,8 +589,8 @@ Unixes typically use \texttt{\textbackslash{}n} as its end-of-line sequence,
 MS-DOS and Windows uses \texttt{\textbackslash{}r\textbackslash{}n}, and Mac
 OSes used \texttt{\textbackslash{}r} before OS X.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 /* A example program that reads from stdin and writes to stdout */
 #include <stdio.h>
 
@@ -584,14 +605,16 @@ int main(void) {
 }
 /* end program. */
 \end{lstlisting}
+\stepcounter{filecnt}
 
 \paragraph{The \texttt{getc} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int getc(FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{getc} function is equivalent to \texttt{fgetc}, except that it may
 be implemented as a macro. If it is implemented as a macro, the \texttt{stream}
@@ -609,11 +632,12 @@ returns \texttt{EOF}.
 
 \paragraph{The \texttt{getchar} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int getchar(void);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{getchar} function is equivalent to \texttt{getc} with the argument
 \texttt{stdin}.
@@ -628,11 +652,12 @@ error occurs, the error indicator for \texttt{stdin} is set and
 
 \paragraph{The \texttt{gets} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 char *gets(char *s);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{gets} function reads characters from the input stream pointed to by
 \texttt{stdin} into the array pointed to by \texttt{s} until an end-of-file is
@@ -664,11 +689,12 @@ Land Of Rm, where they can do no further harm to thee.''
 
 \paragraph{The \texttt{ungetc} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int ungetc(int c, FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{ungetc} function pushes the character specified by \texttt{c}
 (converted to an \texttt{unsigned char}) back onto the input stream pointed to
@@ -701,11 +727,12 @@ conversion, or \texttt{EOF} if the operation fails.
 
 \subsubsection{Direct input function: the \texttt{fread} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{fread} function reads, into the array pointed to by \texttt{ptr},
 up to \texttt{nmemb} elements whose size is specified by \texttt{size}, from
@@ -723,13 +750,14 @@ unchanged.
 
 \subsubsection{Formatted input functions: the \texttt{scanf} family of functions}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int fscanf(FILE *stream, const char *format, ...);
 int scanf(const char *format, ...);
 int sscanf(const char *s, const char *format, ...);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{fscanf} function reads input from the stream pointed to by
 \texttt{stream}, under control of the string pointed to by \texttt{format} that
@@ -920,11 +948,12 @@ place between objects that overlap, the behavior is undefined.
 \subsubsection{Character Output Functions}
 \paragraph{The \texttt{fputc} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int fputc(int c, FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{fputc} function writes the character specified by \texttt{c}
 (converted to an \texttt{unsigned char}) to the stream pointed to by
@@ -937,11 +966,12 @@ indicator for the stream is set and \texttt{fputc} returns \texttt{EOF}.
 
 \paragraph{The \texttt{fputs} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int fputs(const char *s, FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{fputs} function writes the string pointed to by \texttt{s} to the
 stream pointed to by \texttt{stream}. The terminating null character is not
@@ -950,11 +980,12 @@ it returns a nonnegative value.
 
 \paragraph{The \texttt{putc} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int putc(int c, FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{putc} function is equivalent to \texttt{fputc}, except that if it
 is implemented as a macro, it may evaluate \texttt{stream} more than once, so
@@ -964,11 +995,12 @@ error indicator for the stream is set and the function returns \texttt{EOF}.
 
 \paragraph{The \texttt{putchar} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int putchar(int c);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{putchar} function is equivalent to \texttt{putc} with the second
 argument \texttt{stdout}. It returns the character written, unless a write
@@ -977,11 +1009,12 @@ the function returns \texttt{EOF}.
 
 \paragraph{The \texttt{puts} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 int puts(const char *s);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{puts} function writes the string pointed to by \texttt{s} to the
 stream pointed to by \texttt{stdout}, and appends a new-line character to the
@@ -991,11 +1024,12 @@ value.
 
 \subsubsection{Direct output function: the \texttt{fwrite} function}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdio.h>
 size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 The \texttt{fwrite} function writes, from the array pointed to by \texttt{ptr},
 up to \texttt{nmemb} elements whose size is specified by \texttt{size} to the
@@ -1008,8 +1042,8 @@ error is encountered.
 
 \subsubsection{Formatted output functions: the \texttt{printf} family of functions}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{filecnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{filecnt}]
 #include <stdarg.h>
 #include <stdio.h>
 int fprintf(FILE *stream, const char *format, ...);
@@ -1019,6 +1053,7 @@ int vfprintf(FILE *stream, const char *format, va_list arg);
 int vprintf(const char *format, va_list arg);
 int vsprintf(char *s, const char *format, va_list arg);
 \end{lstlisting}
+\stepcounter{filecnt}
 
 \emph{Note: Some length specifiers and format specifiers are new in C99. These
 may not be available in older compilers and versions of the stdio library,

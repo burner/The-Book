@@ -1,4 +1,5 @@
 \section{Memory management}
+\newcounter{memcnt}
 In C, you have already considered creating variables for use in the program.
 You have created some arrays for use, but you may have already noticed some
 limitations:
@@ -12,14 +13,15 @@ program
 
 \subsection{Malloc}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{memcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{memcnt}]
 #include <stdlib.h>
 void *calloc(size_t nmemb, size_t size);
 void free(void *ptr);
 void *malloc(size_t size);
 void *realloc(void *ptr, size_t size);
 \end{lstlisting}
+\stepcounter{memcnt}
 
 The C function \texttt{malloc} is the means of implementing dynamic memory
 allocation. It is defined in stdlib.h or malloc.h, depending on what operating
@@ -44,10 +46,11 @@ Let's look at how dynamic memory allocation can be used for arrays.
 
 Normally when we wish to create an array we use a declaration such as
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{memcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{memcnt}]
 int array[10];
 \end{lstlisting}
+\stepcounter{memcnt}
 
 Recall \texttt{array} can be considered a pointer which we use as an array. We
 specify the length of this array is 10 \texttt{int}s. After array\url{0}, nine
@@ -69,10 +72,11 @@ much memory we need for 2 \texttt{int}s, and so on.
 So how do we malloc an array of ten \texttt{int}s like before? If we wish to
 declare and make room in one hit, we can simply say
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{memcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{memcnt}]
 int *array = malloc(10*sizeof(int));
 \end{lstlisting}
+\stepcounter{memcnt}
 
 We only need to declare the pointer; \texttt{malloc} gives us some space to
 store the 10 \texttt{int}s, and returns the pointer to the first element, which
@@ -89,14 +93,15 @@ the allocated memory.  Often a number of statements exist between the
 declaration and the call to malloc, as follows:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{memcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{memcnt}]
 int *array = NULL;
 printf(``Hello World!!!'');
 /* more statements */
 array = malloc(10*sizeof(int)); /* delayed allocation */
 /* use the array */
 \end{lstlisting}
+\stepcounter{memcnt}
 
 \subsubsection{Error checking}
 When we want to use \texttt{malloc}, we have to be mindful that the pool of
@@ -106,14 +111,15 @@ order to stop the program crashing from having no more memory to use, one
 should always check that malloc has not returned \texttt{NULL} before
 attempting to use the memory; we can do this by 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{memcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{memcnt}]
 int *pt = malloc(3 * sizeof(int));
 if(pt == NULL) {
 	fprintf(stderr, "Out of memory, exiting\n");
 	exit(1);
 }
 \end{lstlisting}
+\stepcounter{memcnt}
 
 Of course, suddenly quitting as in the above example is not always appropriate,
 and depends on the problem you are trying to solve and the architecture you are
@@ -160,8 +166,8 @@ that is not released with \texttt{free} is however released when the current
 program terminates on most operating systems. Calls to \texttt{free} are as in
 the following example.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{memcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{memcnt}]
 int *myStuff = malloc( 20 * sizeof(int)); 
 if (myStuff != NULL) {
 	/* more statements here */
@@ -169,14 +175,15 @@ if (myStuff != NULL) {
 	free( myStuff );
 }
 \end{lstlisting}
+\stepcounter{memcnt}
 
 \subsubsection{free with recursive data structures}
 It should be noted that \texttt{free} is neither intelligent nor recursive. The
 following code that depends on the recursive application of free to the
 internal variables of a struct does not work.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{memcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{memcnt}]
 typedef struct BSTNode {
 	int value; 
 	struct BSTNode* left;
@@ -192,6 +199,7 @@ temp->left = (BSTNode*) calloc(1, sizeof(BSTNode));
  
 free(temp); // WRONG! don't do this!
 \end{lstlisting}
+\stepcounter{memcnt}
 
 The statement ``\texttt{free(temp);}'' will *not* free temp-\textgreater{}left,
 causing a memory leak.

@@ -1,4 +1,5 @@
 \section{Procedures and functions}
+\newcounter{funccnt}
 In C programming, all executable code resides within a \textbf{function}. A
 function is a named block of code that performs a task and then returns control
 to a caller. Note that other programming languages may distinguish between a
@@ -15,8 +16,8 @@ As a basic example, suppose you are writing code to print out the first 5
 squares of numbers, do some intermediate processing, then print the first 5
 squares again. We could write it like this:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 #include <stdio.h>
 
 int main(void) {
@@ -29,13 +30,14 @@ int main(void) {
 	}
 return 0;
 \end{lstlisting}
+\stepcounter{funccnt}
 
 We have to write the same loop twice. We may want to somehow put this code in a
 separate place and simply jump to this code when we want to use it. This would
 look like:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 #include <stdio.h>
 
 void Print_Squares(void) {
@@ -50,6 +52,7 @@ int main(void) {
 	return 0;
 }
 \end{lstlisting}
+\stepcounter{funccnt}
 
 This is precisely what functions are for.
 
@@ -80,14 +83,15 @@ its arguments.
 It's always good to learn by example. Let's write a function that will return the square of a number.
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 int square(int x) {
 	  int square_of_x;
 	  square_of_x = x * x;
 	  return square_of_x;
 }
 \end{lstlisting}
+\stepcounter{funccnt}
 
 To understand how to write such a function like this, it may help to look at
 what this function does as a whole. It takes in an \texttt{int}, x, and squares
@@ -123,12 +127,13 @@ Written in a more concise manner, this code performs the exact same function as
 the above:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 int square(int x) {
 	return x * x;
 }
 \end{lstlisting}
+\stepcounter{funccnt}
 
 Note this should look familiar --- you have been writing functions already, in
 fact --- main is a function that is always written.
@@ -136,12 +141,13 @@ fact --- main is a function that is always written.
 \subsubsection{In general}
 In general, if we want to declare a function, we write
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 {
   /* code */
 } 
 \end{lstlisting}
+\stepcounter{funccnt}
 
 We've previously said that a function can take no arguments, or can return
 nothing, or both. What do we write if we want the function to return nothing?
@@ -149,8 +155,8 @@ We use C's \texttt{void} keyword. \texttt{void} basically means ``nothing'' ---
 so if we want to write a function that returns nothing, for example, we write
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 void sayhello(int number\_of\_times) {
 	 int i;
 	 for(i=1; i <= number_of_times; i++)
@@ -159,6 +165,7 @@ void sayhello(int number\_of\_times) {
 	 }
 }
 \end{lstlisting}
+\stepcounter{funccnt}
 
 Notice that there is no \texttt{return} statement in the function above. Since
 there's none, we write \texttt{void} as the return type.
@@ -167,8 +174,8 @@ What about a function that takes no arguments? If we want to do this, we can
 write for example
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 float calculate_number(void) {
 	float to_return=1;
 	int i;
@@ -179,6 +186,7 @@ float calculate_number(void) {
 	return to_return;
 }
 \end{lstlisting}
+\stepcounter{funccnt}
 
 Notice this function doesn't take any inputs, but merely returns a number
 calculated by this function.
@@ -192,22 +200,23 @@ itself, which again prints a line and calls itself again, and this continues
 until the stack overflows and the program crashes. A function calling itself is
 called recursion, and normally you will have a conditional that would stop the
 recursion after a small, finite number of steps.
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 	     // don't run this!
 void infinite_recursion() {
 	printf("Infinite loop!\n");
 	infinite_recursion();
 }
 \end{lstlisting}
+\stepcounter{funccnt}
 
 A simple check can be done like this. Note that ++depth is used so the
 increment will take place before the value is passed into the function.
 Alternatively you can increment on a separate line before the recursion call.
 If you say print\_me(3,0); the function will print the line Recursion 3 times.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 void print_me(int j, int depth) {
 	if(depth < j) {
 	    printf("Recursion! depth = %d j = %d\n",depth,j); //j keeps its value
@@ -215,6 +224,7 @@ void print_me(int j, int depth) {
 	}
 }
 \end{lstlisting}
+\stepcounter{funccnt}
 
 Recursion is most often used for jobs such as directory tree scans, seeking for
 the end of a linked list, parsing a tree structure in a database and
@@ -226,12 +236,13 @@ declared, it is appropriate to declare it as a static function. When a function
 is declared static, the compiler will now compile to an object file in a way
 that prevents the function from being called from code in other files. Example:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 static short compare( short a, short b ) {
 	return (a+4 < b)? a : b;
 }
 \end{lstlisting}
+\stepcounter{funccnt}
 
 \subsection{Using C functions}
 We can now \emph{write} functions, but how do we use them? When we write main,
@@ -240,26 +251,29 @@ we place the function outside the braces that encompass main.
 When we want to use that function, say, using our \texttt{calculate\_number}
 function above, we can write something like
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 float f;
 f = calculate_number();
 \end{lstlisting}
+\stepcounter{funccnt}
 
 If a function takes in arguments, we can write something like
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 int square_of_10;
 square_of_10 = square(10);
 \end{lstlisting}
+\stepcounter{funccnt}
 
 If a function doesn't return anything, we can just say
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 say_hello();
 \end{lstlisting}
+\stepcounter{funccnt}
 
 since we don't need a variable to catch its return value.
 
@@ -497,10 +511,11 @@ compiler that a variable list of arguments is to follow. For example, the
 following function declaration is for a function that returns the average of a
 list of numbers:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 	 float average (int n_args, ...);
 \end{lstlisting}
+\stepcounter{funccnt}
 
 Note that because of the way variable-length arguments work, we must somehow,
 in the arguments, specify the number of elements in the variable-length part of
@@ -515,10 +530,11 @@ the numbers stored in the variable-length argument list for our
 \texttt{average} function, we must first declare a variable for the list
 itself:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 	 va_list myList;
 \end{lstlisting}
+\stepcounter{funccnt}
 
 The \texttt{va\_list} type is a type declared in the \texttt{stdarg.h} header
 that basically allows you to keep track of your list. To start actually using
@@ -529,13 +545,14 @@ the arguments to \texttt{va\_start}, you must provide the \texttt{va\_list}
 variable you plan on using, as well as the name of the last variable appearing
 before the ellipsis in your function declaration:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 float average (int n\_args, ...) {
 	va_list myList;
 	va_start (myList, n_args);
 }
 \end{lstlisting}
+\stepcounter{funccnt}
 
 Now that \texttt{myList} has been prepped for usage, we can finally start
 accessing the variables stored in it. To do so, use the \texttt{va\_arg} macro,
@@ -544,8 +561,8 @@ which pops off the next argument on the list. In the arguments to
 as the primitive data type (e.g. \texttt{int}, \texttt{char}) that the variable
 you're accessing should be:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 float average (int n\_args, ...) {
 	va_list myList;
 	va_start (myList, n_args);
@@ -553,12 +570,13 @@ float average (int n\_args, ...) {
 	int myNumber = va_arg (myList, int);
 }
 \end{lstlisting}
+\stepcounter{funccnt}
 
 By popping \texttt{n\_args} integers off of the variable-length argument list,
 we can manage to find the average of the numbers:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt, label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{funccnt},language={C},
+breaklines=true,xleftmargin=15pt, label=lst:section\thesection listing\arabic{funccnt}]
 float average (int n\_args, ...) {
 	va_list myList;
 	va_start (myList, n_args);
@@ -576,6 +594,7 @@ float average (int n\_args, ...) {
 	return avg;
 }
 \end{lstlisting}
+\stepcounter{funccnt}
 
 By calling \texttt{average (2, 10, 20)}, we get the average of \texttt{10} and
 \texttt{20}, which is \texttt{15.}

@@ -1,4 +1,5 @@
 \section{Input and Output}
+\newcounter{inout}
 When you take time to consider it, a computer would be pretty useless without
 some way to talk to the people who use it. Just like we need information in
 order to accomplish tasks, so do computers. And just as we supply information
@@ -16,8 +17,8 @@ printf(). Here we discuss more of the functions that stdio.h gives us.
 \subsection{Output using printf}
 Recall from the beginning of this text the demonstration program duplicated below:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{inout},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{inout}]
 #include <stdio.h>
 
 int main(void) {
@@ -25,6 +26,7 @@ int main(void) {
 	return 0;
 }
 \end{lstlisting}
+\stepcounter{inout}
 
 If you compile and run this program, you will see the sentence below show up on
 your screen:
@@ -49,10 +51,11 @@ printf() can be as simple as typing in some text, surrounded by double quotes
 (note that these are double quotes and not two single quotes). So, for example,
 you can print any string by placing it as an argument to the printf() function:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{inout},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{inout}]
 printf("This sentence will print out exactly as you see it...");
 \end{lstlisting}
+\stepcounter{inout}
 
 And once it is contained in a proper main() function, it will show:
 \scriptsize
@@ -67,14 +70,15 @@ The printf function is a powerful function, and is probably the most-used
 function in C programs.  For example, let us look at a problem. Say we don't
 know what 1905 + 31214 is. Let's use C to get the answer.  We start writing
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{inout},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{inout}]
 #include <stdio.h> // this is important, since printf 
                    // can't be used without this line
 int main(void) {
 	printf("1905+31214 is");
 }
 \end{lstlisting}
+\stepcounter{inout}
 
 but here we are stuck! printf only prints strings! Thankfully, printf has
 methods for printing numbers. What we do is put a placeholder format code in
@@ -115,16 +119,17 @@ something special onscreen, such as make a beep, write a tab, and so on. To
 write a newline we write \\n. All escape characters start with a backslash.  So
 to achieve the output above, we write
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{inout},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{inout}]
 printf(" 1905\n31214 +\n-----\n");
 \end{lstlisting}
+\stepcounter{inout}
 
 or to be a bit more clear, we can break this long printf statement over several
 lines. So our program will be
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{inout},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{inout}]
 #include <stdio.h>
  
 int main(void) {
@@ -135,6 +140,7 @@ int main(void) {
 	return 0;
 }
 \end{lstlisting}
+\stepcounter{inout}
 There are other escape characters we can use. Another common one is to use \\t
 to write a tab. You can use \\a to ring the computer's bell, but you should not
 use this very much in your programs, as excessive use of sound is not very
@@ -153,18 +159,20 @@ puts("Print this string.");
 
 will print to the screen:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{inout},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{inout}]
 Print this string.
 \end{lstlisting}
+\stepcounter{inout}
 
 followed by the newline character (as discussed above). (The puts function
 appends a newline character to its output.) The fputs function is similar:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{inout},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{inout}]
 fputs("Print this string via fputs", stdout);
 \end{lstlisting}
+\stepcounter{inout}
 
 will print to the stdout file (usually the screen):
 \scriptsize
@@ -190,8 +198,8 @@ until later in the text. Instead, the simple technique is to use the address-of
 operator, \&. For now it may be best to consider this "magic" before we discuss
 pointers. A typical application might be like this:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{inout},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{inout}]
 #include "stdio.h"
  
 int main(void) {
@@ -204,23 +212,26 @@ int main(void) {
 	return 0;
 }
 \end{lstlisting}
+\stepcounter{inout}
 
 If you were to describe the effect of the scanf() function call above, it might
 read as: "Read in an integer from the user and store it at the address of
 variable a".  If you are trying to input a string using scanf, you should not
 include the \& operator. The code below will not compile.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{inout},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{inout}]
 scanf("%s", &a);
 \end{lstlisting}
+\stepcounter{inout}
 
 The correct usage would be:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{inout},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{inout}]
 scanf("%s", a);
 \end{lstlisting}
+\stepcounter{inout}
 Note of caution on inputs: When data is typed at a keyboard, the information
 does not go straight to the program that is running. It is first stored in what
 is known as a buffer - a small amount of memory reserved for the input source.

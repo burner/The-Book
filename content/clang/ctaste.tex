@@ -1,10 +1,11 @@
 \section{A taste of C}
+\newcounter{lstcnta}
 As with nearly every other programming language learning book, we use the
 \emph{Hello world} program to introduce you to C.
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption={Section \thesection listing  \arabic{lstcnta}},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection \arabic{lstcnta}]
 #include <stdio.h>
 
 int main(void) {
@@ -12,6 +13,7 @@ int main(void) {
    return 0;
 }
 \end{lstlisting}
+\stepcounter{lstcnta}
 
 This program prints Hello, world! and then exits.
 Enter this code into your text editor or IDE, and save it as hello.c.

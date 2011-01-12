@@ -1,4 +1,5 @@
 \section{Networking in UNIX}
+\newcounter{netcnt}
 Network programming under UNIX is relatively simple in C.
 
 This guide assumes you already have a good general idea about C, UNIX and
@@ -8,8 +9,8 @@ networks.
 To start with, we'll look at one of the simplest things you can do, initialize
 a stream connection and receive a message from a remote server.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{netcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{netcnt}]
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,6 +48,7 @@ int main(int argc, char *argv[]) {
 	return EXIT_SUCCESS;
 }
 \end{lstlisting}
+\stepcounter{netcnt}
 
 This is the very bare bones of a client; in practice, we would check every
 function that we called for failure, however for clarity, error checking the
@@ -56,22 +58,24 @@ As you can see, the code mainly revolves around ``dest'' which is a struct of
 type sockaddr\_in; in this struct we store information about the machine we
 want to connect to.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{netcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{netcnt}]
 mysocket = socket(AF_INET, SOCK_STREAM, 0);
 \end{lstlisting}
+\stepcounter{netcnt}
 
 The socket function tells our OS that we want a file descriptor for a socket
 which we can use for a network stream connection; what the parameters mean is
 mostly irrelevent for now.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{netcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{netcnt}]
 memset(&dest, 0, sizeof(dest));                /* zero the struct */
 dest.sin_family = AF_INET;
 dest.sin_addr.s_addr = inet_addr("127.0.0.1"); /* set destination IP number */ 
 dest.sin_port = htons(PORTNUM);                /* set destination port number */
 \end{lstlisting}
+\stepcounter{netcnt}
 
 Now we get on to the interesting part:
 
@@ -94,18 +98,20 @@ htons() should be used.
 Now that all of the preliminary work is done, we can actually make the
 connection and use it:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{netcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{netcnt}]
 connect(mysocket, (struct sockaddr *)&dest, sizeof(struct sockaddr));
 \end{lstlisting}
+\stepcounter{netcnt}
 
 This tells our OS to use the socket mysocket to create a connection to the
 machine specified in dest.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{netcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{netcnt}]
 len = recv(mysocket, buffer, MAXRCVLEN, 0);
 \end{lstlisting}
+\stepcounter{netcnt}
 
 Now this receives upto MAXRCVLEN bytes of data from the connection and stores
 them in the buffer string. The number of characters received is returned by
@@ -127,8 +133,8 @@ were sending. In most cases this can be resolved by resending the unsent data.
 
 \subsection{A simple server}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{netcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{netcnt}]
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -176,6 +182,7 @@ int main(int argc, char *argv[]) {
 	return EXIT_SUCCESS;
 }
 \end{lstlisting}
+\stepcounter{netcnt}
 
 Superficially, this is very similar to the client. The first important
 difference is that rather than creating a sockaddr\_in with information about
@@ -207,19 +214,21 @@ processes, or use threads, to handle the connections.
 
 \subsection{Useful network functions}
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{netcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{netcnt}]
 int gethostname(char *hostname, size_t size);
 \end{lstlisting}
+\stepcounter{netcnt}
 
 Parameters are a pointer to the first character of an array of chars and the
 size of that array. If possible, it finds the hostname and stores it in the
 array. On failure it returns -1.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{netcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{netcnt}]
 struct hostent *gethostbyname(const char *name);
 \end{lstlisting}
+\stepcounter{netcnt}
 
 This function obtains information about a domain name and stored it in a
 hostent struct, in the hostent structure the most useful part is the (char**)

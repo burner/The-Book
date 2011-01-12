@@ -1,4 +1,5 @@
 \section{Complex types}\label{Complex_types}
+\newcounter{comtypcnt}
 \subsection{Data structures}
 A data structure (``struct'') contains multiple pieces of data.  Each piece of
 data (called a ``member'') can be accessed by the name of the variable,
@@ -10,10 +11,11 @@ of a struct can be of any data type and can even be an array or a pointer.
 Pointers are variables that don't hold the actual data. Instead they point to
 the memory location of some other variable.  For example,
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{comtypcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{comtypcnt}]
 int *pointer = &variable;
 \end{lstlisting}
+\stepcounter{comtypcnt}
 
 defines a pointer to an \texttt{int}, and also makes it point to the particular
 integer contained in \texttt{variable}.
@@ -21,68 +23,75 @@ integer contained in \texttt{variable}.
 The '*' is what makes this an integer pointer.  To make the pointer point to a
 different integer, use the form
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{comtypcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{comtypcnt}]
 pointer = &sandwiches;
 \end{lstlisting}
+\stepcounter{comtypcnt}
 
 Where \& is the \emph{address of} operator.  Often programmers set the value of
 the pointer to NULL (a standard macro defined as 0 or (void*)0 ) like this:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{comtypcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{comtypcnt}]
 pointer = NULL;
 \end{lstlisting}
+\stepcounter{comtypcnt}
 
 This tells us that the pointer isn't currently pointing to any real location.
 
 Additionally, to dereference (access the thing being pointed at) the pointer,
 use the form:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{comtypcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{comtypcnt}]
 value = *pointer;
 \end{lstlisting}
+\stepcounter{comtypcnt}
 
 \subsection{Structs}
 A data structure contains multiple pieces of data.  One defines a data
 structure using the \texttt{struct} keyword. For example,
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{comtypcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{comtypcnt}]
 struct mystruct {
     int int_member;
     double double_member;
     char string_member[25];
 } variable;
 \end{lstlisting}
+\stepcounter{comtypcnt}
 
 \texttt{variable} is an instance of \texttt{mystruct}. You can omit it from the
 end of the \texttt{struct} declaration and declare it later using:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{comtypcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{comtypcnt}]
 struct mystruct variable;
 \end{lstlisting}
+\stepcounter{comtypcnt}
 
 It is often common practice to make a \emph{type synonym} so we don't have to
 type ``struct mystruct'' all the time. C allows us the possibility to do so
 using a \texttt{typedef} statement, which aliases a type:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{comtypcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{comtypcnt}]
 typedef struct {
   ...
 } Mystruct;
 \end{lstlisting}
+\stepcounter{comtypcnt}
 
 The \texttt{struct} itself has no name (by the absence of a name on the first
 line), but it is aliased as \texttt{Mystruct}. Then you can use
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{comtypcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{comtypcnt}]
 Mystruct structure;
 \end{lstlisting}
+\stepcounter{comtypcnt}
 
 Note that it is commonplace, and good style to capitalize the \textbf{first
 letter} of a type synonym. However in the actual definition we need to give the
@@ -95,13 +104,14 @@ between the two is that in a struct, the members occupy different areas of
 memory, but in a union, the members occupy the same area of memory. Thus, in
 the following type, for example:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{comtypcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{comtypcnt}]
 union {
     int i;
     double d;
 } u;
 \end{lstlisting}
+\stepcounter{comtypcnt}
 
 The programmer can access either \texttt{u.i} or \texttt{u.d}, but not both at
 the same time. Since \texttt{u.i} and \texttt{u.d} occupy the same area of

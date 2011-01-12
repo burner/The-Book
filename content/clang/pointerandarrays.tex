@@ -1,4 +1,5 @@
 \section{Pointers and arrays}
+\newcounter{pntcnt}
 A \textbf{pointer} is a value that designates the address (i.e., the location
 in memory), of some value. There are four fundamental things you need to know
 about pointers:
@@ -26,8 +27,8 @@ arrays''. We will briefly cover multi-dimensional arrays in a later chapter.
 \subsection{Declaring pointers}
 Consider the following snippet of code which declares two pointers:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 struct MyStruct {
 	int   m_aNumber;
 	float num2;
@@ -36,6 +37,7 @@ struct MyStruct {
 int *pJ2;
 struct MyStruct *pAnItem;
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 The first four lines define a structure.  The next line declares a variable
 which points to an \texttt{int}, and the bottom line declares a variable which
@@ -47,11 +49,12 @@ In the first of the following lines of code, \texttt{var1} is a pointer to a
 long while \texttt{var2} is a long and not a pointer to a long. In the second
 line \texttt{p3} is declared as a pointer to a pointer to an int.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 long  *var1, var2;
 int   **p3;
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 Pointer types are often used as parameters to function calls. The following
 shows how to declare a function which uses a pointer as an argument. Since C
@@ -62,18 +65,19 @@ struct will be modified in the function. This is done to avoid copying the
 complete contents of the structure onto the stack. More about pointers as
 function arguments later.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 int MyFunction(struct MyStruct *pStruct);
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 \subsection{Assigning values to pointers}
 So far we've discussed how to declare pointers. The process of assigning values
 to pointers is next. To assign a pointer the address of a variable, the
 \texttt{\&} or 'address of' operator is used. 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 int myInt;
 int *pPointer;
 struct MyStruct dvorak;
@@ -82,20 +86,22 @@ struct MyStruct *pKeyboard;
 pPointer = &myInt;
 pKeyboard = &dvorak;
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 Here, pPointer will now reference myInt and pKeyboard will reference dvorak.
 
 Pointers can also be assigned to reference dynamically allocated memory. The
 malloc() and calloc() functions are often what are used to do this.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 #include <stdlib.h>
 /* ... */
 struct MyStruct *pKeyboard;
 /* ... */
 pKeyboard = malloc(sizeof *pKeyboard);
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 The malloc function returns a pointer to dynamically allocated memory (or NULL
 if unsuccessful). The size of this memory will be appropriately sized to
@@ -104,8 +110,8 @@ contain the MyStruct structure.
 The following is an example showing one pointer being assigned to another and
 of a pointer being assigned a return value from a function.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 static struct MyStruct val1, val2, val3, val4;
 
 struct MyStruct *ASillyFunction( int b ) {
@@ -127,6 +133,7 @@ c = &j; /* pointer assigned using & operator */
 d = c;  /* assign one pointer to another     */
 strPointer = ASillyFunction( 3 ); /* pointer returned from a function. */
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 When returning a pointer from a function, do not return a pointer that points
 to a value that is local to the function or that is a pointer to a function
@@ -139,8 +146,8 @@ To access a value to which a pointer points, the \texttt{*} operator is used.
 Another operator, the \texttt{-\textgreater{}} operator is used in conjunction
 with pointers to structures. Here's a short example.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 int c, d;
 int *pj;
 struct MyStruct astruct;
@@ -157,6 +164,7 @@ bb = &astruct;
 bb->num2 = 44.3;     /* assigns 44.3 to the num2 member of astruct   */
 *pj = bb->m_aNumber; /* eqivalent to d = astruct.m_aNumber;          */
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 The expression \texttt{bb-\textgreater{}mem} is entirely equivalent to
 \texttt{(*bb).mem}. They both access the \texttt{mem} element of the structure
@@ -200,8 +208,8 @@ accessing dynamically allocated memory. Let's look at examples of each. In the
 following code, the call to calloc() effectively allocates an array of struct
 MyStruct items.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 float KrazyFunction( struct MyStruct *parm1, int p1size, int bb ) { 
 	int ix; //declaring an integer variable//
 	for(ix=0; ix<p1size; ix++) {
@@ -227,6 +235,7 @@ for(ix=0; ix<someSize; ix++) {
 	secondArray[ix].num2 = .304 * ix * ix;
 }
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 Pointers and array names can pretty much be used interchangeably. There are
 exceptions. You cannot assign a new pointer value to an array name. The array
@@ -241,12 +250,13 @@ When declaring parameters to functions, declaring an array variable without a
 size is equivalent to declaring a pointer. Often this is done to emphasize the
 fact that the pointer variable will be used in a manner equivalent to an array. 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 /* two equivalent function definitions */
 int LittleFunction( int *paramN );
 int LittleFunction( int paramN[] );
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 Now we're ready to discuss pointer arithmetic. You can add and subtract integer
 values to/from pointers. If myArray is declared to be some type of array, the
@@ -265,8 +275,8 @@ If you have a pointer that points to an element of an array, the index of the
 element is the result when the array name is subtracted from the pointer.
 Here's an example.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 struct MyStruct someArray[20];
 struct MyStruct *p2;
 int idx;
@@ -279,6 +289,7 @@ for(p2 = someArray; p2 < someArray+20;  ++p2) {
 }
 idx = p2 - someArray;
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 You may be wondering how pointers and multidimensional arrays interact. Lets
 look at this a bit in detail. Suppose A is declared as a two dimensional array
@@ -287,22 +298,23 @@ float. If pf is initialized to point to A[0][0], then *(pf+1) is equivalent to
 A[0][1] and *(pf+D2) is equivalent to A[1][0]. The elements of the array are
 stored in row-major order.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 float A[6][8];
 float *pf;
 pf = &A[0][0]; 
 *(pf+1) = 1.3;   /* assigns 1.3 to A[0][1] */
 *(pf+8) = 2.3;   /* assigns 2.3 to A[1][0] */
 \end{lstlisting}
+\stepcounter{pntcnt}
 	
 Let's look at a slightly different problem. We want to have a two dimensional
 array, but we don't need to have all the rows the same length. What we do is
 declare an array of pointers. The second line below declares A as an array of
 pointers. Each pointer points to a float. Here's some applicable code:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 float  linearA[30];
 float *A[6];
 
@@ -318,6 +330,7 @@ A[3][-3] = 1.44; /* refers to linearA[12];
 negative indices are sometimes useful. But avoid using 
 them as much as possible. */
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 We also note here something curious about array indexing. Suppose myArray is an
 array and idx is an integer value. The expression myArray[idx] is equivalent to
@@ -330,8 +343,8 @@ done within a loop, as in the following example. The increment and decrement
 applies to the pointer, not to the object to which the pointer refers.  In
 other words, *pArray++ is equivalent to *(pArray++).
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 long myArray[20];
 long *pArray;
 int i;
@@ -343,6 +356,7 @@ for(i=0; i<10; ++i) {
 	*pArray++ = 6 + 2*i + 7*i*i;
 }
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 \subsection{Pointers in Function Arguments}
 Often we need to invoke a function with an argument that is itself a pointer.
@@ -359,8 +373,8 @@ argument in the call is \texttt{*mValue}. The third parameter to function
 pointer to a long, no ampersand is needed when it is used as the third argument
 to the function.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 int FunctOne( struct SomeStruct *pValue, int iValue, long *lValue ) {
    /*  do some stuff ... */
    return 0;
@@ -376,6 +390,7 @@ int FunctTwo( struct someStruct *pStruct, int *mValue ) {
 	return j;
 }
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 \subsection{Pointers and Text Strings}
 Historically, text strings in C have been implemented as arrays of characters,
@@ -387,38 +402,42 @@ functions requires the inclusion of the standard C header file ``string.h''.
 
 A statically declared, initialized string would look similar to the following:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 static const char *myFormat = "Total Amount Due: %d";
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 The variable \texttt{myFormat} can be viewed as an array of 21 characters.
 There is an implied null character ('\textbackslash{}0') tacked on to the end
 of the string after the 'd' as the 21st item in the array.  You can also
 initialize the individual characters of the array as follows:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 static const char myFlower[] = { 'P', 'e', 't', 'u', 'n', 'i', 'a', '\0' };
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 An initialized array of strings would typically be done as follows:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 static const char *myColors[] = {
    "Red", "Orange", "Yellow", "Green", "Blue", "Violet" };
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 The initilization of an especially long string can be split across lines of
 source code as follows.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 static char *longString = "Hello. My name is Rudolph and I work as a reindeer "
   "around Christmas time up at the North Pole.  My boss is a really swell guy."
   " He likes to give everybody gifts.";
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 The library functions that are used with strings are discussed in a later chapter.
 
@@ -431,8 +450,8 @@ invokes a caller supplied function \texttt{TalkJive} with caller data. Note
 that \texttt{DoSomethingNice} really doesn't know anything about what
 \texttt{dataPointer}refers to.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 typedef  int (*MyFunctionType)( int, void *);      /* a typedef for a function pointer */
 
 #define THE_BIGGEST 100
@@ -467,6 +486,7 @@ static DataINeed  sillyStuff = { BLUE, "Whatcha talkin 'bout Willis?" };
 /* ... */
 DoSomethingNice( 41, &TalkJive,  &sillyStuff );
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 Some versions of C may not require an ampersand preceeding the
 \texttt{TalkJive} argument in the \texttt{DoSomethingNice} call. Some
@@ -498,8 +518,8 @@ through a function pointer in the current state.
 Function pointers are mainly used to reduce the complexity of switch statement.
 Example With Switch statement: 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 #include <stdio.h>
 int add(int a, int b);
 int sub(int a, int b);
@@ -535,12 +555,13 @@ int div(int i, int j) {
 	return (i/j);
 }
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 Without Switch Statement or Use of function pointer: Here you will see the
 beautiful use of function pointer.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 #include <stdio.h>
 
 int add(int a, int b);
@@ -573,6 +594,7 @@ int div(int i, int j) {
 	return (i/j);
 }
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 \subsubsection{Examples of pointer constructs}
 Below are some example constructs which may aid in creating your pointer.
@@ -606,8 +628,8 @@ declared earlier in the same function.
 
 To find the end of an array.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 /* better.c - demonstrates one method of fixing the problem */
  
 #include <stdio.h>
@@ -624,11 +646,12 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 To iterate over every element of an array, use
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 #define NUM_ELEM(x) (sizeof (x) / sizeof (*(x)))
 
 for( i = 0; i < NUM_ELEM(array); i++ ) {
@@ -636,6 +659,7 @@ for( i = 0; i < NUM_ELEM(array); i++ ) {
 	;
 }
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 Note that the sizeof operator only works on things defined earlier in the same
 function.  The compiler replaces it with some fixed constant number.  In this
@@ -650,8 +674,8 @@ Often a function needs to know the size of an array it was given -- an array
 defined in some other function.
 For example,
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 /* broken.c - demonstrates a flaw */
  
 #include <stdio.h>
@@ -678,6 +702,7 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 Unfortunately, (in C and C++) the length of the array cannot be obtained from
 an array passed in at run time, because (as mentioned above) the size of an
@@ -699,8 +724,8 @@ the first element); similar to the string or vector classes in C++.
 \end{itemize}
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
-\begin{lstlisting}[caption=,language={C},
-breaklines=true,xleftmargin=15pt,label=lst:]
+\begin{lstlisting}[caption=Section \thesection listing \arabic{pntcnt},language={C},
+breaklines=true,xleftmargin=15pt,label=lst:section\thesection listing\arabic{pntcnt}]
 /* fixed.c - demonstrates one work-around */
  
 #include <stdio.h>
@@ -729,6 +754,7 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 \end{lstlisting}
+\stepcounter{pntcnt}
 
 It's worth mentioning that sizeof operator has two variations: \texttt{sizeof
 (\emph{type})} (for instance: \texttt{sizeof (int)} or \texttt{sizeof (struct
