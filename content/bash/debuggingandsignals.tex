@@ -459,7 +459,7 @@ following:
 	\item[A string] A string containing a command list. Any and all commands
 are allowed and you can use multiple commands separated by semicolons as well
 (i.e. a command list).
-	\item['\textless{}nowiki/\textgreater{}'] The empty string. Actually this
+	\item[The empty string] Actually this
 is the same as the previous case, since this is the empty command string. This
 causes the shell to execute nothing when a signal is trapped --- in other
 words, to ignore the signal.
@@ -529,14 +529,14 @@ $ ps -ef | grep signal
 
 \scriptsize
 \begin{verbatim}
-bzt 10865 7067 0 15:08 pts/0 00:00:00 /bin/sh ./trap_signal.sh
+bzt 10865 7067 0 15:08 pts/0 00:00:00 /bin/sh 
+    ./trap_signal.sh
 bzt 10808 10415 0 15:12 pts/1 00:00:00 fgrep signal
 \end{verbatim}
 \normalsize
 
 Now, to send a signal to that process, we use the 'kill' command which is built
 into the Bourne Shell: 
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:]
@@ -547,7 +547,6 @@ As the name suggests, 'kill' was actually intended to kill processes (this fits
 with the default signal being SIGTERM and the default signal handler being
 terminate). But in fact what it does is nothing more than send a signal to a
 process. So for example, we can send a SIGUSR1 to our process like this:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Let's trip the trap...,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:Let's trip the trap...]
@@ -609,10 +608,12 @@ standard:
 
 \scriptsize
 \begin{verbatim}
-A mechanism by which a process or thread may be notified of, or
-affected by, an event occurring in the system.  Examples of such 
-events include hardware exceptions and specific actions by 
-processes. The term signal is also used to refer to the event itself.
+A mechanism by which a process or thread may be 
+notified of, or affected by, an event occurring 
+in the system. Examples of such events include 
+hardware exceptions and specific actions by 
+processes. The term signal is also used to refer 
+to the event itself.
 \end{verbatim}
 \normalsize
 
@@ -651,7 +652,7 @@ rely on them (but then again, you use symbolic values in order not to use
 actual values). See table \ref{tab:posixsignal}.
 
 \begin{table*}[H]
-	\begin{tabular}{|c|c|p{5cm}|c|}
+	\begin{tabular}{|c|c|p{4cm}|c|}
 		\hline
 		\textbf{ Signal} & \textbf{ Default action} & \textbf{ Description} & \textbf{ Typical value(s)} \\ \hline
 		 SIGABRT &  Abort with core dump &  Abort process and generate a core dump &  6 \\ \hline

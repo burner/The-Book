@@ -4,6 +4,10 @@ When you think of a computer and everything that goes with it, you usually come
 up with a mental list of all sorts of different things:
 
 \begin{itemize}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 	\item The computer itself
 	\item The monitor
 	\item The keyboard
@@ -64,6 +68,10 @@ streams (a program can print and open a network connection, for instance). But
 there are three basic streams available to all files, even though they may not
 always be useful or used. These streams are called the ``standard'' streams:
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 	\item[Standard in (stdin)] the standard stream for input into a file.
 	\item[Standard out (stdout)] the standard stream for output out of a file.
 	\item[Standard error (stderr)] the standard stream for error output from a file.
@@ -156,6 +164,10 @@ file is such a common operation that you don't need a separate end-of-chain
 program for it. Redirecting to file is built straight into the Bourne Shell,
 through the following operators:
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 	\item[\emph{process} \textgreater{} \emph{data file}] redirect the output
 of \emph{process} to the data file; create the file if necessary, overwrite its
 existing contents otherwise.
@@ -181,7 +193,6 @@ Commands. When we run the script, it simply outputs the string \textbf{Hello}
 to the screen and then returns us to our prompt. But let's say we want to
 redirect the output to a file instead. We can use the redirect operators to do
 that easily:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Redirecting the output to a data file,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:Redirecting the output to a data file]
@@ -192,8 +203,6 @@ $
 This time, we don't see the string 'Hello' on the screen. Where's it gone?
 Well, exactly where we wanted it to: into the (new) data file called
 'myfile.txt'. Let's examine this file using the 'cat' command:
-
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Examining the results of redirecting some output,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:Examining the results of redirecting some output]
@@ -204,8 +213,6 @@ $
 
 Let's run the program again, this time using the '\textgreater{}\textgreater{}'
 operator instead, and then examine 'myfile.txt' again using the 'cat' command:
-
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Redirecting using the append redirect,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:Redirecting using the append redirect]
@@ -220,7 +227,6 @@ You can see that 'myfile.txt' now consists of two lines --- the output has been
 added to the end of the file (or concatenated); this is due to the use of the
 '\textgreater{}\textgreater{}' operator. If we run the script again, this time
 with the single greater-than operator, we get:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Redirecting using the overwrite redirect,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:Redirecting using the overwrite redirect]
@@ -241,8 +247,6 @@ stream is captured by the '\textless{}' operator.
 
 By default 'stdin' is fed from your keyboard; run the 'cat' command without any
 arguments and it will just sit there, waiting for you type something:
-
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=cat ???,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:cat]
@@ -681,7 +685,6 @@ But now it will end....
 When using here documents in combination with variable or command substitution,
 it is important to realize that substitutions are carried out \emph{before} the
 here document is passed on. So for example:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Using a here document with substitutions,language={bash},
 breaklines=true,xleftmargin=15pt,label=lst:Using a here document with substitutions]

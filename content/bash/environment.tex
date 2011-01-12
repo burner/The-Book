@@ -9,15 +9,15 @@ actually is called the "environment". The second is a much wider collection of
 resources that influence the execution of a program and is called the
 \textit{command execution environment}.
 
-\subsection{The command execution environment}
+\subsection{The command execution\\ environment}
 Each running program, either started directly by the user from the shell or
 indirectly by another process, operates within a collection of global resources
 called its \textbf{command execution environment} (CEE).
 
 A program's CEE contains important information such as the source and
 destination of data upon which the program can operate (also known as the
-../Files and streams|standard input, ../Files and streams|standard output and
-../Files and streams|standard error handles). In addition, variables are
+../Files and streams | standard input, ../Files and streams | standard output
+and ../Files and streams | standard error handles). In addition, variables are
 defined that list the identity and home directory of the user or process that
 started the program, the hostname of the machine and the kind of terminal used
 to start the program. There are other variables too, but that's just some of
@@ -27,6 +27,10 @@ run in the same environment.
 
 The complete list of resources included in the shell's CEE is:
 \begin{itemize}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 \item Open files held in the parent process that started the shell. These files
 are inherited. This list of files includes the files accessed through
 redirection (such as standard input, output and error files).
@@ -49,6 +53,10 @@ is executed it its own CEE. This CEE inherits a copy of part of the CEE of its
 parent, but not the entire parent CEE. The inherited copy includes:
 
 \begin{itemize}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 \item Open files.
 \item The working directory.
 \item The file creation mode mask.
@@ -67,8 +75,12 @@ environment (variables and functions). Here are some of the options you might
 get some use out of:
 
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 \item[+/-a]:When set, automatically mark all newly created or redefined variables for export.
-\item[+/-f]When set, ignore filename \_Shell\_Scripting/ Control\_flow \#Regular\_expressions\_and\_metacharacters | metacharacters.
+\item[+/-f]When set, ignore filename \_Shell \_Scripting/ Control\_flow \#Regular \_expressions \_and \_metacharacters | metacharacters.
 \item[+/-n]When set, only read commands but do not execute them.
 \item[+/-v]When set, causes the shell to print commands as they are read from input (verbose debugging flag).
 \item[+/-x]When set, causes the shell to print commands as they will be executed (debugging flag).
@@ -92,7 +104,6 @@ that examine these variables, and those scripts can make decisions based on the
 values stored in the variables.
 
 An environment variable is a name/value pair of the form
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[language={bash},
 xleftmargin=15pt]
@@ -104,14 +115,12 @@ variable which we will discuss in the module on |substitution, but for now we
 will limit ourselves to the simple way: if you prepend a variable name with a
 \$-character, the shell will substitute the value for the variable. So, for
 example:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Simple use of a variable,language={bash},
 xleftmargin=15pt, label=lst:simpleuseofavariable]
 VAR=Hello
 $ echo $VAR
 \end{lstlisting}
-
 \scriptsize
 \begin{verbatim}
 Hello
@@ -129,6 +138,10 @@ by another. There are even a number of environment variables that the shell
 itself uses in its configuration. Some typical examples:
 
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 \item[IFS]This variable lists the characters that the shell considers to be whitespace characters.
 \item[PATH]This variable is interpreted as a list of directories (separated by colons on a Unix system). Whenever you type the name of an executable for the shell to execute but do not include the full path of that executable, the shell will look in all of these directories \textit{in order} to find the executable.
 \item[PS1]This variable lists a set of codes. These codes instruct your shell about what the command-line prompt in the interactive shell should look like.
@@ -182,26 +195,21 @@ xleftmargin=15pt,label=lst:Assigningasimplevaluetoavariable2]
 $ VAR=Goodbye
 \end{lstlisting}
 
-
 We aren't limited to straightforward strings either. We can just as easily
 assign the value of one variable to another:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Assigning a simple value to a variable,language={bash},
 xleftmargin=15pt,label=lst:Assigningasimplevaluetoavariable3]
 $ VAR=$PATH
 \end{lstlisting}
 
-
 We can even go all-out and combine several commands to come up with a value:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Assigning a combined value to a variable,language={bash},
 xleftmargin=15pt,label=lst:Assigningacombinedvaluetoavariable4]
 $ PS1= "`whoami`@`hostname -s` `pwd` 
 $ "
 \end{lstlisting}
-
 
 In this case, we're taking the output of the three commands 'whoami',
 'hostname', and 'pwd', then we add the '\$' symbol, and some spacing and other
@@ -224,11 +232,10 @@ you execute in the shell (in interactive mode or in a script) can have
 command-line arguments. Even if the command doesn't actually use them, they can
 still be there. You pass command-line arguments to a command simply by typing
 them after the command, like so:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[language={bash},
 xleftmargin=15pt]
-\textit{command} \textit{arg0} \textit{arg1} ...
+command arg0 arg1 ...
 \end{lstlisting}
 
 This is allowed for any command. Even your own shell scripts. But say that you
@@ -240,15 +247,14 @@ positional variables. And these variables have numbers for names: 1 through 9,
 accessed through \$1 through \$9. Well, actually zero though nine; \$0 is the
 name of the command that was executed. For example, consider a script like
 this:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=WithArgs.sh: A script that uses command-line arguments,language={bash},
 xleftmargin=15pt,label=lst:WithArgs.sh:Ascriptthatusescommand-linearguments]
 #!/bin/sh
 
-echo \$0
-echo \$1
-echo \$2
+echo $0
+echo $1
+echo $2
 \end{lstlisting}
 
 And a call to this script like this:
@@ -269,7 +275,6 @@ As you can see, the shell automatically assigned the values 'Hello' and 'World'
 to \$1 and \$2 (okay, technically to the variables called 1 and 2, but it's
 less confusing in written text to call them \$1 and \$2). What happens if we
 call this script with more than two arguments?
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Calling the script with more arguments,language={bash},
 xleftmargin=15pt, label=lst:Calling the script with more arguments]
@@ -283,10 +288,10 @@ World
 Did the mouse eat the cheese?
 \end{verbatim}
 \normalsize
+
 This is no problem whatsoever - the extra arguments get assigned to \$3 and
 \$4. But we didn't use those variables in the script, so those command-line
 arguments are ignored. What about the opposite case (too few arguments)?
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Calling the script with too few arguments...,language={bash},
 xleftmargin=15pt,label=lst:Callingthescriptwithtoofewarguments...]
@@ -309,8 +314,6 @@ argument to be passed to the script? I.e. 'Hello World' rather than 'Hello' and
 'World'? We'll get deeply into that when we start talking about
 \_Shell\_Scripting/Control\_flow quoting, but for now just surround the
 words with single quotes:
-
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Calling the script with multi-word arguments,language={bash},
 xleftmargin=15pt,label=lst:Calling the script with multi-word arguments]
@@ -344,6 +347,10 @@ shift is the number of positions to shift (so you can shift as many positions
 in one go as you like). There are a couple of things to keep in mind though:
 
 \begin{itemize}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 \item No matter how often you shift, \$0 always remains the original command.
 \item If you shift n positions, n must be lower than the number of arguments.
 If n is greater than the number of arguments, no shifting occurs.
@@ -358,6 +365,10 @@ other, special variables with special information about the shell. You'll
 probably not use these as often, but it's good to know they're there. These
 variables are
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 	\item[\$\#]The number of command-line arguments to the current command (changes after a use of the \textbf{shift} command!).
 	\item[\$-]The shell options currently in effect (see \#The \_ .27set. 27\_ command|the 'set' command).
 	\item[\$?]The exit status of the last command executed (0 if it succeeded, non-zero if there was an error).
@@ -412,8 +423,6 @@ variables that are marked to be \textit{exported} (i.e. copied to
 subprocesses). In other words, you can have any variable copied into the
 environment of your subprocesses, but you have to let the shell know that's
 what you want first. Here's an example of the distinction:
-
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Exported and non-exported variables,language={bash},
 xleftmargin=15pt,label=lst:Exported and non-exported variables]
@@ -438,7 +447,6 @@ the second shell doesn't get a copy.
 
 In order to mark a variable for export you use the \textbf{export} command,
 like so:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[language={bash},
 xleftmargin=15pt]
@@ -591,6 +599,10 @@ shell to influence and use multitasking (starting jobs and so on) is referred
 to as \textit{job control}.
 
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 \item[Job] A process that is executing an instance of a computer program.
 \item[Job control] The ability to selectively stop (suspend) the execution of jobs and continue (resume) their execution at a later point.
 \end{description}
@@ -600,10 +612,14 @@ and other contexts might allow for different definitions. Here are some more
 terms you'll come across:
 
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 \item[Job ID] An ID (usually an integer) that uniquely identifies a job. Can be used to refer to jobs for different tools and commands.
 \item[Process ID (or PID)] An ID (usually an integer) that uniquely identifies a process. Can be used to refer to processes for different tools and commands. Not the same as a Job ID.
-\item[Foreground job (or foreground process)] A job that has access to the terminal (i.e. can read from the keyboard and write to the monitor).
-\item[Background job (or background process)] A job that does not have access to the terminal (i.e. cannot read from the keyboard or write to the monitor).
+\item[Foreground job (or foreground ps)] A job that has access to the terminal (i.e. can read from the keyboard and write to the monitor).
+\item[Background job (or background ps)] A job that does not have access to the terminal (i.e. cannot read from the keyboard or write to the monitor).
 \item[Stop (or suspend)] Stop the execution of a job and return terminal control to the shell. A stopped job is not a \textit{terminated} job.
 \item[Terminate] Unload a program from memory and destroy the job that was running the program.
 \end{description}
@@ -651,6 +667,10 @@ In order to do all the things we talked about in the previous section, you need
 two things:
 
 \begin{itemize}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 \item An operating system that supports job control.
 \item A shell that supports job control and has job control enabled.
 \end{itemize}
@@ -694,9 +714,9 @@ We've already talked at length about how to create a foreground job: type a
 command or executable name at the prompt, hit enter, there's your job. Been
 there, done that, bought the T-shirt.
 
-We've also already ../Running\_Commands \#A\_useful \_thing \_to \_know:
-\_background\_processes | mentioned how to start a background job: by adding an
-ampersand at the end of the command.
+We've also already ../Running \_Commands \#A \_useful \_thing \_to \_know:
+\_background \_processes | mentioned how to start a background job: by adding
+an ampersand at the end of the command.
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Creating a background job,language={bash},
 xleftmargin=15pt,label=lst:creatingabackgroundjob]
@@ -732,7 +752,6 @@ done &
 We haven't gotten into ../Control flow|flow control yet, but this writes
 200,000 integers to a file and takes some time. It also runs in the background.
 Say that we start this job:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Starting the job,language={bash},
 xleftmargin=15pt, label=lst:Starting the job]
@@ -744,25 +763,22 @@ done &
 [1] 11246
 \end{lstlisting}
 
-
 The job is given job ID 1 and process ID 11246. Let's move the process to the
 foreground:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Moving the job to the front,language={bash},
-xleftmargin=15pt, label=lst:Moving the job to the front]
+breaklines=true,xleftmargin=15pt, label=lst:Moving the job to the front]
 $ fg %1
 while [ \$CNT -lt 200000 ]; do
     echo \$CNT >> outp.txt; CNT=\$(expr \$CNT + 1);
 done
 \end{lstlisting}
 
-
 The job is now running in the foreground, as you can tell from the fact that we
 are not returned a prompt. Now type the \textit{CTRL+Z} keyboard combination:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Stopping the job,language={bash},
-xleftmargin=15pt, label=lst:Stopping the job]
+breaklines=true,xleftmargin=15pt, label=lst:Stopping the job]
 'CTRL+Z'
 [1]+  Stopped 
 while [ $CNT -lt 200000 ]; do
@@ -781,7 +797,6 @@ And even those that don't usually have some way of suspending themselves.
 Once a job is suspended, you can resume it either in the foreground or the
 background. To resume in the foreground you use the 'fg' command discussed
 earlier. You use 'bg' for the background:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[language={bash},
 xleftmargin=15pt]
@@ -789,17 +804,15 @@ xleftmargin=15pt]
 \end{lstlisting}
 
 To resume our long-lasting job that writes numbers, we do the following:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=Resuming the job in the background,language={bash},
-xleftmargin=15pt, label=lst:Resuming the job in the background]
+breaklines=true,xleftmargin=15pt, label=lst:Resuming the job in the background]
 $ bg %1
 [1]+ while [ $CNT -lt 200000 ] do
     echo $CNT >> outp.txt; CNT=`expr $CNT + 1`;
 done &
 $
 \end{lstlisting}
-
 
 The output indicates that the job is running again. In the background this
 time, since we are also returned a prompt.
@@ -836,6 +849,10 @@ section we will cover the complete list.
 The standard list of job control tools consists of the following:
 
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 \item[bg]Moves a job to the background.
 \item[fg]Moves a job to the foreground.
 \item[jobs]Lists the active jobs.
@@ -849,6 +866,10 @@ All of these commands can take a job specification as an argument. A job
 specification starts with a percent sign and can be any of the following:
 
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 \item[\%n]A job ID (n is  number).
 \item[\%s]The job whose command-line started with the string s.
 \item[\%?s]The jobs whose command-lines \textit{contained} the string s.
@@ -860,7 +881,6 @@ specification starts with a percent sign and can be any of the following:
 We've already looked at bg, fg, and CTRL+Z and we'll cover kill in a
 \_and\_signal\_handling\#Trap | later section. That leaves us with jobs and
 wait. Let's start with the simplest one:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=job wait,language={bash},
 xleftmargin=15pt,label=lst:jobwait]
@@ -880,6 +900,10 @@ regularly though:
 
 Where 
 \begin{itemize}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 \item -l lists the process IDs as well as normal output
 \item -n limits the output to information about jobs whose status has changed since the last status report
 \item -p lists only the process ID of the jobs' process group leader
@@ -890,7 +914,7 @@ Where
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=another wait,language={bash},
-xleftmargin=15pt,label=lst:anotherwait]
+breaklines=true,xleftmargin=15pt,label=lst:anotherwait]
 $ CNT0=0
 $ while [ $CNT0 -lt 200000 ];
 do echo $CNT0 >> outtemp0.txt;
@@ -903,14 +927,15 @@ CNT1=`expr $CNT1 + 1`; done&
 [2] 31331
 $ jobs
 \end{lstlisting}
-
 \scriptsize
 \begin{verbatim}
-[1]-  Running                 while [ $CNT0 -lt 200000 ]; do
-    echo $CNT0 >> outtemp0.txt; CNT0=`expr $CNT0 + 1`;
+[1]-  Running while [ $CNT0 -lt 200000 ]; do
+    echo $CNT0 >> outtemp0.txt;
+    CNT0=`expr $CNT0 + 1`;
 done &
-[2]+  Running                 while [ $CNT1 -lt 200000 ]; do
-    echo $CNT1 >> outtemp1.txt; CNT1=`expr $CNT1 + 1`;
+[2]+  Running while [ $CNT1 -lt 200000 ]; do
+    echo $CNT1 >> outtemp1.txt;
+    CNT1=`expr $CNT1 + 1`;
 done &
 \end{verbatim}
 \normalsize
@@ -937,6 +962,10 @@ command reports on state directly after the job id and order. We recognize the
 following states:
 
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 \item[Running] This is where the job is doing what it's supposed to do. You
 probably don't need to interrupt it unless you really want to give the program
 your personal attention (for example, to stop the program, or to find out how
@@ -964,17 +993,16 @@ a reboot will be required to get rid of them.
 \end{description}
 
 \subsection{Other job control related tools}
-In the \#Job\_control\_tools\_and\_job\_status|last section we discussed the
-standard facilities that are available for job control in the Unix shell.
+In the \#Job \_control \_tools \_and \_job\_status | last section we discussed
+the standard facilities that are available for job control in the Unix shell.
 However, there are also a number of non-standard tools that you might come
 across. And even though the focus of this book is Bourne Shell scripting
 (particularly as the lingua franca of Unix shell scripting) these tools are so
 common that we would be remiss if we did not at least mention them.
 
-\subsubsection{Shell commands you might come across}
+\subsubsection{Shell commands you might come\\ across}
 In addition to the tools previously discussed, there are two shell commands
 that are quite common: 'stop' and 'suspend'.
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[language={bash},xleftmargin=15pt]
 stop job ID
@@ -986,7 +1014,6 @@ other words, it is the equivalent of 'CTRL+Z' for background processes. It
 usually takes a job ID, like most of these commands. On systems that do not
 have a 'stop' command, you should be able to stop background processes by using
 the 'kill' command to send a SIGSTOP signal to the background process.
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[language={bash},
 xleftmargin=15pt]
@@ -1016,13 +1043,11 @@ than the 'jobs' tool.
 The 'ps' utility is meant to report on running processes in the system.
 Processes, not jobs - meaning it can see across shell instances. Here's an
 example of the 'ps' utility:
-
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=process snapshot,language={bash},
 xleftmargin=15pt,label=lst:processsnapshot]
 $ ps x
 \end{lstlisting}
-
 \scriptsize
 \begin{verbatim}
 PID    TTY     STAT  TIME    COMMAND
@@ -1030,7 +1055,6 @@ PID    TTY     STAT  TIME    COMMAND
 37759  tty5    S     0:00:00 /bin/ps
 \end{verbatim}
 \normalsize
-
 Typical process output includes the process ID, the ID of the terminal the
 process is connected to (or running on), the CPU time the process has taken and
 the command issued to start the process. Possibly you also get a process state.
@@ -1045,6 +1069,10 @@ have to check the documentation on your system for specific details. Some
 options are quite common though, so we will list them here:
 
 \begin{description}
+\setlength{\leftmargin}{0pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
 \item[a]List all processes except group leader processes.
 \item[d]List all processes except session leaders.
 \item[e]List all processes, without taking into account user id and other access limits.

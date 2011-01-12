@@ -23,7 +23,6 @@ Ben_Tels:Local_Machine:~>_
 or
  
 The admin says: everybody, STOP TRYING TO CRASH THE SYSTEM Have a lot of fun!
-bzt:Another\_Machine:~>\_
 
 or even something as simple as
 \scriptsize
@@ -308,7 +307,7 @@ We have seen several ways of running a shell command or script. With respect to
 multiprocessing, they run in the following way:
 Way of running Runs as
 
-\begin{tabular}{|p{4cm}|p{4cm}|}
+\begin{tabular}{|p{3cm}|p{3cm}|}
 \hline
 Way of running & Runs as\\ \hline
 Interactive mode command & \begin{itemize}
@@ -350,7 +349,7 @@ time, with an example. Give the following (rather pointless but still time
 consuming) command at the prompt:
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
-xleftmargin=15pt,label=lst:]
+breaklines=true,xleftmargin=15pt,label=lst:]
 N=0 &\& while [ $N -lt 10000 ];
 do date >> scriptout; N=`expr $N + 1`; done
 \end{lstlisting}
@@ -364,7 +363,7 @@ Now give the following command:
 
 \lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
-xleftmargin=15pt,label=lst:]
+breaklines=true,xleftmargin=15pt,label=lst:]
 N=0 && while [ $N -lt 10000 ]; do date >>
 scriptout; N=`expr $N + 1`; done&
 \end{lstlisting}
