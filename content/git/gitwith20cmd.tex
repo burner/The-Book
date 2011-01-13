@@ -1,0 +1,138 @@
+\section{Everyday GIT With 20 Commands Or So}
+Individual Developer (Standalone) commands are essential for anybody who makes
+a commit, even for somebody who works alone.  If you work with other people,
+you will need commands listed in the [Individual Developer (Participant)
+section as well.  People who play the Integrator role need to learn some more
+commands in addition to the above.  [Repository Administration] commands are
+for system administrators who are responsible for the care and feeding of git
+repositories.
+
+\subsection{Individual Developer (Standalone)}
+A standalone individual developer does not exchange patches with other people,
+and works alone in a single repository, using the following commands.
+
+\begin{itemize}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+\item git-init(1) to create a new repository.
+\item git-show-branch(1) to see where you are.
+\item git-log(1) to see what happened.
+\item git-checkout(1) and git-branch(1) to switch branches.
+\item git-add(1) to manage the index file.
+\item git-diff(1) and git-status(1) to see what you are in the middle of doing.
+\item git-commit(1) to advance the current branch.
+\item git-reset(1) and git-checkout(1) (with pathname parameters) to undo changes.
+\item git-merge(1) to merge between local branches.
+\item git-rebase(1) to maintain topic branches.
+\item git-tag(1) to mark known point.
+\end{itemize}
+
+Examples:\\
+Use a tarball as a starting point for a new repository.
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ tar zxf frotz.tar.gz
+$ cd frotz
+$ git init
+$ git add . <1>
+$ git commit -m "import of frotz source tree."
+$ git tag v2.43 <2>
+\end{lstlisting}
+
+\begin{enumerate}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+\item add everything under the current directory.
+\item make a lightweight, unannotated tag.
+\end{enumerate}
+
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git checkout -b alsa-audio <1>
+$ edit/compile/test
+$ git checkout -- curses/ux_audio_oss.c <2>
+$ git add curses/ux_audio_alsa.c <3>
+$ edit/compile/test
+$ git diff HEAD <4>
+$ git commit -a -s <5>
+$ edit/compile/test
+$ git reset --soft HEAD^ <6>
+$ edit/compile/test
+$ git diff ORIG_HEAD <7>
+$ git commit -a -c ORIG_HEAD <8>
+$ git checkout master <9>
+$ git merge alsa-audio <10>
+$ git log --since='3 days ago' <11>
+$ git log v2.43.. curses/ <12>
+\end{lstlisting}
+
+\begin{enumerate}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+\item create a new topic branch.
+\item revert your botched changes in curses/ux\_audio\_oss.c.
+\item you need to tell git if you added a new file; removal and modification
+will be caught if you do git commit -a later.
+\item to see what changes you are committing.
+\item commit everything as you have tested, with your sign-off.
+\item take the last commit back, keeping what is in the working tree.
+\item look at the changes since the premature commit we took back.
+\item redo the commit undone in the previous step, using the message you
+originally wrote.
+\item switch to the master branch.
+\item merge a topic branch into your master branch.
+\item review commit logs; other forms to limit output can be combined and
+include --max-count=10 (show 10 commits), --until=2005-12-10, etc.
+\item view only the changes that touch what’s in curses/ directory, since v2.43
+tag.
+\end{enumerate}
+
+\subsection{Individual Developer (Participant)}
+A developer working as a participant in a group project needs to learn how to
+communicate with others, and uses these commands in addition to the ones needed
+by a standalone developer.
+
+\begin{itemize}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+\item git-clone(1) from the upstream to prime your local repository.
+\item git-pull(1) and git-fetch(1) from "origin" to keep up-to-date with the
+upstream.
+\item git-push(1) to shared repository, if you adopt CVS style shared
+repository workflow.
+\item git-format-patch(1) to prepare e-mail submission, if you adopt Linux
+kernel-style public forum workflow.
+\end{itemize}
+
+Examples:\\
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git clone git://git.kernel.org/pub/scm/.../torvalds/linux-2.6 my2.6
+$ cd my2.6
+$ edit/compile/test; git commit -a -s <1>
+$ git format-patch origin <2>
+$ git pull <3>
+$ git log -p ORIG_HEAD.. arch/i386 include/asm-i386 <4>
+$ git pull git://git.kernel.org/pub/.../jgarzik/libata-dev.git ALL <5>
+$ git reset --hard ORIG_HEAD <6>
+$ git gc <7>
+$ git fetch --tags <8>
+\end{lstlisting}
+
+\begin{enumerate}
+\setlength{\itemsep}{0cm}
+\setlength{\parskip}{0cm}
+\item repeat as needed.
+\item extract patches from your branch for e-mail submission.
+\item git pull fetches from origin by default and merges into the current
+branch.
+\item immediately after pulling, look at the changes done upstream since last
+time we checked, only in the area we are interested in.
+\item fetch from a specific branch from a specific repository and merge.
+\item revert the pull.
+\item garbage collect leftover objects from reverted pull.
+\item from time to time, obtain official tags from the origin and store them under .git/refs/tags/.
+\end{enumerate}
