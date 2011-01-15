@@ -1,0 +1,67 @@
+\section{Git Tag}
+\subsection{Lightweight Tags}
+We can create a tag to refer to a particular commit by running git tag with no
+arguments.
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git tag stable-1 1b2e1d63ff
+\end{lstlisting}
+
+After that, we can use stable-1 to refer to the commit 1b2e1d63ff.
+
+This creates a "lightweight" tag, basically a branch that never moves. If you
+would also like to include a comment with the tag, and possibly sign it
+cryptographically, then we can create a tag object instead.
+
+\subsection{Tag Objects}
+If one of -a, -s, or -u <key-id> is passed, the command creates a tag object,
+and requires the tag message. Unless -m or -F is given, an editor is started
+for the user to type in the tag message.
+
+When this happens, a new object is added to the Git object database and the tag
+ref points to that tag object, rather than the commit itself. The strength of
+this is that you can sign the tag, so you can verify that it is the correct
+commit later. You can create a tag object like this:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git tag -a stable-1 1b2e1d63ff
+\end{lstlisting}
+
+It is actually possible to tag any object, but tagging commit objects is the
+most common. (In the Linux kernel source, the first tag object references a
+tree, rather than a commit)
+
+\subsection{Signed Tags}
+If you have a GPG key setup, you can create signed tags fairly easily. First,
+you will probably want to setup your key id in your .git/config or ~.gitconfig
+file.
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+[user]
+    signingkey = <gpg-key-id>
+\end{lstlisting}
+
+You can also set that with
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git config (--global) user.signingkey <gpg-key-id>
+\end{lstlisting}
+
+Now you can create a signed tag simply by replacing the -a with a -s.
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git tag -s stable-1 1b2e1d63ff
+\end{lstlisting}
+
+If you don't have your GPG key in your config file, you can accomplish the same
+thing this way:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git tag -u <gpg-key-id> stable-1 1b2e1d63ff
+\end{lstlisting}

@@ -1,0 +1,164 @@
+\section{Advanced Branching And Merging}
+\subsection{Getting conflict-resolution help during a merge}
+
+All of the changes that git was able to merge automatically are already added
+to the index file, so git diff shows only the conflicts. It uses an unusual
+syntax:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git diff
+diff --cc file.txt
+index 802992c,2b60207..0000000
+--- a/file.txt
++++ b/file.txt
+@@@ -1,1 -1,1 +1,5 @@@
+++<<<<<<< HEAD:file.txt
+ +Hello world
+++=======
++ Goodbye
+++>>>>>>> 77976da35a11db4580b80ae27e8d65caf5208086:file.txt
+\end{lstlisting}
+
+Recall that the commit which will be committed after we resolve this conflict
+will have two parents instead of the usual one: one parent will be HEAD, the
+tip of the current branch; the other will be the tip of the other branch, which
+is stored temporarily in MERGE\_HEAD.
+
+During the merge, the index holds three versions of each file. Each of these
+three "file stages" represents a different version of the file:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git show :1:file.txt  # the file in a common ancestor of both branches
+$ git show :2:file.txt  # the version from HEAD.
+$ git show :3:file.txt  # the version from MERGE_HEAD.
+\end{lstlisting}
+
+When you ask git diff to show the conflicts, it runs a three-way diff between
+the conflicted merge results in the work tree with stages 2 and 3 to show only
+hunks whose contents come from both sides, mixed (in other words, when a hunk's
+merge results come only from stage 2, that part is not conflicting and is not
+shown. Same for stage 3).
+
+The diff above shows the differences between the working-tree version of
+file.txt and the stage 2 and stage 3 versions. So instead of preceding each
+line by a single "+" or "-", it now uses two columns: the first column is used
+for differences between the first parent and the working directory copy, and
+the second for differences between the second parent and the working directory
+copy. (See the "COMBINED DIFF FORMAT" section of git diff-files for a details
+of the format.)
+
+After resolving the conflict in the obvious way (but before updating the
+index), the diff will look like:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git diff
+diff --cc file.txt
+index 802992c,2b60207..0000000
+--- a/file.txt
++++ b/file.txt
+@@@ -1,1 -1,1 +1,1 @@@
+- Hello world
+-Goodbye
+++Goodbye world
+\end{lstlisting}
+
+This shows that our resolved version deleted "Hello world" from the first
+parent, deleted "Goodbye" from the second parent, and added "Goodbye world",
+which was previously absent from both.
+
+Some special diff options allow diffing the working directory against any of
+these stages:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git diff -1 file.txt      # diff against stage 1
+$ git diff --base file.txt  # same as the above
+$ git diff -2 file.txt      # diff against stage 2
+$ git diff --ours file.txt  # same as the above
+$ git diff -3 file.txt      # diff against stage 3
+$ git diff --theirs file.txt    # same as the above.
+\end{lstlisting}
+
+The git log and gitk commands also provide special help for merges:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git log --merge
+$ gitk --merge
+\end{lstlisting}
+
+These will display all commits which exist only on HEAD or on MERGE\_HEAD, and
+which touch an unmerged file.
+
+You may also use git mergetool, which lets you merge the unmerged files using
+external tools such as emacs or kdiff3.
+
+Each time you resolve the conflicts in a file and update the index:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git add file.txt
+\end{lstlisting}
+
+the different stages of that file will be "collapsed", after which git-diff
+will (by default) no longer show diffs for that file.
+
+\subsection{Multiway Merge}
+You can merge several heads at one time by simply listing them on the same git
+merge command. For instance,
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git merge scott/master rick/master tom/master
+\end{lstlisting}
+
+is the equivalent of:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git merge scott/master
+$ git merge rick/master
+$ git merge tom/master
+\end{lstlisting}
+
+\subsection{Subtree}
+There are situations where you want to include contents in your project from an
+independently developed project. You can just pull from the other project as
+long as there are no conflicting paths.
+
+The problematic case is when there are conflicting files. Potential candidates
+are Makefiles and other standard filenames. You could merge these files but
+probably you do not want to. A better solution for this problem can be to merge
+the project as its own subdirectory. This is not supported by the recursive
+merge strategy, so just pulling won't work.
+
+What you want is the subtree merge strategy, which helps you in such a
+situation.
+
+In this example, let's say you have the repository at /path/to/B (but it can be
+an URL as well, if you want). You want to merge the master branch of that
+repository to the dir-B subdirectory in your current branch.
+
+Here is the command sequence you need:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git remote add -f Bproject /path/to/B (1)
+$ git merge -s ours --no-commit Bproject/master (2)
+$ git read-tree --prefix=dir-B/ -u Bproject/master (3)
+$ git commit -m "Merge B project as our subdirectory" (4)
+$ git pull -s subtree Bproject master (5)
+\end{lstlisting}
+
+The benefit of using subtree merge is that it requires less administrative
+burden from the users of your repository. It works with older (before Git
+v1.5.2) clients and you have the code right after clone.
+
+However if you use submodules then you can choose not to transfer the submodule
+objects. This may be a problem with the subtree merge.
+
+Also, in case you make changes to the other project, it is easier to submit
+changes if you just use submodules.
