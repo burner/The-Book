@@ -1,0 +1,46 @@
+\subsection{The Git Index}
+The index is a binary file (generally kept in .git/index) containing a sorted
+list of path names, each with permissions and the SHA1 of a blob object; git
+ls-files can show you the contents of the index:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git ls-files --stage
+100644 667fa005ff12ad89437f2fdc80926e21c 0   .gitignore
+100644 8e8d14decbe4ad99db3f7fb632de0439d 0   .mailmap
+100644 664981e4397625791c8ea3bbb5f2279a3 0   COPYING
+100644 2bd26be2c2289e1f57a292534a51a93c7 0   Documentation/.gitignore
+100644 45b00a54b58d94d06eca48b03d40a50e0 0   Documentation/Makefile
+...
+100644 8d89ab52be5ec6a5e46236b4b6bcd07ea 0   xdiff/xtypes.h
+100644 2574a9f77e7ae4002a4e07a6a38e46d07 0   xdiff/xutils.c
+100644 2e05e7c36c4b68857c1cf9855e3d2f70a 0   xdiff/xutils.h
+\end{lstlisting}
+
+Note that in older documentation you may see the index called the "current
+directory cache" or just the "cache". It has three important properties:
+\begin{enumerate}
+\item The index contains all the information necessary to generate a single
+(uniquely determined) tree object.  For example, running git commit generates
+this tree object from the index, stores it in the object database, and uses it
+as the tree object associated with the new commit.
+
+\item The index enables fast comparisons between the tree object it defines and
+the working tree.  It does this by storing some additional data for each entry
+(such as the last modified time). This data is not displayed above, and is not
+stored in the created tree object, but it can be used to determine quickly
+which files in the working directory differ from what was stored in the index,
+and thus save git from having to read all of the data from such files to look
+for changes.
+
+\item It can efficiently represent information about merge conflicts between
+different tree objects, allowing each pathname to be associated with sufficient
+information about the trees involved that you can create a three-way merge
+between them.  During a merge, the index can store multiple versions of a
+single file (called "stages"). The third column in the git ls-files output
+above is the stage number, and will take on values other than 0 for files with
+merge conflicts.
+\end{enumerate}
+
+The index is thus a sort of temporary staging area, which is filled with a tree
+which you are in the process of working on.
