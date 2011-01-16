@@ -1,0 +1,123 @@
+\subsection{Browsing Git Objects}
+We can ask git about particular objects with the cat-file command. Note that
+you can shorten the shas to only a few characters to save yourself typing all
+40 hex digits:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git-cat-file -t 54196cc2
+commit
+$ git-cat-file commit 54196cc2
+tree 92b8b694ffb1675e5975148e11218100
+author J. Bruce Fields <bfields@puzzle.fieldses.org> 1143414668 -0500
+committer J. Bruce Fields <bfields@puzzle.fieldses.org> 1143414668 -0500
+
+initial commit
+\end{lstlisting}
+
+A tree can refer to one or more "blob" objects, each corresponding to a file.
+In addition, a tree can also refer to other tree objects, thus creating a
+directory hierarchy. You can examine the contents of any tree using ls-tree
+(remember that a long enough initial portion of the SHA1 will also work):
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git ls-tree 92b8b694
+100644 blob 3b18e512dba79e4c8300dd08aeb37f8e7    file.txt
+\end{lstlisting}
+
+Thus we see that this tree has one file in it. The SHA1 hash is a reference to
+that file's data:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git cat-file -t 3b18e512
+blob
+\end{lstlisting}
+
+A "blob" is just file data, which we can also examine with cat-file:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git cat-file blob 3b18e512
+hello world
+\end{lstlisting}
+
+Note that this is the old file data; so the object that git named in its
+response to the initial tree was a tree with a snapshot of the directory state
+that was recorded by the first commit.
+
+All of these objects are stored under their SHA1 names inside the git
+directory:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ find .git/objects/
+.git/objects/
+.git/objects/pack
+.git/objects/info
+.git/objects/3b
+.git/objects/3b/18e512dba79e4c8300dd08aeb37f8
+.git/objects/92
+.git/objects/92/b8b694ffb1675e5975148e1121810
+.git/objects/54
+.git/objects/54/196cc2703dc165cbd373a65a4dcf2
+.git/objects/a0
+.git/objects/a0/423896973644771497bdc03eb99d5
+.git/objects/d0
+.git/objects/d0/492b368b66bdabf2ac1fd8c92b39d
+.git/objects/c4
+.git/objects/c4/d59f390b9cfd4318117afde11d601
+\end{lstlisting}
+
+and the contents of these files is just the compressed data plus a header
+identifying their length and their type. The type is either a blob, a tree, a
+commit, or a tag.
+
+The simplest commit to find is the HEAD commit, which we can find from
+.git/HEAD:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ cat .git/HEAD
+ref: refs/heads/master
+\end{lstlisting}
+
+As you can see, this tells us which branch we're currently on, and it tells us
+this by naming a file under the .git directory, which itself contains a SHA1
+name referring to a commit object, which we can examine with cat-file:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ cat .git/refs/heads/master
+c4d59f390b9cfd4318117afde11d601c1085f241
+$ git cat-file -t c4d59f39
+commit
+$ git cat-file commit c4d59f39
+tree d0492b368b66bdabf2ac1fd8c92b39d3d
+parent 54196cc2703dc165cbd373a65a4dcf2
+author J. Bruce Fields <bfields@puzzle.fieldses.org> 1143418702 -0500
+committer J. Bruce Fields <bfields@puzzle.fieldses.org> 1143418702 -0500
+
+add emphasis
+\end{lstlisting}
+
+The "tree" object here refers to the new state of the tree:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git ls-tree d0492b36
+100644 blob a0423896973644771497bdc03eb99d528    file.txt
+$ git cat-file blob a0423896
+hello world!
+\end{lstlisting}
+
+and the "parent" object refers to the previous commit:
+\lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
+\begin{lstlisting}[caption=,language={bash},
+breaklines=true,label=lst:]
+$ git-cat-file commit 54196cc2
+tree 92b8b694ffb1675e5975148e1121810081dbdffe
+author J. Bruce Fields <bfields@puzzle.fieldses.org> 1143414668 -0500
+committer J. Bruce Fields <bfields@puzzle.fieldses.org> 1143414668 -0500
+\end{lstlisting}
