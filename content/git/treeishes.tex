@@ -1,9 +1,9 @@
-\section{Git Treeishes}
+\subsection{Git Treeishes}
 There are a number of ways to refer to a particular commit or tree other than
 spelling out the entire 40-character sha. In Git, these are referred to as a
 'treeish'.
 
-\subsection{Partial Sha}
+\subsubsection{Partial Sha}
 If your commit sha is '980e3ccdaac54a0d4de358f3fe5d718027d96aae', git will
 recognize any of the following identically:
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
@@ -18,7 +18,7 @@ As long as the partial sha is unique - it can't be confused with another (which
 is incredibly unlikely if you use at least 5 characters), git will expand a
 partial sha for you.
 
-\subsection{Branch, Remote or Tag Name}
+\subsubsection{Branch, Remote or Tag Name}
 You can always use a branch, remote or tag name instead of a sha, since they
 are simply pointers anyhow. If your master branch is on the 980e3 commit and
 you've pushed it to origin and have tagged it 'v1.0', then all of the following
@@ -45,7 +45,7 @@ $ git log master
 $ git log refs/tags/v1.0
 \end{lstlisting}
 
-\subsection{Date Spec}
+\subsubsection{Date Spec}
 The Ref Log that git keeps will allow you to do some relative stuff locally,
 such as:
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
@@ -60,7 +60,7 @@ Which is shorthand for 'where the master branch head was yesterday', etc. Note
 that this format can result in different shas on different computers, even if
 the master branch is currently pointing to the same place.
 
-\subsection{Ordinal Spec}
+\subsubsection{Ordinal Spec}
 This format will give you the Nth previous value of a particular reference. For
 example:
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
@@ -71,7 +71,7 @@ master@{5}
 
 will give you the 5th prior value of the master head ref.
 
-\subsection{Carrot Parent}
+\subsubsection{Carrot Parent}
 This will give you the Nth parent of a particular commit. This format is only
 useful on merge commits - commit objects that have more than one direct parent.
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
@@ -80,7 +80,7 @@ breaklines=true,label=lst:]
 master^2
 \end{lstlisting}
 
-\subsection{Tilde Spec}
+\subsubsection{Tilde Spec}
 The tilde spec will give you the Nth grandparent of a commit object. For
 example,
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
@@ -107,7 +107,7 @@ master~3^~2
 master~6
 \end{lstlisting}
 
-\subsection{Tree Pointer}
+\subsubsection{Tree Pointer}
 This disambiguates a commit from the tree that it points to. If you want the
 sha that a commit points to, you can add the '\^{tree}' spec to the end of it.
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
@@ -116,7 +116,7 @@ breaklines=true,label=lst:]
 master^{tree}
 \end{lstlisting}
 
-\subsection{Blob Spec}
+\subsubsection{Blob Spec}
 If you want the sha of a particular blob, you can add the blob path at the end
 of the treeish, like so:
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
@@ -125,7 +125,7 @@ breaklines=true,label=lst:]
 master:/path/to/file
 \end{lstlisting}
 
-\subsection{Range}
+\subsubsection{Range}
 Finally, you can specify a range of commits with the range spec. This will give
 you all the commits between 7b593b5 and 51bea1 (where 51bea1 is most recent),
 excluding 7b593b5 but including 51bea1:

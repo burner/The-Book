@@ -1,4 +1,4 @@
-\section{Maintaining Git}
+\subsection{Maintaining Git}
 Ensuring good performance
 
 On large repositories, git depends on compression to keep the history
@@ -15,7 +15,7 @@ $ git gc
 to recompress the archive. This can be very time-consuming, so you may prefer
 to run git-gc when you are not doing other work.
 
-\section{Ensuring reliability}
+\subsubsection{Ensuring reliability}
 The git fsck command runs a number of self-consistency checks on the
 repository, and reports on any problems. This may take some time. The most
 common warning by far is about "dangling" objects:

@@ -15,7 +15,7 @@ series.
 Version 2 also includes a CRC checksum of each object so compressed data can be
 copied directly from pack to pack during repacking without undetected data
 corruption. Version 2 indexes can also handle packfiles larger than 4 Gb. See
-figure \ref{fig:packfileindex}
+figure \ref{fig:packfileindex} on page \pageref{fig:packfileindex}
 \begin{figure*}[tbp]
 \centering
 \includegraphics[width=0.80\textwidth]{content/git/packfile-index.png}
@@ -24,11 +24,11 @@ figure \ref{fig:packfileindex}
 \end{figure*}
 
 In both formats, the fanout table is simply a way to find the offset of a
-particular sha faster within the index file. The offset/sha1[] tables are
-sorted by sha1[] values (this is to allow binary search of this table), and
-fanout[] table points at the offset/sha1[] table in a specific way (so that
-part of the latter table that covers all hashes that start with a given byte
-can be found to avoid 8 iterations of the binary search).
+particular sha faster within the index file. The offset/sha1 tables are sorted
+by sha1 values (this is to allow binary search of this table), and fanout table
+points at the offset/sha1 table in a specific way (so that part of the latter
+table that covers all hashes that start with a given byte can be found to avoid
+8 iterations of the binary search).
 
 In version 1, the offsets and shas are in the same space, where in version two,
 there are seperate tables for the shas, crc checksums and offsets. At the end
@@ -62,7 +62,7 @@ end
 After that, you get a series of packed objects, in order of their SHAs which
 each consist of an object header and object contents. At the end of the
 packfile is a 20-byte SHA1 sum of all the shas (in sorted order) in that
-packfile. See figure \ref{fig:packfileformat}
+packfile. See figure \ref{fig:packfileformat} on page \pageref{fig:packfileformat}
 
 \begin{figure*}[tbp]
 \centering
@@ -85,7 +85,7 @@ table below.
 Here, we can see an example of a header of two bytes, where the first specifies
 that the following data is a commit, and the remainder of the first and the
 last 7 bits of the second specifies that the data will be 144 bytes when
-expanded. See figure \ref{fig:packfilelogic}
+expanded. See figure \ref{fig:packfilelogic} on page \pageref{fig:packfilelogic}
 
 \begin{figure*}[tbp]
 \centering

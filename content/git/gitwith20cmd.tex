@@ -1,4 +1,4 @@
-\section{Everyday GIT With 20 Commands Or So}
+\subsection{Everyday GIT With 20 Commands Or So}
 Individual Developer (Standalone) commands are essential for anybody who makes
 a commit, even for somebody who works alone.  If you work with other people,
 you will need commands listed in the [Individual Developer (Participant)
@@ -7,7 +7,7 @@ commands in addition to the above.  [Repository Administration] commands are
 for system administrators who are responsible for the care and feeding of git
 repositories.
 
-\subsection{Individual Developer (Standalone)}
+\subsubsection{Individual Developer (Standalone)}
 A standalone individual developer does not exchange patches with other people,
 and works alone in a single repository, using the following commands.
 
@@ -88,7 +88,7 @@ include --max-count=10 (show 10 commits), --until=2005-12-10, etc.
 tag.
 \end{enumerate}
 
-\subsection{Individual Developer (Participant)}
+\subsubsection{Individual Developer (Participant)}
 A developer working as a participant in a group project needs to learn how to
 communicate with others, and uses these commands in addition to the ones needed
 by a standalone developer.
@@ -105,7 +105,7 @@ repository workflow.
 kernel-style public forum workflow.
 \end{itemize}
 
-\subsubsection{Clone the upstream and work on it. Feed changes to upstream.}
+\paragraph{Clone the upstream and work on it. Feed changes to upstream.}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -136,7 +136,7 @@ time we checked, only in the area we are interested in.
 \item from time to time, obtain official tags from the origin and store them under .git/refs/tags/.
 \end{enumerate}
 
-\subsubsection{Push into another repository.}
+\paragraph{Push into another repository.}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -173,7 +173,7 @@ branch on the mothership machine. You could use this as a back-up method.
 the master branch.
 \end{enumerate}
 
-\subsubsection{Branch off of a specific tag.}
+\paragraph{Branch off of a specific tag.}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -191,7 +191,7 @@ $ git format-patch -k -m --stdout v2.6.14..private2.6.14 |
 \item forward port all changes in private2.6.14 branch to master branch without a formal "merging".
 \end{enumerate}
 
-\subsection{Integrator}
+\subsubsection{Integrator}
 A fairly central person acting as the integrator in a group project receives
 changes made by others, reviews and integrates them and publishes the result
 for others to use, using these commands in addition to the ones needed by

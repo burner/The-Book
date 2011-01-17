@@ -1,10 +1,10 @@
-\section{Git Hooks}
+\subsection{Git Hooks}
 Hooks are little scripts you can place in \$GIT\_DIR/hooks directory to trigger
 action at certain points. When git-init is run, a handful example hooks are
 copied in the hooks directory of the new repository, but by default they are
 all disabled. To enable a hook, rename it by removing its .sample suffix.
 
-\subsection{applypatch-msg}
+\subsubsection{applypatch-msg}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -21,7 +21,7 @@ one). It can also be used to refuse the commit after inspecting the message
 file. The default applypatch-msg hook, when enabled, runs the commit-msg hook,
 if the latter is enabled.
 
-\subsection{pre-applypatch}
+\subsubsection{pre-applypatch}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -36,7 +36,7 @@ It can be used to inspect the current working tree and refuse to make a commit
 if it does not pass certain test. The default pre-applypatch hook, when
 enabled, runs the pre-commit hook, if the latter is enabled.
 
-\subsection{post-applypatch}
+\subsubsection{post-applypatch}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -49,7 +49,7 @@ the patch is applied and a commit is made.
 This hook is meant primarily for notification, and cannot affect the outcome of
 'git-am'.
 
-\subsection{pre-commit}
+\subsubsection{pre-commit}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -94,7 +94,7 @@ else
 end
 \end{lstlisting}
 
-\subsection{prepare-commit-msg}
+\subsubsection{prepare-commit-msg}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -122,7 +122,7 @@ hook.
 The sample prepare-commit-msg hook that comes with git comments out the
 Conflicts: part of a merge's commit message.
 
-\subsection{commit-msg}
+\subsubsection{commit-msg}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -142,7 +142,7 @@ file.
 The default 'commit-msg' hook, when enabled, detects duplicate "Signed-off-by"
 lines, and aborts the commit if one is found.
 
-\subsection{post-commit}
+\subsubsection{post-commit}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -155,7 +155,7 @@ after a commit is made.
 This hook is meant primarily for notification, and cannot affect the outcome of
 'git-commit'.
 
-\subsection{pre-rebase}
+\subsubsection{pre-rebase}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -165,7 +165,7 @@ GIT_DIR/hooks/pre-rebase
 This hook is called by 'git-rebase' and can be used to prevent a branch from
 getting rebased.
 
-\subsection{post-checkout}
+\subsubsection{post-checkout}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -183,7 +183,7 @@ This hook can be used to perform repository validity checks, auto-display
 differences from the previous HEAD if different, or set working dir metadata
 properties.
 
-\subsection{post-merge}
+\subsubsection{post-merge}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -201,7 +201,7 @@ save and restore any form of metadata associated with the working tree (eg:
 permissions/ownership, ACLS, etc). See contrib/hooks/setgitperms.perl for an
 example of how to do this.
 
-\subsection{pre-receive}
+\subsubsection{pre-receive}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -249,7 +249,7 @@ do
 done
 \end{lstlisting}
 
-\subsection{update}
+\subsubsection{update}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -287,7 +287,7 @@ on the other end, so you can simply echo messages for the user.
 The default 'update' hook, when enabled--and with hooks.allowunannotated config
 option turned on--prevents unannotated tags to be pushed.
 
-\subsection{post-receive}
+\subsubsection{post-receive}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -315,7 +315,7 @@ The default 'post-receive' hook is empty, but there is a sample script
 post-receive-email provided in the contrib/hooks directory in git distribution,
 which implements sending commit emails.
 
-\subsection{post-update}
+\subsubsection{post-update}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
@@ -346,7 +346,7 @@ probably enable this hook.
 Both standard output and standard error output are forwarded to 'git-send-pack'
 on the other end, so you can simply echo messages for the user.
 
-\subsection{pre-auto-gc}
+\subsubsection{pre-auto-gc}
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]

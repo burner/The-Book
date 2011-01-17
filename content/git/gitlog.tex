@@ -1,4 +1,4 @@
-\section{Reviewing History - Git Log}
+\subsection{Reviewing History - Git Log}
 The git log command can show lists of commits. On its own, it shows all commits
 reachable from the parent commit; but you can also make more specific requests:
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
@@ -72,7 +72,7 @@ index c2d3c90..785779e 100644
  pserver (/etc/inetd.conf):
 \end{lstlisting}
 
-\section{Log Stats}
+\subsubsection{Log Stats}
 If you pass the --stat option to 'git log', it will show you which files have
 changed in that commit and how many lines were added and removed from each.
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
@@ -91,7 +91,7 @@ Date:   Sun Aug 17 15:44:11 2008 -0700
  2 files changed, 16 insertions(+), 1 deletions(-)
 \end{lstlisting}
 
-\section{Formatting the Log}
+\subsubsection{Formatting the Log}
 You can also format the log output almost however you want. The '--pretty'
 option can take a number of preset formats, such as 'oneline':
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
@@ -159,7 +159,7 @@ $ git log --pretty=format:'%h : %s' --graph
 
 It will give a pretty nice ASCII representation of the commit history lines.
 
-\section{Ordering the Log}
+\subsubsection{Ordering the Log}
 You can also view the log entries in a few different orders. Note that git log
 starts with the most recent commit and works backwards through the parents;
 however, since git history can contain multiple independent lines of

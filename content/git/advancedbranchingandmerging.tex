@@ -1,5 +1,5 @@
-\section{Advanced Branching And Merging}
-\subsection{Getting conflict-resolution help during a merge}
+\subsection{Advanced Branching And Merging}
+\subsubsection{Getting conflict-resolution help during a merge}
 
 All of the changes that git was able to merge automatically are already added
 to the index file, so git diff shows only the conflicts. It uses an unusual
@@ -106,7 +106,7 @@ $ git add file.txt
 the different stages of that file will be "collapsed", after which git-diff
 will (by default) no longer show diffs for that file.
 
-\subsection{Multiway Merge}
+\subsubsection{Multiway Merge}
 You can merge several heads at one time by simply listing them on the same git
 merge command. For instance,
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
@@ -124,7 +124,7 @@ $ git merge rick/master
 $ git merge tom/master
 \end{lstlisting}
 
-\subsection{Subtree}
+\subsubsection{Subtree}
 There are situations where you want to include contents in your project from an
 independently developed project. You can just pull from the other project as
 long as there are no conflicting paths.

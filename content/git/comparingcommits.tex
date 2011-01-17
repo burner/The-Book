@@ -1,4 +1,4 @@
-\section{Comparing Commits - Git Diff}
+\subsection{Comparing Commits - Git Diff}
 You can generate diffs between any two versions of your project using git diff:
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
@@ -19,8 +19,7 @@ git diff is an incredibly useful tool for figuring out what has changed between
 any two points in your project's history, or to see what people are trying to
 introduce in new branches, etc.
 
-\subsection{What you will commit}
-
+\subsubsection{What you will commit}
 You will commonly use git diff for figuring out differences between your last
 commit, your index, and your current working directory. A common use is to
 simply run
@@ -51,7 +50,7 @@ $ git diff HEAD
 which shows changes in the working directory since your last commit; what you
 would be committing if you run "git commit -a".
 
-\subsection{More Diff Options}
+\subsubsection{More Diff Options}
 If you want to see how your current working directory differs from the state of
 the project in another branch, you can run something like
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}

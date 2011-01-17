@@ -1,5 +1,5 @@
-\section{Git Tag}
-\subsection{Lightweight Tags}
+\subsection{Git Tag}
+\subsubsection{Lightweight Tags}
 We can create a tag to refer to a particular commit by running git tag with no
 arguments.
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
@@ -14,7 +14,7 @@ This creates a "lightweight" tag, basically a branch that never moves. If you
 would also like to include a comment with the tag, and possibly sign it
 cryptographically, then we can create a tag object instead.
 
-\subsection{Tag Objects}
+\subsubsection{Tag Objects}
 If one of -a, -s, or -u <key-id> is passed, the command creates a tag object,
 and requires the tag message. Unless -m or -F is given, an editor is started
 for the user to type in the tag message.
@@ -33,7 +33,7 @@ It is actually possible to tag any object, but tagging commit objects is the
 most common. (In the Linux kernel source, the first tag object references a
 tree, rather than a commit)
 
-\subsection{Signed Tags}
+\subsubsection{Signed Tags}
 If you have a GPG key setup, you can create signed tags fairly easily. First,
 you will probably want to setup your key id in your .git/config or ~.gitconfig
 file.

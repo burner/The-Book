@@ -1,10 +1,10 @@
-\section{Undoing in Git - Reset, Checkout and Revert}
+\subsection{Undoing in Git - Reset, Checkout and Revert}
 Git provides multiple methods for fixing up mistakes as you are developing.
 Selecting an appropriate method depends on whether or not you have committed
 the mistake, and if you have committed the mistake, whether you have shared the
 erroneous commit with anyone else.
 
-\subsection{Fixing un-committed mistakes}
+\subsubsection{Fixing un-committed mistakes}
 If you've messed up the working tree, but haven't yet committed your mistake,
 you can return the entire working tree to the last committed state with
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
@@ -31,7 +31,7 @@ diff hello.rb" returns no differences. The second command will restore hello.rb
 to the version in the HEAD revision, so that both "git diff hello.rb" and "git
 diff --cached hello.rb" return no differences.
 
-\subsection{Fixing committed mistakes}
+\subsubsection{Fixing committed mistakes}
 If you make a commit that you later wish you hadn't, there are two
 fundamentally different ways to fix the problem:
 \begin{enumerate}
@@ -44,7 +44,7 @@ a project to change, and cannot correctly perform repeated merges from a branch
 that has had its history changed.
 \end{enumerate}
 
-\subsection{Fixing a mistake with a new commit}
+\subsubsection{Fixing a mistake with a new commit}
 Creating a new commit that reverts an earlier change is very easy; just pass
 the git revert command a reference to the bad commit; for example, to revert
 the most recent commit:
@@ -69,7 +69,7 @@ changes made since then. If more recent changes overlap with the changes to be
 reverted, then you will be asked to fix conflicts manually, just as in the case
 of resolving a merge.
 
-\subsection{Fixing a mistake by modifying a commit}
+\subsubsection{Fixing a mistake by modifying a commit}
 If you have just committed something but realize you need to fix up that
 commit, recent versions of git commit support an --amend flag which instructs
 git to replace the HEAD commit with a new one, based on the current contents of

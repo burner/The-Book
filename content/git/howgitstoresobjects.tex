@@ -11,12 +11,12 @@ objects.
 Loose objects are the simpler format. It is simply the compressed data stored
 in a single file on disk. Every object written to a seperate file.
 
-If the sha of your object is ab04d884140f7b0cf8bbf86d6883869f16a46f65, then the
+If the sha of your object is ab04d884140f7b0cf8bbf86d6883869f1, then the
 file will be stored in the following path:
 \lstset{basicstyle=\scriptsize, numbers=none, captionpos=b, tabsize=4}
 \begin{lstlisting}[caption=,language={bash},
 breaklines=true,label=lst:]
-GIT_DIR/objects/ab/04d884140f7b0cf8bbf86d6883869f16a46f65
+GIT_DIR/objects/ab/04d884140f7b0cf8bbf86d6883869f
 \end{lstlisting}
 
 It pulls the first two characters off and uses that as the subdirectory, so

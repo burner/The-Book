@@ -1,4 +1,4 @@
-\section{Submodules}
+\subsection{Submodules}
 Large projects are often composed of smaller, self-contained modules. For
 example, an embedded Linux distribution's source tree would include every piece
 of software in the distribution with some local modifications; a movie player
@@ -191,7 +191,7 @@ $ git push
 You have to run git submodule update after git pull if you want to update
 submodules, too.
 
-\section{Pitfalls with submodules}
+\subsubsection{Pitfalls with submodules}
 Always publish the submodule change before publishing the change to the
 superproject that references it. If you forget to publish the submodule change,
 others won't be able to clone the repository:
