@@ -11,6 +11,7 @@
 \usepackage{geometry}
 \usepackage{verbatim}
 \usepackage{hyperref}
+\usepackage{fancyhdr}
 \usepackage{stfloats}
 \usepackage{multicol}
 \usepackage{fancyhdr}
@@ -19,8 +20,10 @@
 \usepackage{tikz}
 \usepackage{graphics}
 \usepackage{texPackages/tikz-er2}
-\pagestyle{plain}
 \geometry{b5paper, left=2.25cm, right=1.25cm, top=1.5cm, bottom=1.5cm}
+\pagestyle{fancy}
+%\renewcommand{\headrulewidth}{0.0pt}
+\renewcommand{\footrulewidth}{0.4pt}
 \newenvironment{keywords}{
        \list{}{\advance\topsep by0.35cm\relax\small
        \leftmargin=1cm
