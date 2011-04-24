@@ -1,27 +1,52 @@
 #!/bin/sed -f
 
 #code
-/{{code\:Output|\([a-zA-Z ]*\)/ {
-	N
-	s/{{code\:Output|\([a-zA-Z ]*\)|<source lang=\"\([a-zA-Z]*\)\">/\\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}\n\\begin{lstlisting}[caption=\1,language={\2},\nxleftmargin=15pt, label=lst:\1]\n/
-	s/{{code\:Output|\([a-zA-Z ]*\)\n|<source lang=\"\([a-zA-Z]*\)\">/\\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}\n\\begin{lstlisting}[caption=\1,language={\2},\nxleftmargin=15pt, label=lst:\1]\n/
-	}
-
-#code basic
-/{{code\:Basic|\([a-zA-Z ]*\)/ {
-	N
-	s/{{code\:Basic|\([a-zA-Z ]*\)|<source lang=\"\([a-zA-Z]*\)\">/\\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}\n\\begin{lstlisting}[caption=\1,language={\2},\nxleftmargin=15pt, label=lst:\1]\n/
-	s/{{code\:Basic|\([a-zA-Z ]*\)\n|<source lang=\"\([a-zA-Z]*\)\">/\\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}\n\\begin{lstlisting}[caption=\1,language={\2},\nxleftmargin=15pt, label=lst:\1]\n/
-	}
-
-#code example
-s/{{bcode\:Example|\([^}]*\)}}$/\\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}\n\\begin{lstlisting}[language={bash},\nxleftmargin=15pt]\n\1\n\\end{lstlisting}/
+#/{{code\:Output|\([a-zA-Z ]*\)/ {
+#	N
+#	s/{{code\:Output|\([a-zA-Z ]*\)|<source lang=\"\([a-zA-Z]*\)\">/\\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}\n\\begin{lstlisting}[caption=\1,language={\2},\nxleftmargin=15pt, label=lst:\1]\n/
+#	s/{{code\:Output|\([a-zA-Z ]*\)\n|<source lang=\"\([a-zA-Z]*\)\">/\\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}\n\\begin{lstlisting}[caption=\1,language={\2},\nxleftmargin=15pt, label=lst:\1]\n/
+#	}
+#
+##code basic
+#/{{code\:Basic|\([a-zA-Z ]*\)/ {
+#	N
+#	s/{{code\:Basic|\([a-zA-Z ]*\)|<source lang=\"\([a-zA-Z]*\)\">/\\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}\n\\begin{lstlisting}[caption=\1,language={\2},\nxleftmargin=15pt, label=lst:\1]\n/
+#	s/{{code\:Basic|\([a-zA-Z ]*\)\n|<source lang=\"\([a-zA-Z]*\)\">/\\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}\n\\begin{lstlisting}[caption=\1,language={\2},\nxleftmargin=15pt, label=lst:\1]\n/
+#	}
+#
+##code example
+#s/{{bcode\:Example|\([^}]*\)}}$/\\lstset{basicstyle=\scriptsize, numbers=left, captionpos=b, tabsize=4}\n\\begin{lstlisting}[language={bash},\nxleftmargin=15pt]\n\1\n\\end{lstlisting}/
 	
 
 #label
 #/label=lst:[a-zA-Z ]*\]/ {
 #	s/ //g
 #}
+
+#table start
+s/{|/\\begin{tabular}/g
+
+#table stop
+s/|}/\\end{tabular}/g
+
+
+#table caption
+#s/{\+[:alnum:]\(*\)/\\caption{\1}/g
+
+#table rowend
+s/|-/\\\\/g
+
+#table rowend
+s/|\([^-+}]*\)/\1 \&/g
+
+#code
+s/<code>/\\lstinline{/g
+
+#code
+s/<\/code>/}/g
+
+#begin of listing
+s/<source[a-zA-T\"=\ ]*>/\\begin{lstlisting}\n/g
 
 
 #end of listing
@@ -69,7 +94,7 @@ s/\$/\\$/g
 s/\_/\\_/g
 
 #tt html tag
-s/:<tt>/\\texttt{/g
+s/<tt>/\\texttt{/g
 s/<\/tt>/}/g
 
 #tabel
