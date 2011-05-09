@@ -1,4 +1,4 @@
-\subsubsection{Document Classes}
+\section{Document Classes}
 The first information LaTeX needs to know when processing an input file is the type of document the author wants to create. This is specified with the \lstinline{\documentclass} command.
 \begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
 \documentclass[options]{class}
@@ -111,7 +111,7 @@ For example, if you want a report to be in 12pt type on A4, but printed one-side
 \end{lstlisting}
 
 
-\subsubsection{Packages}
+\subsection{Packages}
 While writing your document, you will probably find that there are some areas where basic LaTeX cannot solve your problem. If you want to include
 graphics, colored text or source code from a file into your document, you need to enhance the capabilities of LaTeX. Such enhancements are called packages. Packages are activated with the
 
@@ -123,7 +123,7 @@ command, where package is the name of the package and options is a list of keywo
 
 Modern TeX distributions come with a large number of packages pre-installed. If you are working on a Unix system, use the command \lstinline{texdoc} for accessing package documentation. For more information, see the ]] section. 
 
-\subsubsection{Files you might Encounter}
+\subsection{Files you might Encounter}
 When you work with LaTeX you will soon find yourself in a maze of files with various extensions and probably no clue. The following list explains the most common file types you might encounter when working with TeX:
 
 \begin{table*}[H]
@@ -159,7 +159,7 @@ with cross-references.  \\
 \caption{Common file extensions in LaTeX}
 \end{table*}
 
-\subsubsection{Big Projects}
+\subsection{Big Projects}
 When working on big documents, you might want to split the input file into several parts. LaTeX has three commands to insert a file into another when building the document.
 The simplest is the 
 \begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
@@ -210,5 +210,5 @@ Remember that the input file should omit all the commands referring to the main 
 
 line of your included file.
 
-\subsubsection{Picking suitable filenames}
+\subsection{Picking suitable filenames}
 Never, ever use directories (folders) or file names that contain spaces. Although your operating system probably supports them, some don't, and they will only cause grief and tears with TeX. Make filenames as short or as long as you wish, but strictly avoid spaces. Stick to lower-case letters without accents (a-z), the digits 0-9, the hyphen (-), and the full point or period (.), (similar to the conventions for a Web URL): it will let you refer to TeX files over the Web more easily and make your files more portable. Some operating systems do not distinguish between upper-case and lower-case letters, others do. Therefore it's best not to mix them.

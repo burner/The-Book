@@ -14,7 +14,7 @@ showf:
 	evince thebook.pdf
 
 clean:
-	rm -rf *.aux *.log *.pdf *.toc
+	rm -rf *.aux *.log *.pdf *.toc *.dvi *.lof *.lol
 
 fshow:
 	pdflatex -hald-on-error thebook.tex
