@@ -57,22 +57,22 @@ s/<\/source>/\n\\end{lstlisting}\n/g
 s/|\([a-zA-Z ]*\)|}}/Output:\n\\scriptsize\n\\begin{verbatim}\n\1 \n\\end{verbatim}\n\\normalsize/g
 
 #subsubsection
-s/====\([a-zA-Z:\'. ]*\)====/\\paragraph{\1}/g
+s/====\([a-zA-Z:\'.\ ?!]+\)====/\\paragraph{\1}/g
 
 #subsection
-s/===\([a-zA-Z:\'. ]*\)===/\\subsubsection{\1}/g
+s/===\([a-zA-Z:\'.\ ?!]+\)===/\\subsubsection{\1}/g
 
 #section
-s/==\([a-zA-Z:.\' ]*\)==/\\subsection{\1}/g
+s/==\([a-zA-Z:.\'\ ?!]+\)==/\\subsection{\1}/g
 
 #bolditalic
-s/'''''\([a-zA-Z0-9\:. _-!]*\)'''''/\\\textit{\\textbf{\1}}/g
+s/'''''\([\"a-zA-Z0-9\:.\ _-?!]+\)'''''/\\\textit{\\textbf{\1}}/g
 
 #bold
-s/'''\([a-zA-Z0-9\:. _-\!]*\)'''/\\textbf{\1}/g
+s/'''\([\"a-zA-Z0-9\:.\ _-\?!]+\)'''/\\textbf{\1}/g
 
 #bold
-s/''\([a-zA-Z0-9\:. _-]*\)''/\\textit{\1}/g
+s/''\([\"a-zA-Z0-9\:.\ _-?!]+\)''/\\textit{\1}/g
 
 #links [asdfsdf|asdf]
 s/\[\[[a-zA-Z \/-]*\|\([a-zA-Z \/-]\)\]\]/\1/g
