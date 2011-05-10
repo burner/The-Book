@@ -1,66 +1,98 @@
 \section{The \texttt{document} environment}
-The main point of writing a text is to convey ideas, information, or knowledge to the reader. The reader will
-understand the text better if these ideas are well-structured, and will see and feel this structure much better if the typographical form reflects the logical and semantic structure of the content.
+The main point of writing a text is to convey ideas, information, or knowledge
+to the reader. The reader will understand the text better if these ideas are
+well-structured, and will see and feel this structure much better if the
+typographical form reflects the logical and semantic structure of the content.
 
-LaTeX is different from other typesetting systems in that you just have to tell it the logical and semantical structure of a text. It then derives
-the typographical form of the text according to the rules in the document class file and in various style files. LaTeX allows users to structure their documents with a variety of hierarchal constructs, including chapters, sections, subsections and paragraphs. 
+LaTeX is different from other typesetting systems in that you just have to tell
+it the logical and semantical structure of a text. It then derives the
+typographical form of the text according to the rules in the document class
+file and in various style files. LaTeX allows users to structure their
+documents with a variety of hierarchal constructs, including chapters,
+sections, subsections and paragraphs. 
 
-After the Document Class Declaration, the text of your document is enclosed between two commands which identify the beginning and end of the actual document:
+After the Document Class Declaration, the text of your document is enclosed
+between two commands which identify the beginning and end of the actual
+document:
 \begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
-
 \documentclass[11pt,a4paper,oneside]{report}
 
 \begin{document}
 ...
 \end{document}
-
 \end{lstlisting}
 
 
-You would put your text where the dots are. The reason for marking off the beginning of your text is that LaTeX allows you to insert extra setup specifications before it (where the blank line is in the example above: we'll be using this soon). The reason for marking off the end of your text is to provide a place for LaTeX to be programmed to do extra stuff automatically at the end of the document, like making an index.
+You would put your text where the dots are. The reason for marking off the
+beginning of your text is that LaTeX allows you to insert extra setup
+specifications before it (where the blank line is in the example above: we'll
+be using this soon). The reason for marking off the end of your text is to
+provide a place for LaTeX to be programmed to do extra stuff automatically at
+the end of the document, like making an index.
 
-A useful side-effect of marking the end of the document text is that you can store comments or temporary text underneath the \texttt{\end{document}} in the knowledge that LaTeX will never try to typeset them:
+A useful side-effect of marking the end of the document text is that you can
+store comments or temporary text underneath the \texttt{\\end\{document\}} in the
+knowledge that LaTeX will never try to typeset them:
 \begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
 ...
 \end{document}
 Don't forget to get the extra chapter from Dorando!
-
 \end{lstlisting}
 
 \subsection{ Preamble }
-
-The \textit{preamble} is everything from the start of the LaTeX source file until the \lstinline{\begin{document}} command. It normally contains commands that affect the entire document.
-
+The \textit{preamble} is everything from the start of the LaTeX source file
+until the \texttt{\\begin\{document\}} command. It normally contains commands
+that affect the entire document.
 \begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
 % simple.tex - A simple article to illustrate document structure.
-
 \documentclass{article}
 \usepackage{mathptmx}
-
 \begin{document}
-
 \end{lstlisting}
 
 
-The first line is a comment (as denoted by the % sign). The \lstinline{\documentclass} command takes an argument, which in this case is article, because that's the type of document we want to produce. It is also possible to create your own, as is often done by journal publishers, who simply provide you with their own class file, which tells LaTeX how to format your content. But we'll be happy with the standard article class for now. \lstinline{\usepackage} is an important command that tells LaTeX to utilize some external macros. In this instance, we specified \lstinline{mathptmx} which means LaTeX will use the Postscript Times type 1 font instead of the default ComputerModern font. And finally, the \lstinline{\begin{document}}. This strictly isn't part of the preamble, but I'll put it here anyway, as it implies the end of the preamble by nature of stating that the document is now starting.
+The first line is a comment (as denoted by the \% sign). The
+\lstinline{\documentclass} command takes an argument, which in this case is
+article, because that's the type of document we want to produce. It is also
+possible to create your own, as is often done by journal publishers, who simply
+provide you with their own class file, which tells LaTeX how to format your
+content. But we'll be happy with the standard article class for now.
+\lstinline{\usepackage} is an important command that tells LaTeX to utilize
+some external macros. In this instance, we specified \lstinline{mathptmx} which
+means LaTeX will use the Postscript Times type 1 font instead of the default
+ComputerModern font. And finally, the \texttt{\\begin\{document\}}. This
+strictly isn't part of the preamble, but I'll put it here anyway, as it implies
+the end of the preamble by nature of stating that the document is now starting.
 
 \subsection{ Top Matter }
-
-At the beginning of most documents there will be information about the document itself, such as the title and date, and also information about the authors, such as name, address, email etc. All of this type of information within LaTeX is collectively referred to as \textit{top matter}. Although never explicitly specified (there is no {{LaTeX/LaTeXcode=\topmatter &}} command) you are likely to encounter the term within LaTeX documentation.
+At the beginning of most documents there will be information about the document
+itself, such as the title and date, and also information about the authors,
+such as name, address, email etc. All of this type of information within LaTeX
+is collectively referred to as \textit{top matter}. Although never explicitly
+specified (there is no \texttt{\\topmatter} command) you are likely
+to encounter the term within LaTeX documentation.
 
 A simple example:
-{{LaTeX/Usagecode= &
+\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
 \documentclass[11pt,a4paper,oneside]{report}
-
 \begin{document}
 \title{How to Structure a LaTeX Document}
 \author{Andrew Roberts}
 \date{December 2004}
 \maketitle
 \end{document}
-}}
+\end{lstlisting}
 
-The {{LaTeX/LaTeXcode=\title &}}, {{LaTeX/LaTeXcode=\author &}}, and {{LaTeX/LaTeXcode=\date &}} commands are self-explanatory. You put the title, author name, and date in curly braces after the relevant command. The title and author are usually compulsory (at least if you want LaTeX to write the title automatically); if you omit the {{LaTeX/LaTeXcode=\date &}} command, LaTeX uses today's date by default. You always finish the top matter with the {{LaTeX/LaTeXcode=\maketitle &}} command, which tells LaTeX that it's complete and it can typeset the title according to the information you have provided and the class (style) you are using. If you omit \texttt{\maketitle}, the titling will never be typeset (unless you write your own).
+The \texttt{\\title}, \texttt{\\author}, and
+\texttt{\date} commands are self-explanatory. You put the title,
+author name, and date in curly braces after the relevant command. The title and
+author are usually compulsory (at least if you want LaTeX to write the title
+automatically); if you omit the \texttt{\date} command, LaTeX uses
+today's date by default. You always finish the top matter with the
+\texttt{\maketitle} command, which tells LaTeX that it's complete
+and it can typeset the title according to the information you have provided and
+the class (style) you are using. If you omit \texttt{\maketitle}, the titling
+will never be typeset (unless you write your own).
 
 Here is a more complicated example:
 {{LaTeX/Usagecode= &
@@ -76,9 +108,14 @@ Here is a more complicated example:
 \maketitle
 }}
 
-as you can see, you can use commands as arguments of {{LaTeX/LaTeXcode=\title &}} and the others. The double backslash ({{LaTeX/LaTeXcode=\\ &}}) is the LaTeX command for forced linebreak. LaTeX normally decides by itself where to break lines, and it's usually right, but sometimes you need to cut a line short, like here, and start a new one.
+as you can see, you can use commands as arguments of {{LaTeX/LaTeXcode=\title
+&}} and the others. The double backslash ({{LaTeX/LaTeXcode=\\ &}}) is the
+LaTeX command for forced linebreak. LaTeX normally decides by itself where to
+break lines, and it's usually right, but sometimes you need to cut a line
+short, like here, and start a new one.
 
-If there are two authors separate them with the {{LaTeX/LaTeXcode=\and &}} command:
+If there are two authors separate them with the {{LaTeX/LaTeXcode=\and &}}
+command:
 {{LaTeX/Usagecode= &
 \title{Our Fun Document}
 \author{Jane Doe \and John Doe} 
@@ -86,16 +123,27 @@ If there are two authors separate them with the {{LaTeX/LaTeXcode=\and &}} comma
 \maketitle
 }}
 
-If you are provided with a class file from a publisher, or if you use the AMS article class ({{LaTeX/Packageamsart &}}), then you can use several different commands to enter author information. The email address is at the end, and the {{LaTeX/LaTeXcode=\texttt &}} commands formats the email address using a mono-spaced font. The built-in command called {{LaTeX/LaTeXcode=\today &}} will be replaced with the current date when processed by LaTeX. But you are free to put whatever you want as a date, in no set order. If braces are left empty, then the date is omitted. 
+If you are provided with a class file from a publisher, or if you use the AMS
+article class ({{LaTeX/Packageamsart &}}), then you can use several different
+commands to enter author information. The email address is at the end, and the
+{{LaTeX/LaTeXcode=\texttt &}} commands formats the email address using a
+mono-spaced font. The built-in command called {{LaTeX/LaTeXcode=\today &}} will
+be replaced with the current date when processed by LaTeX. But you are free to
+put whatever you want as a date, in no set order. If braces are left empty,
+then the date is omitted. 
 
-Using this approach, you can create only basic output whose layout is very hard to change. If you want to create your title freely, see the \_CreationTitle Creation section. &
+Using this approach, you can create only basic output whose layout is very hard
+to change. If you want to create your title freely, see the \_CreationTitle
+Creation section. &
 
 \subsection{ Abstract }
-
-As most research papers have an abstract, there are predefined commands for telling LaTeX which part of the content makes up the abstract. This should appear in its logical order, therefore, after the top matter, but before the main sections of the body. This command is available for the document classes \textit{article} and \textit{report}, but not \textit{book}. 
+As most research papers have an abstract, there are predefined commands for
+telling LaTeX which part of the content makes up the abstract. This should
+appear in its logical order, therefore, after the top matter, but before the
+main sections of the body. This command is available for the document classes
+\textit{article} and \textit{report}, but not \textit{book}. 
 
 \begin{lstlisting}
-
 \documentclass{article}
 
 \begin{document}
@@ -106,25 +154,24 @@ Your abstract goes here...
 \end{abstract}
 ...
 \end{document}
-
 \end{lstlisting}
 
-
-By default, LaTeX will use the word "Abstract" as a title for your abstract, if you want to change it into anything else, e.g. "Executive Summary", add the following line in the preamble:
+By default, LaTeX will use the word "Abstract" as a title for your abstract, if
+you want to change it into anything else, e.g. "Executive Summary", add the
+following line in the preamble:
 
 \begin{lstlisting}
-
 \renewcommand{\abstractname}{Executive Summary}
-
 \end{lstlisting}
 
 
 \subsection{ Sectioning Commands }
-
-The commands for inserting sections are fairly intuitive. Of course, certain commands are appropriate to different document classes. For example, a book has chapters but an article doesn't. Here is an edited version of some of the structure commands in use from \textit{simple.tex}.
+The commands for inserting sections are fairly intuitive. Of course, certain
+commands are appropriate to different document classes. For example, a book has
+chapters but an article doesn't. Here is an edited version of some of the
+structure commands in use from \textit{simple.tex}.
 
 \begin{lstlisting}
-
 \section{Introduction}
 This section's content...
 
@@ -136,13 +183,15 @@ This subsection's content...
 
 \subsection{Article Information}
 This subsection's content...
-
 \end{lstlisting}
 
 
-Notice that you do not need to specify section numbers; LaTeX will sort that out for you. Also, for sections, you do not need to markup which content belongs to a given block, using \lstinline{\begin} and \lstinline{\end} commands, for example. LaTeX provides 7 levels of depth for defining sections:
+Notice that you do not need to specify section numbers; LaTeX will sort that
+out for you. Also, for sections, you do not need to markup which content
+belongs to a given block, using \lstinline{\begin} and \lstinline{\end}
+commands, for example. LaTeX provides 7 levels of depth for defining sections:
 
-\begin{tabular} class="wikitable"
+\begin{tabular}
 ! Command
 ! Level
 ! Comment
@@ -177,192 +226,201 @@ Notice that you do not need to specify section numbers; LaTeX will sort that out
 \\
 \end{tabular}
 
-All the titles of the sections are added automatically to the table of contents (if you decide to insert one). But if you make manual styling changes to your heading, for example a very long title, or some special line-breaks or unusual font-play, this would appear in the Table of Contents as well, which you almost certainly don't want. LaTeX allows you to give an optional extra version of the heading text which only gets used in the Table of Contents and any running heads, if they are in effect. This optional alternative heading goes in [square brackets] before the curly braces:
+All the titles of the sections are added automatically to the table of contents
+(if you decide to insert one). But if you make manual styling changes to your
+heading, for example a very long title, or some special line-breaks or unusual
+font-play, this would appear in the Table of Contents as well, which you almost
+certainly don't want. LaTeX allows you to give an optional extra version of the
+heading text which only gets used in the Table of Contents and any running
+heads, if they are in effect. This optional alternative heading goes in [square
+brackets] before the curly braces:
 
 \begin{lstlisting}
-
 \section[Effect on staff turnover]{An analysis of the
 effect of the revised recruitment policies on staff
 turnover at divisional headquarters}
-
 \end{lstlisting}
-
 
 \paragraph{ Section numbering }
-
-Numbering of the sections is performed automatically by LaTeX, so don't bother adding them explicitly, just insert the heading you want between the curly braces. 
-Parts get roman numerals (Part I, Part II, etc.); chapters and sections get decimal numbering like this document, and appendices (which are just a special case of chapters, and share the same structure) are lettered (A, B, C, etc.). You can change the depth to which section numbering occurs, so you can turn it off selectively. By default it is set to 2. If you only want parts, chapters, and sections numbered, not subsections or subsections etc., you can change the value
-of the \texttt{secnumdepth} counter using the \texttt{\setcounter} command, giving the depth level from the previous table. For example, if you want to change it to "1":
-
+Numbering of the sections is performed automatically by LaTeX, so don't bother
+adding them explicitly, just insert the heading you want between the curly
+braces.  Parts get roman numerals (Part I, Part II, etc.); chapters and
+sections get decimal numbering like this document, and appendices (which are
+just a special case of chapters, and share the same structure) are lettered (A,
+B, C, etc.). You can change the depth to which section numbering occurs, so you
+can turn it off selectively. By default it is set to 2. If you only want parts,
+chapters, and sections numbered, not subsections or subsections etc., you can
+change the value of the \texttt{secnumdepth} counter using the
+\texttt{\setcounter} command, giving the depth level from the previous table.
+For example, if you want to change it to "1":
 \begin{lstlisting}
-
 \setcounter{secnumdepth}{1}
-
 \end{lstlisting}
 
-
-A related counter is \texttt{tocdepth}, which specifies what depth to take the Table of Contents to. It can be reset in exactly the
-same way as \texttt{secnumdepth}. For example:
-
+A related counter is \texttt{tocdepth}, which specifies what depth to take the
+Table of Contents to. It can be reset in exactly the same way as
+\texttt{secnumdepth}. For example:
 \begin{lstlisting}
-
 \setcounter{tocdepth}{3}
-
 \end{lstlisting}
 
-
-To get an unnumbered section heading which does not go into the Table of Contents, follow the command name with an asterisk before the opening curly brace:
-
+To get an unnumbered section heading which does not go into the Table of
+Contents, follow the command name with an asterisk before the opening curly
+brace:
 \begin{lstlisting}
-
 \subsection*{Introduction}
-
 \end{lstlisting}
 
+All the divisional commands from \\part* to \\subparagraph* have this "starred"
+version which can be used on special occasions for an unnumbered heading when
+the setting of \texttt{secnumdepth} would normally mean it would be numbered.
 
-All the divisional commands from \part* to \subparagraph* have this "starred" version which can be used on special occasions for an unnumbered heading when the setting of \texttt{secnumdepth} would normally mean it would be numbered.
-
-If you want the unnumbered section to be in the table of contents anyway, use the \texttt{\addcontentsline} command like this:
-
+If you want the unnumbered section to be in the table of contents anyway, use
+the \texttt{\\addcontentsline} command like this:
 \begin{lstlisting}
-
 \section*{Introduction}
 \addcontentsline{toc}{section}{Introduction}
-
 \end{lstlisting}
 
-
-Note if you use pdf bookmarks you will need to add a phantom section so that bookmark will lead to the correct place in the document:
-
+Note if you use pdf bookmarks you will need to add a phantom section so that
+bookmark will lead to the correct place in the document:
 \begin{lstlisting}
-
 \phantomsection
 \addcontentsline{toc}{section}{Introduction}
 \section*{Introduction} 
-
 \end{lstlisting}
 
-
-For chapters you will also need to clear the page (this will also correct page numbering in the ToC):
-
+For chapters you will also need to clear the page (this will also correct page
+numbering in the ToC):
 \begin{lstlisting}
-
 \cleardoublepage
 \phantomsection
 \addcontentsline{toc}{chapter}{Bibliography}
 \bibliographystyle{unsrt}
 \bibliography{my\_bib\_file}
-
 \end{lstlisting}
 
-
-The value where the section numbering starts from can be set with the following command:
-
+The value where the section numbering starts from can be set with the following
+command:
 \begin{lstlisting}
-
 \setcounter{section}{4}
-
 \end{lstlisting}
 
-
-The next section after this command will now be numbered 5.
-
-Any counter can be incremented/decremented with the following command:
-
+The next section after this command will now be numbered 5.  Any counter can be
+incremented/decremented with the following command:
 \begin{lstlisting}
-
 \addtocounter{counter}{integer}
-
 \end{lstlisting}
 
-
-The \phantomsection command is defined in the hyperref package.
+The \\phantomsection command is defined in the hyperref package.
 
 \subsection{ Appendices }
-The separate numbering of appendices is also supported by LaTeX. The \texttt{\appendix} macro can be used to indicate that following sections or chapters are to be numbered as appendices.
+The separate numbering of appendices is also supported by LaTeX. The
+\texttt{\\appendix} macro can be used to indicate that following sections or
+chapters are to be numbered as appendices.
 
 In the report or book classes this gives:
-
 \begin{lstlisting}
-
 \appendix
 \chapter{First Appendix}
-
 \end{lstlisting}
-
 
 For the article class use:
-
 \begin{lstlisting}
-
 \appendix
 \section{First Appendix}
-
 \end{lstlisting}
-
 
 \subsection{ Ordinary paragraphs }
-Paragraphs of text come after section headings. Simply type the text and leave a blank line between paragraphs. The blank line means "start a new paragraph here": it does \textbf{not} mean you get a blank line in the typeset output. For formatting paragraph indents and spacing between paragraphs, refer to the #Paragraph\_IndentsFormatting section. &
+Paragraphs of text come after section headings. Simply type the text and leave
+a blank line between paragraphs. The blank line means "start a new paragraph
+here": it does \textbf{not} mean you get a blank line in the typeset output.
+For formatting paragraph indents and spacing between paragraphs, refer to the
+#Paragraph\_IndentsFormatting section. &
 
 \subsection{ Table of contents }
+All auto-numbered headings get entered in the Table of Contents (ToC)
+automatically. You don't have to print a ToC, but if you want to, just add the
+command \texttt{\\tableofcontents} at the point where you want it printed
+(usually after the Abstract or Summary).
 
-All auto-numbered headings get entered in the Table of Contents (ToC) automatically. You don't have to print a ToC, but if you want to, just add the command \texttt{\tableofcontents} at the point where you want it printed (usually after the Abstract or
-Summary).
+Entries for the ToC are recorded each time you process your document, and
+reproduced the next time you process it, so you need to re-run LaTeX one extra
+time to ensure that all ToC pagenumber references are correctly calculated.
+We've already seen how to use the optional argument to the sectioning commands
+to add text to the ToC which is slightly different from the one printed in the
+body of the document. It is also possible to add extra lines to the ToC, to
+force extra or unnumbered section headings to be included.
 
-Entries for the ToC are recorded each time you process your document, and reproduced the next time you process it, so you need to re-run LaTeX one extra time to ensure that all ToC pagenumber references are correctly calculated. We've already seen how to use the optional argument to the sectioning commands to add text to the ToC which is slightly different from the one printed in the body of the document. It is also possible to add extra lines to the ToC, to force extra or unnumbered section headings to be included.
-
-The commands \lstinline{\listoffigures} and \lstinline{\listoftables} work in exactly the same way as \lstinline{\tableofcontents} to automatically list all your tables and figures. If you use them, they normally go after the \lstinline{\tableofcontents} command. The \lstinline{\tableofcontents} command normally shows only numbered section headings, and only down to the level defined by the \lstinline{tocdepth} counter, but you can add extra entries with the \lstinline{\addcontentsline} command. For example if you use an unnumbered section heading command to start a preliminary piece of text like a Foreword or Preface, you can write:
-
+The commands \lstinline{\listoffigures} and \lstinline{\listoftables} work in
+exactly the same way as \lstinline{\tableofcontents} to automatically list all
+your tables and figures. If you use them, they normally go after the
+\lstinline{\tableofcontents} command. The \lstinline{\tableofcontents} command
+normally shows only numbered section headings, and only down to the level
+defined by the \lstinline{tocdepth} counter, but you can add extra entries with
+the \lstinline{\addcontentsline} command. For example if you use an unnumbered
+section heading command to start a preliminary piece of text like a Foreword or
+Preface, you can write:
 \begin{lstlisting}
-
 \subsection*{Preface}
 \addcontentsline{toc}{subsection}{Preface}
-
 \end{lstlisting}
 
-
-This will format an unnumbered ToC entry for "Preface" in the "subsection" style. You can use the same mechanism to add lines to the List of Figures or List of Tables by substituting \texttt{lof} or \texttt{lot} for \texttt{toc}. If the hyperref package is used and the link does not point correct to the chapter, the command \lstinline{\phantomsection} in combination with \lstinline{\clearpage} or \lstinline{\cleardoublepage} can be used (see also \_and\_Cross-referencing#The\_hyperref\_package\_and\_.5CphantomsectionLabels\_and\_Cross &-referencing):
-
+This will format an unnumbered ToC entry for "Preface" in the "subsection"
+style. You can use the same mechanism to add lines to the List of Figures or
+List of Tables by substituting \texttt{lof} or \texttt{lot} for \texttt{toc}.
+If the hyperref package is used and the link does not point correct to the
+chapter, the command \lstinline{\\phantomsection} in combination with
+\lstinline{\clearpage} or \lstinline{\cleardoublepage} can be used (see also
+\_and\_Cross-referencing#The\_hyperref\_package\_and\_.5CphantomsectionLabels\_and\_Cross-referencing):
 \begin{lstlisting}
-
 \cleardoublepage
 \phantomsection
 \addcontentsline{toc}{chapter}{List of Figures}
 \listoffigures
-
 \end{lstlisting}
 
-
-To change the title of the TOC, you have to paste this command \begin{lstlisting}
+To change the title of the TOC, you have to paste this command
+\begin{lstlisting}
 \renewcommand{\contentsname}{<New table of contents title>}
 \end{lstlisting}
- in your document preamble.  The List of Figures (LoF) and List of Tables (LoT) names can be changed by replacing the \begin{lstlisting}
+
+in your document preamble.  The List of Figures (LoF) and List of Tables (LoT)
+names can be changed by replacing the 
+\begin{lstlisting}
 \contentsname
 \end{lstlisting}
- with \begin{lstlisting}
+with 
+\begin{lstlisting}
 \listfigurename
 \end{lstlisting}
- for LoF and \begin{lstlisting}
+for LoF and 
+\begin{lstlisting}
 \listtablename
 \end{lstlisting}
- for LoT.
+for LoT.
 
 \paragraph{ Depth }
-The default ToC will list headings of level 3 and above.  To change how deep the table of contents displays automatically the following command can be used in the preamble:
-
+The default ToC will list headings of level 3 and above.  To change how deep
+the table of contents displays automatically the following command can be used
+in the preamble:
 \begin{lstlisting}
-
 \setcounter{tocdepth}{4}
-
 \end{lstlisting}
 
-
-This will make the table of contents include everything down to paragraphs.   The levels are defined above on this page.
+This will make the table of contents include everything down to paragraphs.
+The levels are defined above on this page.
 
 \subsection{ The Bibliography }
+Any good research paper will have a whole list of references. There are two
+ways to insert your references into LaTeX: *you can embed them within the
+document itself. It's simpler, but it can be time-consuming if you are writing
+several papers about similar subjects so that you often have to cite the same
+books.  *you can store them in an external [http://www.bibtex.org BibTeX file ]
+and then link them via a command to your current document and use a
+[http://www.cs.stir.ac.uk/~kjt/software/latex/showbst.html Bibtex style] to
+define how they appear. This way you can create a small database of the
+references you might use and simply link them, letting LaTeX work for you.
 
-Any good research paper will have a whole list of references. There are two ways to insert your references into LaTeX: 
-*you can embed them within the document itself. It's simpler, but it can be time-consuming if you are writing several papers about similar subjects so that you often have to cite the same books.
-*you can store them in an external [http://www.bibtex.org BibTeX file ] and then link them via a command to your current document and use a [http://www.cs.stir.ac.uk/~kjt/software/latex/showbst.html Bibtex style] to define how they appear. This way you can create a small database of the references you might use and simply link them, letting LaTeX work for you.
-
-In order to know how to add the bibliography to your document, see the \_ManagementBibliography Management section. &
+In order to know how to add the bibliography to your document, see the
+\_ManagementBibliography Management section.
