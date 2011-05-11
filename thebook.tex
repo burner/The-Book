@@ -12,7 +12,7 @@
 \usepackage{longtable}
 \usepackage{geometry}
 \usepackage{verbatim}
-\usepackage{hyperref}
+\usepackage{url}
 \usepackage{fancyhdr}
 \usepackage{stfloats}
 \usepackage{multicol}
@@ -35,9 +35,9 @@
        \rightmargin\leftmargin}\item[\hskip\labelsep
                                      \bfseries Keywords:]}
      {\endlist}
-\hypersetup{%
-    pdfborder = {0 0 0}
-}
+%\hypersetup{%
+%    pdfborder = {0 0 0}
+%}
 
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
@@ -55,10 +55,8 @@
 \setlength{\columnsep}{6mm}
 \tableofcontents
 
-%\twocolumn
-
 \part{Workflow}
-%\setlength{\columnseprule}{0.1pt}
+\setlength{\columnseprule}{0.1pt}
 \input{content/vim/vim}
 \input{content/git/git}
 \input{content/regex/regex}
@@ -73,19 +71,19 @@
 \input{content/perl/perl}
 
 \part{Compiler and Operating Systems}
-%\input{content/os/os}
+\input{content/os/os}
 
 \part{Databases and Web application}
-%\input{content/is/is}
+\input{content/is/is}
 
 \part{Appendix}
 \newpage
-\phantomsection
+%\phantomsection
 \addcontentsline{toc}{chapter}{List of Figures}
 \listoffigures
 
 \newpage
-\phantomsection
+%\phantomsection
 \addcontentsline{toc}{chapter}{List of Listings}
 \lstlistoflistings
 

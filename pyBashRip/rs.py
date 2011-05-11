@@ -1,53 +1,61 @@
-import subprocess
-from conv import *
+#!/usr/bin/python
+import sys
 
-chapter = []
+ifile = ""
+mainfile = ""
 
-def extractChapter(line):
-	lidx = line.find("[[/")
-	uidx = line.find("/]]")
-	if lidx != -1 and uidx != -1:
-		lidx += 3
-		chapter.append(line[lidx:uidx])
-		print(line[lidx:uidx])
+subs = { "section":["==","==","\section{","}"]}
+
+def subtitute(toSubB, toSubE, toSubWithB, toSubWithE):
+	line = readLine()
+	retLine = ""
+	lowIdx = line.find(toSubB)
+	if lowIdx != -1:
+		retLine += line[0:lowIdx] + toSubWithB
+		highIdx = line.find(toSubE, lowIdx+len(toSubB))
+		print(highIdx)
+		while highIdx == -1:
+			line += readLine()
+			highIdx = line.find(toSubE)
+
+		retLine += line[lowIdx+len(toSubB):highIdx]
+		retLine += toSubWithE
+		print(retLine)
+		retLine += line[highIdx+len(toSubE):len(line)]
+		print(retLine)
+	else:
+		return line
+
+	return retLine
+
+def sub(sub):
+	return subtitute(sub[0], sub[1], sub[2], sub[3])
 	
 
-title="Bourne_Shell_Scripting"
-url="http://en.wikibooks.org/w/index.php?title="+title+"&action=edit"
-print(url)
-prog="wget "+"\""+url+"\""
-print(prog)
-p = subprocess.Popen(prog, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-retval = p.wait()
+def done():
+	ifile.close()
+	ofile.close()
+	sys.exit()
 
-ifileStr = url[26:len(url)]
-print(ifileStr)
+def readLine():
+	global ifile
+	while ifile:
+		line = ifile.readline()		
+		print(line)
+		if not line:
+			done()
+		return line
 
-mainfile = open("bash.tex", "w")
+def main():
+	global ifile
+	global ofile
+	if(len(sys.argv) == 2):
+		ifile = open(sys.argv[1] + ".w", "r")
+		ofile = open(sys.argv[1] + ".tex", "w")
 
-cnt = 0
+	while 1:
+		ofile.write(sub(subs["section"]))
 
-ifile = open(ifileStr, "r")
-for foo in ifile:
-	#print(foo)
-	if foo.find("textarea") != -1:
-		print("fount textarea")
-		cnt+=1
-		continue
-	extractChapter(foo)	
-	if cnt == 1:
-		mainfile.write(foo)		
-	if cnt > 1:
-		break
 
-mainfile.close()
-
-for sec in chapter:
-	foo = sec.replace(" ", "_")
-	url = "http://en.wikibooks.org/w/index.php?title="+title+"/"+foo+"&action=edit"
-	print(url)
-
-	prog="wget "+"\""+url+"\""
-	p = subprocess.Popen(prog, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-	retval = p.wait()
-	convFile(url, sec)
+if __name__ == "__main__":
+	main()
