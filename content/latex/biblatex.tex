@@ -1,0 +1,835 @@
+\section{Bibliography Management}
+For any academic/research writing, incorporating references into a document is
+an important task. Fortunately, LaTeX has a variety of features that make
+dealing with references much simpler, including built-in support for citing
+references. However, a much more powerful and flexible solution is achieved
+thanks to an auxiliary tool called [http://www.bibtex.org BibTeX] (which comes
+bundled as standard with LaTeX.)
+
+BibTeX provides for the storage of all references in an external, flat-file
+database. This database can be linked to any LaTeX document, and citations made
+to any reference that is contained within the file. This is often more
+convenient than embedding them at the end of every document written. There is
+now a centralized bibliography source that can be linked to as many documents
+as desired (write once, read many!). Of course, bibliographies can be split
+over as many files as one wishes, so there can be a file containing references
+concerning\textit{General Relativity} and another about\textit{Quantum
+Mechanics.} When writing about\textit{Quantum Gravity} (QG), which tries to
+bridge the gap between these two theories, both of these files can be linked
+into the document, in addition to references specific to QG.
+
+\subsection{Embedded system}
+If you are writing only one or two documents and aren't planning on writing
+more on the same subject for a long time, maybe you don't want to waste time
+creating a database of references you are never going to use. In this case you
+should consider using the basic and simple bibliography support that is
+embedded within LaTeX.
+
+LaTeX provides an environment called\verb|thebibliography| that you have to use
+where you want the bibliography; that usually means at the very end of your
+document, just before the\verb|\end{document}| command. Here is a practical
+example:
+
+\begin{lstlisting}
+\lstset{language=<source lang="latex" enclose="none">}
+\begin{thebibliography}{9}
+
+\bibitem{lamport94}
+  Leslie Lamport,
+  \emph{\LaTeX: A Document Preparation System}.
+  Addison Wesley, Massachusetts,
+  2nd Edition,
+  1994.
+
+\end{thebibliography}
+\end{lstlisting}
+OK, so what is going on here? The first thing to notice is the establishment of
+the environment.\verb|thebibliography| is a keyword that LaTeX recognizes as
+everything between the begin and end tags as being data for the bibliography.
+The optional argument, which I supplied after the begin statement, is telling
+LaTeX how wide the item label will be when printed. Note however, that it is
+not a literal parameter, i.e the number 9 in this case, but a text width.
+Therefore, I am effectively telling LaTeX that I will only need reference
+labels of one character in width, which means no more than nine references in
+total. If you want more than ten, then input a two-digit number, such as '99'
+which permits fewer than 100 references.
+
+Next is the actual reference entry itself. This is prefixed with
+the\verb|\bibitem\textit{cite_key}}| command. The\textit{cite\_key} should be a
+unique identifier for that particular reference, and is often some sort of
+mnemonic consisting of any sequence of letters, numbers and punctuation symbols
+(although not a comma). I often use the surname of the first author, followed
+by the last two digits of the year (hence\textit{lamport94}). If that author
+has produced more than one reference for a given year, then I add letters
+after, 'a', 'b', etc. But, you should do whatever works for you. Everything
+after the key is the reference itself. You need to type it as you want it to be
+presented. I have put the different parts of the reference, such as author,
+title, etc., on different lines for readability. These linebreaks are ignored
+by LaTeX. I wanted the title to be in italics, so I used the\verb|\emph{}|
+command to achieve this.
+
+\subsection{Citations}
+To actually cite a given document is very easy. Go to the point where you want
+the citation to appear, and use the following:\verb|\cite\textit{cite_key}}|,
+where the\textit{cite\_key} is that of the bibitem you wish to cite. When LaTeX
+processes the document, the citation will be cross-referenced with the bibitems
+and replaced with the appropriate number citation. The advantage here, once
+again, is that LaTeX looks after the numbering for you. If it were totally
+manual, then adding or removing a reference would be a real chore, as you would
+have to re-number all the citations by hand.
+\begin{lstlisting}
+\lstset{language=<source lang="latex" enclose="none">}
+Instead of WYSIWYG editors, typesetting systems like \TeX{} or \LaTeX{} \cite{lamport94} can be used.
+\end{lstlisting}
+
+\subsection{Referring More Specific}
+Sometimes you want to refer to a certain page, figure or theorem in a text
+book. For that you can use the arguments to the\verb|\cite| command:
+\begin{lstlisting}
+\lstset{language=<source lang="latex" enclose="none">}
+\cite[p.~215]{citation01}
+\end{lstlisting}
+The argument, "p. 215", will show up inside the same brackets. Note the tilde
+in [p.~215], which replaces the end-of-sentence spacing with a non-breakable
+inter-word space. There are two reasons: end-of-sentence spacing is too wide,
+and "p." should not be separated from the page number.
+
+\subsection{Multiple Citations}
+When a sequence of multiple citations are needed, you should use a
+single\verb|\cite{}| command. The citations are then separated by commas. Note
+that you must not use spaces between the citations. Here's an example: 
+
+\begin{lstlisting}
+\lstset{language=<source lang="latex" enclose="none">}
+\cite{citation01,citation02,citation03}
+\end{lstlisting}
+The result will then be shown as citations inside the same brackets.
+
+\subsection{No Cite}
+If you only want a reference to appear in the bibliography, but not where it is
+referenced in the main text, then the\verb|\nocite{}| command can be used, for
+example:
+\begin{lstlisting}
+\lstset{language=<source lang="latex" enclose="none">}
+Lamport showed in 1995 something...  \nocite{lamport95}.
+\end{lstlisting}
+
+A special version of the command,\verb|\nocite{*}|, includes all entries from
+the database, whether they are referenced in the document or not.
+
+\subsection{Natbib}
+Using the standard LaTeX bibliography support, you will see that each reference
+is numbered and each citation corresponds to the numbers. The numeric style of
+citation is quite common in scientific writing. In other disciplines, the
+author-year style, e.g., (Roberts, 2003), such as\textit{Harvard} is preferred,
+and is in fact becoming increasingly common within scientific publications. A
+discussion about which is best will not occur here, but a possible way to get
+such an output is by the\verb|natbib| package. In fact, it can supersede
+LaTeX's own citation commands, as Natbib allows the user to easily switch
+between Harvard or numeric.
+
+The first job is to add the following to your preamble in order to get LaTeX to
+use the Natbib package:
+
+\begin{lstlisting}
+\lstset{language=<source lang="latex" enclose="none">}
+\usepackage{natbib}
+\end{lstlisting}
+
+\begin{table}
+\caption{\textit{'Natbib commands}}
+\begin{tabular}{c c} \hline
+ Citation command
+&  Output
+\\ \hline
+ \verb|\citet{goossens93}|
+&  Goossens et al. (1993)
+\\ \hline
+\verb|\citep{goossens93}|
+&  (Goossens et al., 1993)
+\\ \hline
+ \verb|\citet*{goossens93}|
+&  Goossens, Mittlebach, and Samarin (1993)
+\\ \hline
+ \verb|\citep*{goossens93}|
+&  (Goossens, Mittlebach, and Samarin, 1993)
+\\ \hline
+ \verb|\citeauthor{goossens93}|
+&  Goossens et al.
+\\ \hline
+ \verb|\citeauthor*{goossens93}|
+&  Goossens, Mittlebach, and Samarin
+\\ \hline
+ \verb|\citeyear{goossens93}|
+&  1993
+\\ \hline
+ \verb|\citeyearpar{goossens93}|
+&  (1993)
+\\ \hline
+ \verb|\citealt{goossens93}|
+&  Goossens et al. 1993
+\\ \hline
+ \verb|\citealp{goossens93}|
+&  Goossens et al., 1993
+\end{tabular}
+\end{table}
+
+Also, you need to change the bibliography style file to be used, so edit the
+appropriate line at the bottom of the file so that it
+reads:\verb|\bibliographystyle{plainnat}|. Once done, it is basically a matter
+of altering the existing\verb|\cite| commands to display the type of citation
+you want.
+
+The main commands simply add a\textit{t} for 'textual' or\textit{p} for
+'parenthesized', to the basic\verb|\cite| command. You will also notice how
+Natbib by default will compress references with three or more authors to the
+more concise\textit{1st surname et al} version. By adding an asterisk (*), you
+can override this default and list all authors associated with that citation.
+There are some other specialized commands that Natbib supports, listed in the
+table here.
+
+The final area that I wish to cover about Natbib is customizing its citation
+style. There is a command called\verb|\bibpunct| that can be used to override
+the defaults and change certain settings. For example, I have put the following
+in the preamble:
+
+\begin{lstlisting}
+\lstset{language=<source lang="latex" enclose="none">}
+\bibpunct{(}{)}{;}{a}{,}{,}
+\end{lstlisting}
+The command requires six mandatory parameters.
+
+\begin{table}
+\caption{\textit{'Natbib-compatible styles}}
+\begin{tabular}{c c c} \hline
+\\ \hline
+ Style
+&  Source
+&  Description
+\\ \hline
+ plainnat
+&  Provided
+&  natbib-compatible version of plain
+\\ \hline
+ abbrvnat
+&  Provided
+&  natbib-compatible version of abbrv
+\\ \hline
+ unsrtnat
+&  Provided
+&  natbib-compatible version of unsrt
+\\ \hline
+ apsrev
+&  [http://authors.aps.org/revtex4/ REVTeX 4 home page]
+&  natbib-compatible style for Physical Review journals
+\\ \hline
+ rmpaps
+&  [http://authors.aps.org/revtex4/ REVTeX 4 home page]
+&  natbib-compatible style for Review of Modern Physics journals
+\\ \hline
+ IEEEtranN
+&  [http://www.ctan.org/tex-archive/help/Catalogue/entries/ieeetran.html TeX Catalogue entry]
+&  natbib-compatible style for IEEE publications
+\\ \hline
+ achemso
+&  [http://www.ctan.org/tex-archive/help/Catalogue/entries/achemso.html TeX Catalogue entry]
+&  natbib-compatible style for American Chemical Society journals
+\\ \hline
+ rsc
+&  [http://www.ctan.org/tex-archive/help/Catalogue/entries/rsc.html TeX Catalogue entry]
+&  natbib-compatible style for Royal Society of Chemistry journals
+\end{tabular}
+\end{table}
+
+\begin{enumerate}
+\item The symbol for the opening bracket.
+\item The symbol for the closing bracket.
+\item The symbol that appears between multiple citations.
+\item This argument takes a letter: \begin{itemize}
+\item \textit{n} - numerical style.
+\item \textit{s} - numerical superscript style.
+\item \textit{any other letter} - author-year style.
+\end{itemize}
+\item The punctuation to appear between the author and the year (in parenthetical case only).
+\item The punctuation used between years, in multiple citations when there is a common author. e.g., (Chomsky 1956, 1957). If you want an extra space, then you need\verb|{,~}|.
+\end{enumerate}
+
+So as you can see, this package is quite flexible, especially as you can easily
+switch between different citation styles by changing a single parameter. Do
+have a look at the [http://www.ctex.org/documents/packages/bibref/natbib.pdf
+Natbib manual], it's a short document and you can learn even more about how to
+use it.
+
+\subsection{BibTeX}
+I have previously introduced the idea of embedding references at the end of the
+document, and then using the\verb|\cite| command to cite them within the text.
+In this tutorial, I want to do a little better than this method, as it's not as
+flexible as it could be. Which is why I wish to concentrate on
+using BibTeX.
+
+A BibTeX database is stored as a\textit{.bib} file. It is a plain text file,
+and so can be viewed and edited easily. The structure of the file is also quite
+simple. An example of a BibTeX entry:
+
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex">}
+@article{greenwade93,
+    author  = "George D. Greenwade",
+    title   = "The {C}omprehensive {T}ex {A}rchive {N}etwork ({CTAN})",
+    year    = "1993",
+    journal = "TUGBoat",
+    volume  = "14",
+    number  = "3",
+    pages   = "342--351"
+}
+\end{lstlisting}
+Each entry begins with the declaration of the reference type, in the form
+of\verb|\textit{type}|. BibTeX knows of practically all types you can think of,
+common ones are:\textit{book},\textit{article}, and for papers presented at
+conferences, there is\textit{inproceedings}. In this example, I have referred
+to an article within a journal.
+
+After the type, you must have a left curly brace \verb|{|' to signify the
+beginning of the reference attributes. The first one follows immediately after
+the brace, which is the citation key. This key must be unique for all entries
+in your bibliography. It is this identifier that you will use within your
+document to cross-reference it to this entry. It is up to you as to how you
+wish to label each reference, but there is a loose standard in which you use
+the author's surname, followed by the year of publication. This is the scheme
+that I use in this tutorial.
+
+Next, it should be clear that what follows are the relevant fields and data for
+that particular reference. The field names on the left are BibTeX keywords.
+They are followed by an equals sign (=) where the value for that field is then
+placed.  BibTeX expects you to explicitly label the beginning and end of each
+value. I personally use quotation marks ("), however, you also have the option
+of using curly braces ('{', '}'). But as you will soon see, curly braces have
+other roles, within attributes, so I prefer not to use them for this job as
+they can get more confusing. A notable exception is when you want to use
+characters with
+umlauts, since their notation is in the format\verb|\"{o}|, and the quotation
+mark will close the one opening the field, causing an error in the parsing of
+the reference.
+
+Remember that each attribute must be followed by a comma to delimit one from
+another. You do not need to add a comma to the last attribute, since the
+closing brace will tell BibTeX that there are no more attributes for this
+entry, although you won't get an error if you do.
+
+It can take a while to learn what the reference types are, and what fields each
+type has available (and which ones are required or optional, etc). So, look at
+this [http://newton.ex.ac.uk/tex/pack/bibtex/btxdoc/node6.html entry type
+reference] and also this
+[http://newton.ex.ac.uk/tex/pack/bibtex/btxdoc/node7.html field reference] for
+descriptions of all the fields. It may be worth bookmarking or printing these
+pages so that they are easily at hand when you need them.
+
+\subsection{Authors}
+BibTeX can be quite clever with names of authors. It can accept names in\textit{forename surname} or\textit{surname, forename}. I personally use the former, but remember that the order you input them (or any data within an entry for that matter) is customizable and so you can get BibTeX to manipulate the input and then output it however you like. If you use the\textit{forename surname} method, then you must be careful with a few special names, where there are compound surnames, for example "John von Neumann". In this form, BibTeX assumes that the last word is the surname, and everything before is the forename, plus any middle names. You must therefore manually tell BibTeX to keep the 'von' and 'Neumann' together. This is achieved easily using curly braces. So the final result would be "John {von Neumann}".  This is easily avoided with the\textit{surname, forename}, since you have a comma to separate the surname from the forename.
+
+Secondly, there is the issue of how to tell BibTeX when a reference has more than one author. This is very simply done by putting the keyword\textit{and} in between every author. As we can see from another example:
+
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex">}
+@book{goossens93,
+    author    = "Michel Goossens and Frank Mittlebach and Alexander Samarin",
+    title     = "The LaTeX Companion",
+    year      = "1993",
+    publisher = "Addison-Wesley",
+    address   = "Reading, Massachusetts"
+}
+\end{lstlisting}
+This book has three authors, and each is separated as described. Of course,
+when BibTeX processes and outputs this, there will only be an 'and' between the
+penultimate and last authors, but within the .bib file, it needs
+the\textit{and}'s so that it can keep track of the individual authors.
+
+\subsection{Standard templates}
+\begin{description}
+\item[@article :] An article from a magazine or a journal.
+\item[*Required fields:] author, title, journal, year.
+\item[*Optional fields:] volume, number, pages, month, note.
+\end{description}
+
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex">}
+@article{Xarticle,
+    author    = "",
+    title     = "",
+    journal   = "",
+    %volume   = "",
+    %number   = "",
+    %pages    = "",
+    year      = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+\end{lstlisting}
+\begin{description}
+\item[@book :] A published book
+\item[*Required fields:] author/editor, title, publisher, year.
+\item[*Optional fields:] volume/number, series, address, edition, month, note.
+\end{description}
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex">}
+@book{Xbook,
+    author    = "",
+    title     = "",
+    publisher = "",
+    %volume   = "",
+    %number   = "",
+    %series   = "",
+    %address  = "",
+    %edition  = "",
+    year      = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+\end{lstlisting}
+\begin{description}
+\item[@booklet :] A bound work without a named publisher or sponsor.
+\item[*Required fields:] title.
+\item[*Optional fields:] author, howpublished, address, month, year, note.
+\end{description}
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex">}
+@booklet{Xbooklet,
+    %author   = "",
+    title     = "",
+    %howpublished   = "",
+    %address  = "",
+    year      = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+\end{lstlisting}
+\begin{description}
+\item[@conference :] Equal to inproceedings
+\item[*Required fields:] author, title, booktitle, year.
+\item[*Optional fields:] editor, volume/number, series, pages, address, month, organization, publisher, note.
+\end{description}
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex">}
+@conference{Xconference,
+    author    = "",
+    title     = "",
+    booktitle = "",
+    %editor   = "",
+    %volume   = "",
+    %number   = "",
+    %series   = "",
+    %pages    = "",
+    %address  = "",
+    year      = "XXXX",
+    %month    = "",
+    %publisher= "",
+    %note     = "",
+}
+\end{lstlisting}
+\begin{description}
+\item[@inbook :] A section of a book
+\item[*Required fields:] author/editor, booktitle, chapter and/or pages, publisher, year.
+\item[*Optional fields:] volume/number, series, type, address, edition, month, note.
+\item[@incollection :] A section of a book having its own title.
+\item[*Required fields:] author, title, booktitle, publisher, year.
+\item[*Optional fields:] editor, volume/number, series, type, chapter, pages, address, edition, month, note.
+\item[@inproceedings :] An article in a conference proceedings.
+\item[*Required fields:] author, title, booktitle, year.
+\item[*Optional fields:] editor, volume/number, series, pages, address, month, organization, publisher, note.
+\item[@manual :] Technical manual
+\item[*Required fields:] title.
+\item[*Optional fields:] author, organization, address, edition, month, year, note.
+\item[@mastersthesis :] Master's thesis
+\item[*Required fields:] author, title, school, year.
+\item[*Optional fields:] type (eg. "diploma thesis"), address, month, note.
+\end{description}
+
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex">}
+@mastersthesis{Xthesis,
+    author    = "",
+    title     = "",
+    school    = "",
+    %type     = "diploma thesis",
+    %address  = "",
+    year      = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+\end{lstlisting}
+\begin{description}
+\item[@misc :] Template useful for other kinds of publication
+\item[*Required fields:] none
+\item[*Optional fields:] author, title, howpublished, month, year, note.
+\end{description}
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex">}
+@misc{Xmisc,
+    %author    = "",
+    %title     = "",
+    %howpublished = "",
+    %year     = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+\end{lstlisting}
+\begin{description}
+\item[@phdthesis :] Ph.D. thesis
+\item[*Required fields:] author, title, year, school.
+\item[*Optional fields:] address, month, keywords, note.
+\item[@proceedings :] The proceedings of a conference.
+\item[*Required fields:] title, year.
+\item[*Optional fields:] editor, volume/number, series, address, month, organization, publisher, note.
+\item[@techreport :] Technical report from educational, commercial or standardization institution.
+\item[*Required fields:] author, title, institution, year.
+\item[*Optional fields:] type, number, address, month, note.
+\end{description}
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex">}
+@techreport{Xtreport,
+    author    = "",
+    title     = "",
+    institution = "",
+    %type     = "", 
+    %number   = "",
+    %address  = "",
+    year      = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+\end{lstlisting}
+\begin{description}
+\item[@unpublished :] An unpublished article, book, thesis, etc.
+\item[*Required fields:] author, title, note.
+\item[*Optional fields:] month, year.
+\end{description}
+
+\subsection{Not standard templates}
+\begin{description}
+\item[@patent]
+\item[@collection]
+\item[@electronic]
+\end{description}
+
+\subsection{Preserving capital letters}
+In the event that BibTeX has been set to not preserve all capitalization within
+titles, problems can occur, especially if you are referring to proper nouns, or
+acronyms. To tell BibTeX to keep them, use the good old curly braces around the
+letter in question, (or letters, if it's an acronym) and all will be well!
+
+\begin{verbatim}title = "The {LaTeX} Companion"\end{verbatim}
+
+Or you can put the whole title in curly braces:
+
+\begin{verbatim}title = "{The LaTeX Companion}"\end{verbatim}
+
+\subsection{A few additional examples}
+Below you will find a few additional examples of bibliography entries. The
+first one covers the case of multiple authors in the Surname, Firstname format,
+and the second one deals with the incollection case.
+
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex" enclose="none">}
+@article{AbedonHymanThomas2003,
+  author = "Abedon, S. T. and Hyman, P. and Thomas, C.",
+  year = "2003",
+  title = "Experimental examination of bacteriophage latent-period evolution as a response to bacterial availability",
+  journal = "Applied and Environmental Microbiology",
+  volume = "69",
+  pages = "7499--7506"
+}
+
+@incollection{Abedon1994,
+  author = "Abedon, S. T.",
+  title = "Lysis and the interaction between free phages and infected cells",
+  pages = "397--405",
+  booktitle = "Molecular biology of bacteriophage T4",
+  editor = "Karam, Jim D. Karam and Drake, John W. and Kreuzer, Kenneth N. and Mosig, Gisela
+            and Hall, Dwight and Eiserling, Frederick A. and Black, Lindsay W. and Kutter, Elizabeth
+            and Carlson, Karin and Miller, Eric S. and Spicer, Eleanor",
+  publisher = "ASM Press, Washington DC",
+  year = "1994"
+}
+\end{lstlisting}
+If you have to cite a website you can use @misc (for this example you will
+need\verb|\usepackage{url}| in the main document):
+
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex" enclose="none">}
+@MISC{website:fermentas-lambda,
+      AUTHOR = "Fermentas Inc.",
+      TITLE = "Phage Lambda: description \& restriction map",
+      MONTH = "November",
+      YEAR = 2008,
+      HOWPUBLISHED = "\url{http://www.fermentas.com/techinfo/nucleicacids/maplambda.htm}"
+}
+\end{lstlisting}
+The note field comes in handy if you need to add unstructured information, for
+example that the corresponding issue of the journal has yet to appear:
+
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex" enclose="none">}
+@article{blackholes,
+      author="Bunny, R.",
+      title="Black Holes and Their Relation to Hiding Eggs",
+      journal="Theoretical Easter Physics",
+      publisher="Eggs Ltd.",
+      year="2010",
+      note="(to appear)"
+}
+\end{lstlisting}
+
+\subsection{Getting current LaTeX document to use your .bib file}
+At the end of your LaTeX file (that is, after the content, but
+before\verb|\end{document}|, you need to place the following commands:
+
+\begin{lstlisting}
+\lstset{language=<source lang="latex" enclose="none">}
+\bibliographystyle{plain}
+\bibliography{sample1,sample2,...,samplen} 
+% Note the lack of whitespace between the commas and the next bib file.
+\end{lstlisting}
+Bibliography styles are files recognized by BibTeX that tell it how to format
+the information stored in the \verb|.bib| file when processed for output. And
+so the first command listed above is declaring which style file to use. The
+style file in this instance is \verb|plain.bst| (which comes as standard with
+BibTeX). You do not need to add the .bst extension when using this command, as
+it is assumed. Despite its name, the plain style does a pretty good job (look
+at the output of this tutorial to see what I mean).
+
+The second command is the one that actually specifies the \verb|.bib| file
+you wish to use. The ones I created for this tutorial were called
+\verb|sample1.bib|, \verb|sample2.bib|, . . ., \verb|samplen.bib|, but
+once again, you don't include the file extension. At the moment, the
+\verb|.bib| file is in the same directory as the LaTeX document too. However,
+if your .bib file was elsewhere (which makes sense if you intend to maintain a
+centralized database of references for all your research), you need to specify
+the path as well, e.g\verb|\bibliography{/some/where/sample}|.
+
+Now that LaTeX and BibTeX know where to look for the appropriate files,
+actually citing the references is fairly trivial.
+The\verb|\cite\textit{ref_key}}| is the command you need, making sure that
+the\textit{ref\_key} corresponds exactly to one of the entries in the .bib file.
+If you wish to cite more that one reference at the same time, do the
+following:\verb|\cite\textit{ref_key1},\textit{ref_key2},...,\textit{ref_keyN}}|.
+
+\subsection{Why won't LaTeX generate any output?}
+The addition of BibTeX adds extra complexity for the processing of the source
+to the desired output. This is largely hidden to the user, but because of all
+the complexity of the referencing of citations from your source LaTeX file to
+the database entries in another file, you actually need multiple passes to
+accomplish the task. This means you have to run LaTeX a number of times, where
+each pass, it will perform a particular task until it has managed to resolve
+all the citation references. Here's what you need to type:
+\begin{enumerate}
+\item \verb|latex latex_source_code.tex|
+\item \verb|bibtex latex_source_code.aux|
+\item \verb|latex latex_source_code.tex|
+\item \verb|latex latex_source_code.tex|
+\end{enumerate}
+(Extensions are optional, if you put them note that the bibtex command takes the AUX file as input.)
+
+After the first LaTeX run, you will see errors such as:
+
+
+\begin{verbatim}
+LaTeX Warning: Citation `lamport94' on page 1 undefined on input line 21.
+...
+LaTeX Warning: There were undefined references.
+
+\end{verbatim}
+
+The next step is to run bibtex on that same LaTeX source (and not on the actual .bib file) to then define all the references within that document. You should see output like the following:
+
+
+\begin{verbatim}
+This is BibTeX, Version 0.99c (Web2C 7.3.1)
+The top-level auxiliary file: latex_source_code.aux
+The style file: plain.bst
+Database file #1: sample.bib
+
+\end{verbatim}
+
+The third step, which is invoking LaTeX for the second time will see more errors like "\verb|LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.|". Don't be alarmed, it's almost complete. As you can guess, all you have to do is follow its instructions, and run LaTeX for the third time, and the document will be output as expected, without further problems.
+
+If you want a pdf output instead of a dvi output you can use \verb|pdflatex| instead of \verb|latex| as follows:
+\begin{enumerate}
+\item \verb|pdflatex latex_source_code.tex|
+\item \verb|bibtex latex_source_code.aux|
+\item \verb|pdflatex latex_source_code.tex|
+\item \verb|pdflatex latex_source_code.tex|
+\end{enumerate}
+(Extensions are optional, if you put them note that the bibtex command takes the AUX file as input.)
+
+Note that if you are editing your source in vim and attempt to use command mode
+and the current file shortcut (\%) to process the document like this:
+
+\verb|:! pdflatex %|
+\verb|:! bibtex %|
+
+You will get an error similar to this:  
+\verb|I couldn't open file name 'current_file.tex.aux'|
+
+It appears that the file extension is included by default when the current file
+command (\%) is executed.  To process your document from within vim, you must
+explicitly name the file without the file extension for bibtex to work, as is
+shown below:
+\begin{enumerate}
+\item \verb|:! pdflatex %|
+\item \verb|:! bibtex latex_source_code| (without file extension, it looks for the AUX file as mentioned above)
+\item \verb|:! pdflatex %|
+\item \verb|:! pdflatex %|
+\end{enumerate}
+
+If you are running Unix/Linux or any other platform where you have
+[http://en.wikipedia.org/wiki/Make\_\%28software\%29 make], you can simply
+create a Makefile and use vim's make command or use make in shell. The Makefile
+would then look like this:
+
+\verb|latex_source_code.pdf: latex_source_code.tex latex_source_code.bib|
+
+\verb|pdflatex latex_source_code.tex|
+
+\verb|bibtex latex_source_code|
+
+\verb|pdflatex latex_source_code.tex|
+
+\verb|pdflatex latex_source_code.tex|
+
+\subsection{Bibliography styles}
+Below you can see three styles available with LaTeX: %TODO
+%<div style="float:left"\nameref{Image:LaTeX bibliography plain.png|thumb|400px|none|plain}</div>
+%<div style="float:left"\nameref{Image:LaTeX bibliography abbrv.png|thumb|400px|none|abbrv}</div>
+%<div style="float:left"\nameref{Image:LaTeX bibliography alpha.png|thumb|400px|none|alpha}</div>
+% {{clear}} 
+
+\textit{'To number the references in order of appearance, rather than alphabetical order use ieeetr}'
+
+\begin{lstlisting}
+\lstset{language=<source lang="latex">}
+\bibliographystyle{ieeetr}
+\end{lstlisting}
+
+Web page http://www.cs.stir.ac.uk/~kjt/software/latex/showbst.html contains more examples.
+
+\subsection{Including URLs in bibliography}
+As you can see, there is no field for URLs. One possibility is to include
+Internet addresses in\verb|howpublished| field of\verb|@misc| or\verb|note|
+field of\verb|@techreport|,\verb|@article|,\verb|@book|:
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex" enclose="none">}
+howpublished = "\url{http://www.example.com}"
+\end{lstlisting}
+Note the usage of\verb|\url| command to ensure proper appearance of URLs.
+
+Another way is to use special field \verb|url| and make bibliography style recognise it.
+
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex" enclose="none">}
+ url = "http://www.example.com"
+\end{lstlisting}
+You need to use\verb|\usepackage{url}| in the first case or\verb|\usepackage{hyperref}| in the second case.
+
+Styles provided by Natbib (see below) handle this field, other styles can be
+modified using [http://purl.org/nxg/dist/urlbst urlbst] program. Modifications
+of three standard styles (plain, abbrv and alpha) are provided with urlbst.
+
+If you need more help about URLs in bibliography, visit
+[http://www.tex.ac.uk/cgi-bin/texfaq2html?label=citeURL FAQ of UK List of TeX].
+
+\subsection{Customizing bibliography appearance}
+One of the main advantages of BibTeX, especially for people who write many
+research papers, is the ability to customize your bibliography to suit the
+requirements of a given publication. You will notice how different publications
+tend to have their own style of formatting references, to which authors must
+adhere if they want their manuscripts published. In fact, established journals
+and conference organizers often will have created their own bibliography style
+(.bst file) for those users of BibTeX, to do all the hard work for you.
+
+It can achieve this because of the nature of the .bib database, where all the
+information about your references is stored in a structured format, but nothing
+about style. This is a common theme in LaTeX in general, where it tries as much
+as possible to keep content and presentation separate.
+
+A bibliography style file (\verb|.bst|) will tell LaTeX how to format each
+attribute, what order to put them in, what punctuation to use in between
+particular attributes etc. Unfortunately, creating such a style by hand is not
+a trivial task. Which is why \verb|Makebst| (also known as\textit{custom-bib})
+is the tool we need.
+
+\verb|Makebst| can be used to automatically generate a .bst file based on your
+needs. It is very simple, and actually asks you a series of questions about
+your preferences. Once complete, it will then output the appropriate style file
+for you to use.
+
+It should be installed with the LaTeX distribution (otherwise, you can
+[http://www.mps.mpg.de/software/latex/localtex/localltx.html\#makebst download
+it]) and it's very simple to initiate. At the command line, type:
+
+ latex makebst
+
+LaTeX will find the relevant file and the questioning process will begin. You
+will have to answer quite a few (although, note that the default answers are
+pretty sensible), which means it would be impractical to go through an example
+in this tutorial. However, it is fairly straight-forward. And if you require
+further guidance, then there is a comprehensive
+[http://www.mps.mpg.de/software/latex/localtex/doc/merlin.pdf manual]
+available. I'd recommend experimenting with it and seeing what the results are
+when applied to a LaTeX document.
+
+If you are using a custom built .bst file, it is important that LaTeX can find
+it! So, make sure it's in the same directory as the LaTeX source
+file,\textit{unless} you are using one of the standard style files (such
+as\textit{plain} or\textit{plainnat}, that come bundled with LaTeX - these will
+be automatically found in the directories that they are installed. Also, make
+sure the name of the \verb|.bst| file you want to use is reflected in
+the\verb|\bibliographystyle{style}| command (but don't include the \verb|.bst|
+extension!).
+
+\subsection{Localizing bibliography appearance}
+When writing documents in languages other than English, you may find it
+desirable to adapt the appearance of your bibliography to the document
+language. This concerns words such as\textit{editors},\textit{and},
+or\textit{in} as well as a proper typographic layout. The
+[http://tug.ctan.org/tex-archive/biblio/bibtex/contrib/babelbib/
+\verb|babelbib| package] can be used here. For example, to layout the
+bibliography in German, add the following to the header:
+
+\begin{lstlisting}
+\lstset{language=<source lang="latex" enclose="none">}
+\usepackage[fixlanguage]{babelbib}
+\selectbiblanguage{german}
+\end{lstlisting}
+Alternatively, you can layout each bibliography entry according to the language of the cited document:
+
+\begin{lstlisting}
+\lstset{language=<source lang="latex" enclose="none">}
+\usepackage{babelbib}
+\end{lstlisting}
+The language of an entry is specified as an additional field in the BibTeX entry:
+
+\begin{lstlisting}
+\lstset{language=<source lang="bibtex">}
+@article{mueller08,
+  % ...
+  language = {german}
+}
+\end{lstlisting}
+For \verb|babelbib| to take effect, a bibliography style supported by it - one of \verb|babplain|, \verb|babplai3|, \verb|babalpha|, \verb|babunsrt|, \verb|bababbrv|, and \verb|bababbr3| - must be used:
+
+\begin{lstlisting}
+\lstset{language=<source lang="latex" enclose="none">}
+\bibliographystyle{babplain}
+\bibliography{sample}
+\end{lstlisting}
+\subsection{Getting Bibliographic data}
+Many online databases provide bibliographic data in BibTeX-Format, making it easy to build your own database.  
+For example, [http://scholar.google.com Google Scholar] offers the option to
+return properly formatted output, but you must turn it on in the
+[http://scholar.google.de/scholar\_preferences?hl=en\&lr=\&output=search
+Preferences]. <!--Here is an example of such a BibTeX entry:
+http://scholar.google.com/scholar.bib?hl=en\&lr=\&output=search\&q=info:iOXAsGZMSHsJ:scholar.google.com/\&output=citation\&oe=ASCII\&oi=citation-->
+
+One should be alert to the fact that bibliographic databases are frequently the
+product of several generations of automatic processing, and so the resulting
+BibTex code is prone to a variety of minor errors, especially in older entries.

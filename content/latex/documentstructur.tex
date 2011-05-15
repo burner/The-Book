@@ -95,7 +95,7 @@ the class (style) you are using. If you omit \texttt{\maketitle}, the titling
 will never be typeset (unless you write your own).
 
 Here is a more complicated example:
-{{LaTeX/Usagecode= &
+\begin{verbatim}
 \title{How to Structure a \LaTeX{} Document}
 \author{Andrew Roberts\\
   School of Computing,\\
@@ -106,35 +106,35 @@ Here is a more complicated example:
   \texttt{andyr@comp.leeds.ac.uk}<!---->}
 \date{\today}
 \maketitle
-}}
+\end{verbatim}
 
-as you can see, you can use commands as arguments of {{LaTeX/LaTeXcode=\title
-&}} and the others. The double backslash ({{LaTeX/LaTeXcode=\\ &}}) is the
+as you can see, you can use commands as arguments of \verb|\title|
+and the others. The double backslash (\verb|\\|) is the
 LaTeX command for forced linebreak. LaTeX normally decides by itself where to
 break lines, and it's usually right, but sometimes you need to cut a line
 short, like here, and start a new one.
 
-If there are two authors separate them with the {{LaTeX/LaTeXcode=\and &}}
+If there are two authors separate them with the \verb|\and|
 command:
-{{LaTeX/Usagecode= &
+\begin{verbatim}
 \title{Our Fun Document}
 \author{Jane Doe \and John Doe} 
 \date{\today}
 \maketitle
-}}
+\end{verbatim}
 
 If you are provided with a class file from a publisher, or if you use the AMS
-article class ({{LaTeX/Packageamsart &}}), then you can use several different
+article class (\texttt{amsart}), then you can use several different
 commands to enter author information. The email address is at the end, and the
-{{LaTeX/LaTeXcode=\texttt &}} commands formats the email address using a
-mono-spaced font. The built-in command called {{LaTeX/LaTeXcode=\today &}} will
+\verb|\texttt| commands formats the email address using a
+mono-spaced font. The built-in command called \verb|\today| will
 be replaced with the current date when processed by LaTeX. But you are free to
 put whatever you want as a date, in no set order. If braces are left empty,
 then the date is omitted. 
 
 Using this approach, you can create only basic output whose layout is very hard
 to change. If you want to create your title freely, see the \_CreationTitle
-Creation section. &
+Creation section.
 
 \subsection{ Abstract }
 As most research papers have an abstract, there are predefined commands for
@@ -191,39 +191,31 @@ out for you. Also, for sections, you do not need to markup which content
 belongs to a given block, using \lstinline{\begin} and \lstinline{\end}
 commands, for example. LaTeX provides 7 levels of depth for defining sections:
 
-\begin{tabular}
-! Command
-! Level
-! Comment
-\\
- \texttt{\part{\textit{part} &}}
- style="text &-align: center"   &-1
- not in letters &
-\\
- \texttt{\chapter{\textit{chapter} &}}
- style="text &-align: center"  0 &
- only books and reports &
-\\
- \texttt{\section{\textit{section} &}}
- style="text &-align: center"  1 &
- not in letters &
-\\
- \texttt{\subsection{\textit{subsection} &}}
- style="text &-align: center"  2 &
- not in letters &
-\\
- \texttt{\subsection{\textit{subsection} &}}
- style="text &-align: center"  3 &
- not in letters &
-\\
- \texttt{\paragraph{\textit{paragraph} &}}
- style="text &-align: center"  4 &
- not in letters &
-\\
- \texttt{\subparagraph{\textit{subparagraph} &}}
- style="text &-align: center"  5 &
- not in letters &
-\\
+\begin{tabular}{c c c}
+ Command &
+ Level &
+ Comment \\
+ \verb|\part{part} }| &
+ style="text-align: center"  -1 &
+ not in letters \\
+ \verb|\chapter{chapter}| &
+ style="text-align: center"  0 &
+ only books and reports \\
+ \verb|\section{section}| &
+ style="text-align: center"  1 &
+ not in letters \\
+ \verb|\subsection{subsection}| &
+ style="text-align: center"  2 &
+ not in letters \\
+ \verb|\subsection{subsection}| &
+ style="text-align: center"  3 &
+ not in letters \\
+ \verb|\paragraph{paragraph}| &
+ style="text-align: center"  4 &
+ not in letters \\
+ \verb|\subparagraph{subparagraph}| &
+ style="text-align: center"  5 &
+ not in letters \\
 \end{tabular}
 
 All the titles of the sections are added automatically to the table of contents
@@ -251,7 +243,7 @@ B, C, etc.). You can change the depth to which section numbering occurs, so you
 can turn it off selectively. By default it is set to 2. If you only want parts,
 chapters, and sections numbered, not subsections or subsections etc., you can
 change the value of the \texttt{secnumdepth} counter using the
-\texttt{\setcounter} command, giving the depth level from the previous table.
+\verb+\setcounter+ command, giving the depth level from the previous table.
 For example, if you want to change it to "1":
 \begin{lstlisting}
 \setcounter{secnumdepth}{1}
@@ -336,7 +328,7 @@ Paragraphs of text come after section headings. Simply type the text and leave
 a blank line between paragraphs. The blank line means "start a new paragraph
 here": it does \textbf{not} mean you get a blank line in the typeset output.
 For formatting paragraph indents and spacing between paragraphs, refer to the
-#Paragraph\_IndentsFormatting section. &
+\#Paragraph\_IndentsFormatting section.
 
 \subsection{ Table of contents }
 All auto-numbered headings get entered in the Table of Contents (ToC)
@@ -372,7 +364,7 @@ List of Tables by substituting \texttt{lof} or \texttt{lot} for \texttt{toc}.
 If the hyperref package is used and the link does not point correct to the
 chapter, the command \lstinline{\\phantomsection} in combination with
 \lstinline{\clearpage} or \lstinline{\cleardoublepage} can be used (see also
-\_and\_Cross-referencing#The\_hyperref\_package\_and\_.5CphantomsectionLabels\_and\_Cross-referencing):
+\_and\_Cross-referencing\#The\_hyperref\_package\_and\_.5CphantomsectionLabels\_and\_Cross-referencing):
 \begin{lstlisting}
 \cleardoublepage
 \phantomsection
