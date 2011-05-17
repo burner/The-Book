@@ -19,3 +19,6 @@ clean:
 fshow:
 	pdflatex -hald-on-error thebook.tex
 	evince thebook.pdf
+
+count:
+	wc `find content -name \*.tex`

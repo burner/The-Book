@@ -14,7 +14,7 @@ sections, subsections and paragraphs.
 After the Document Class Declaration, the text of your document is enclosed
 between two commands which identify the beginning and end of the actual
 document:
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 \documentclass[11pt,a4paper,oneside]{report}
 
 \begin{document}
@@ -33,7 +33,7 @@ the end of the document, like making an index.
 A useful side-effect of marking the end of the document text is that you can
 store comments or temporary text underneath the \texttt{\\end\{document\}} in the
 knowledge that LaTeX will never try to typeset them:
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 ...
 \end{document}
 Don't forget to get the extra chapter from Dorando!
@@ -43,7 +43,7 @@ Don't forget to get the extra chapter from Dorando!
 The \textit{preamble} is everything from the start of the LaTeX source file
 until the \texttt{\\begin\{document\}} command. It normally contains commands
 that affect the entire document.
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 % simple.tex - A simple article to illustrate document structure.
 \documentclass{article}
 \usepackage{mathptmx}
@@ -73,7 +73,7 @@ specified (there is no \texttt{\\topmatter} command) you are likely
 to encounter the term within LaTeX documentation.
 
 A simple example:
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 \documentclass[11pt,a4paper,oneside]{report}
 \begin{document}
 \title{How to Structure a LaTeX Document}
