@@ -1,0 +1,443 @@
+\section{Lists}
+Convenient and predictable list formatting is one of the many advantages of
+using LaTeX. Many users of wysiwyg word processors are frequently frustrated by
+the software's clumsy attempts to figure out when you intend lists to begin and
+end. This is the price of auto-formatting. As a mark-up language, LaTeX gives
+you\textit{far} more control over the structure and content of your list. With
+a little practice you will find that creating lists in LaTeX is actually a
+pleasure when compared to wrestling with your typical "high power" word
+processor.
+\subsection{List Structures}
+ \begin{lstlisting}
+itemize
+\end{lstlisting}
+  \begin{lstlisting}
+enumerate
+\end{lstlisting}
+  \begin{lstlisting}
+description
+\end{lstlisting}
+ Lists often appear in documents, especially academic, as their purpose is
+often to present information in a clear and concise fashion. List structures in
+LaTeX are simply environments which essentially come in three flavors: ,  and .
+
+All lists follow the basic format:
+\begin{lstlisting}
+\begin{list_type}
+  \item The first item
+  \item The second item
+  \item The third etc \ldots
+\end{list_type}
+\end{lstlisting}
+
+All three of these types of lists can have multiple paragraphs per item: just
+type the additional paragraphs in the normal way, with a blank line between
+each. So long as they are still contained within the enclosing environment,
+they will automatically be indented to follow underneath their item.
+
+\subsection{Itemize}
+This environment is for your standard bulleted list of items.
+
+\begin{lstlisting}
+\begin{itemize}
+  \item The first item
+  \item The second item
+  \item The third etc $\dots$
+\end{itemize}
+\end{lstlisting} 
+\begin{itemize}
+\item The first item
+\item The second item
+\item The third etc $\dots$
+\end{itemize}
+
+\subsection{Enumerate}
+The enumerate environment is for ordered lists, where by default, each item is
+numbered sequentially.
+
+\begin{lstlisting}
+\begin{enumerate}
+  \item The first item
+  \item The second item
+  \item The third etc \ldots
+\end{enumerate}
+\end{lstlisting}
+\begin{enumerate}
+  \item The first item
+  \item The second item
+  \item The third etc \ldots
+\end{enumerate}
+
+\subsection{Description}
+The description environment is slightly different. You can specify the item
+label by passing it as an optional argument (although optional, it would look
+odd if you didn't include it!). Ideal for a series of definitions, such as a
+glossary.
+
+\begin{lstlisting}
+\begin{description}
+  \item[First] The first item
+  \item[Second] The second item
+  \item[Third] The third etc \ldots
+\end{description}
+\end{lstlisting}
+\begin{description}
+  \item[First] The first item
+  \item[Second] The second item
+  \item[Third] The third etc \ldots
+\end{description}
+
+ \begin{lstlisting}
+\\
+\end{lstlisting}
+  \begin{lstlisting}
+\hfill
+\end{lstlisting}
+
+ Sometimes you want a description where the text begins on a new line. This
+cannot easily be done with . The trick is to use . 
+\begin{lstlisting}
+\begin{description}
+  \item[First] \hfill \\
+  The first item
+  \item[Second] \hfill \\
+  The second item
+  \item[Third] \hfill \\
+  The third etc \ldots
+\end{description}
+\end{lstlisting}
+\begin{description}
+  \item[First] \hfill \\
+  The first item
+  \item[Second] \hfill \\
+  The second item
+  \item[Third] \hfill \\
+  The third etc \ldots
+\end{description}
+
+\subsection{Compacted lists}
+\begin{lstlisting}
+itemize*
+\end{lstlisting}
+\begin{lstlisting}
+enumerate*
+\end{lstlisting}
+\begin{lstlisting}
+description*
+\end{lstlisting}
+
+As you may have noticed, in standard LaTeX document classes, the vertical
+spacing between items, and above and below the lists as a whole, is more than
+between paragraphs: it may look odd if the descriptions are too short. If you
+want tightly-packed lists, use the\texttt{mdwlist} package (included in
+the\texttt{mdwtools} bundle), which provides compact, "starred" versions of the
+previous environments, i.e. ,  and . They work exactly in the same way, but the
+output is more compact.
+
+Alternatively, use the\texttt{memoir} class and with\verb|\tightlists|.
+
+\subsection{Nested Lists}
+ \textit{easylist} Latex will happily allow you to insert a list environment
+into an existing one (up to a depth of four -- if you need more than four, use
+the  package). Simply begin the appropriate environment at the desired point
+within the current list. Latex will sort out the layout and any numbering for
+you.
+
+\begin{lstlisting}
+\begin{enumerate}
+  \item The first item
+  \begin{enumerate}
+    \item Nested item 1
+    \item Nested item 2
+  \end{enumerate}
+  \item The second item
+  \item The third etc \ldots
+\end{enumerate}
+\end{lstlisting}
+\begin{enumerate}
+  \item The first item
+  \begin{enumerate}
+    \item Nested item 1
+    \item Nested item 2
+  \end{enumerate}
+  \item The second item
+  \item The third etc \ldots
+\end{enumerate}
+
+\subsection{Customizing Lists}
+Customizing LaTeX is outside the beginners' domain. While not necessarily
+difficult in itself, because beginners are already overwhelmed with the array
+of commands and environments, moving on to more advanced topics runs the risk
+of confusion.
+
+However, since the tutorial is on formatting, I shall still include a brief
+guide on customizing lists. Feel free to skip!
+
+\subsubsection{Customizing Line Spacing in Lists}
+Inside lists you can redefine some length/dimension variables of latex, for
+example using:
+
+\begin{lstlisting}
+\begin{itemize}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+  \item first item
+  \item second item
+\end{itemize}
+\end{lstlisting}
+\begin{itemize}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+  \item first item
+  \item second item
+\end{itemize}
+
+Alternatively, to create a unified look in your document you can define your
+own enumerate environment:
+\begin{lstlisting}
+\newenvironment{my_enumerate}
+{\begin{enumerate}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}}
+{\end{enumerate}}
+\end{lstlisting}
+\newenvironment{my_enumerate}
+{\begin{enumerate}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}}
+{\end{enumerate}}
+ 
+\subsubsection{Customizing Enumerated Lists}
+The thing people want to change most often with Enumerated lists are the
+counters. Therefore, to go any further, a brief introduction to
+LaTeX\textit{counters} is required. Anything that LaTeX automatically numbers,
+such as section headers, figures, and itemized lists, there is a counter
+associated with it that controls the numbering. 
+\begin{lstlisting}
+enumi
+\end{lstlisting}
+  \begin{lstlisting}
+enumii
+\end{lstlisting}
+  \begin{lstlisting}
+enumiii
+\end{lstlisting}
+  \begin{lstlisting}
+enumiv
+\end{lstlisting}
+  \begin{lstlisting}
+\setcounter
+\end{lstlisting}
+  \begin{lstlisting}
+\item
+\end{lstlisting}
+  \begin{lstlisting}
+enumi
+\end{lstlisting}
+There are four individual counters that are associated with itemized lists,
+each one represents the four possible levels of nesting, which are called: , ,
+, . In order to reset any of these counters in the middle of an enumeration
+simply use . The counter is incremented by  before it is printed. For example
+to reset  use:
+
+\begin{lstlisting}
+\begin{enumerate}
+  \setcounter{enumi}{4}
+  \item fifth element
+\end{enumerate}
+\end{lstlisting}
+
+which prints as: 5. fifth element
+
+Each counter also has a default format that dictates how it is displayed
+whenever LaTeX needs to print it. Such formats are specified using internal
+LaTeX commands:
+
+\begin{tabular}{c c} \hline
+ Command
+&  Example
+\\ \hline
+\verb|\arabic|
+&  1, 2, 3 ...
+\\ \hline
+\verb|\alph|
+&  a, b, c ...
+\\ \hline
+\verb|\Alph|
+&  A, B, C ...
+\\ \hline
+\verb|\roman|
+&  i, ii, iii ...
+\\ \hline
+\verb|\Roman|
+&  I, II, III ...
+\\ \hline
+\verb|\fnsymbol|
+&  Aimed at footnotes (see below), but prints a sequence of symbols. \\ \hline
+\end{tabular}
+
+\begin{lstlisting}
+\the
+\end{lstlisting}
+  \begin{lstlisting}
+\theenumi
+\end{lstlisting}
+ Each counter entity holds various bits of information about itself. To get to
+the numbered element, simply use  followed immediately (i.e., no space) by the
+name of the counter, e.g., . This is often referred to as
+the\textit{representation} of a counter. 
+
+Now, that's most of the technicalities out of the way. To make changes to the
+formatting of a given level:
+\begin{lstlisting}
+\renewcommand{\representation}{\format_command{counter}}
+\end{lstlisting}
+
+Admittedly, the generic version is not that clear, so a couple of examples will
+clarify:
+\begin{lstlisting}
+%Redefine the first level
+\renewcommand{\theenumi}{\Roman{enumi}}
+\renewcommand{\labelenumi}{\theenumi}
+
+%Redefine the second level
+\renewcommand{\theenumii}{\Alph{enumii}}
+\renewcommand{\labelenumii}{\theenumii}
+\end{lstlisting}
+
+The method used above first explicitly changes the format used by the counter.
+However, the element that controls the label needs to be updated to reflect the
+change, which is what the second line does. Another way to achieve this result
+is this:
+\begin{lstlisting}
+\renewcommand{\labelenumi}{\Roman{enumi}}
+\end{lstlisting}
+
+This simply redefines the appearance of the label, which is fine, providing
+that you do not intend to cross-reference to a specific item within the list,
+in which case the reference will be printed in the previous format. This issue
+does not arise in the first example.
+
+Note that you can also add other symbols, such as parentheses and periods,
+before and after the counter.  For instance, to create a list indexed by lower
+case letters with parentheses before and after the letter, you might enter the
+following:
+\begin{lstlisting}
+\renewcommand{\labelenumi}{(\alph{enumi})}
+\end{lstlisting}
+
+\subsubsection{Customizing Itemised Lists}
+\begin{lstlisting}
+\item[new symbol]
+\end{lstlisting}
+\begin{lstlisting}
+\item[$\star$]
+\end{lstlisting}
+ Itemized lists are not as complex as they do not need to count. Therefore, to
+customize, you simply change the labels. It can be done manually for each entry
+with , eg . 
+
+\begin{lstlisting}
+\labelitemi
+\end{lstlisting}
+\begin{lstlisting}
+\labelitemii
+\end{lstlisting}
+\begin{lstlisting}
+\labelitemiii
+\end{lstlisting}
+\begin{lstlisting}
+\labelitemiv
+\end{lstlisting}
+The itemize labels are accessed via , , , , for the four respective levels.
+\begin{lstlisting}
+\renewcommand{\labelitemi}{\textgreater}
+\end{lstlisting}
+
+The above example would set the labels for the first level to a greater than
+(>) symbol. Of course, the text symbols available in Latex are not very
+exciting. Why not use one of the ZapfDingbat symbols, as described in
+the Symbols section.
+Or use a mathematical symbol:
+\begin{lstlisting}
+\renewcommand{\labelitemi}{$\star$}
+\end{lstlisting}
+
+Itemized list with tightly set items, that is with no vertical space between
+two consecutive items, can be created as follows.
+\begin{lstlisting}
+
+\begin{itemize}
+  \setlength{\itemsep}{0cm}%
+  \setlength{\parskip}{0cm}%
+  \item Item opening the list
+  \item Item tightly following
+\end{itemize}
+\end{lstlisting}
+
+\subsubsection{Details of Customizing Lists}
+\begin{lstlisting}
+\renewcommand
+\end{lstlisting}
+\begin{lstlisting}
+\begin{document}
+\end{lstlisting}
+Note that it is necessary that the  appears after the  instruction so the
+changes made are taken into account. This is needed for both enumerated and
+itemized lists.
+
+\subsection{Inline lists}
+ \begin{lstlisting}
+inparaenum
+\end{lstlisting}
+Inline lists are a special case as they require the use of the\texttt{paralist}
+package which provides the  environment (with an optional formatting
+specification in square brackets):
+
+\begin{lstlisting}
+...
+\usepackage{paralist}
+
+\begin{document}
+
+\textbf{\itshape Inline lists}, which are
+sequential in nature, just like enumerated
+lists, but are
+\begin{inparaenum}[\itshape a\upshape)]
+\item formatted within their paragraph;
+\item usually labelled with letters; and 
+\item usually have the final item prefixed with
+`and' or `or',
+\end{inparaenum} like this example.
+...
+
+\end{lstlisting}
+
+\begin{lstlisting}
+\Alph
+\end{lstlisting}
+\begin{lstlisting}
+\alph
+\end{lstlisting}
+\begin{lstlisting}
+\Roman
+\end{lstlisting}
+\begin{lstlisting}
+\roman
+\end{lstlisting}
+\begin{lstlisting}
+\arabic
+\end{lstlisting}
+
+To change the styles of the counter, tokens A, a, I, i, and 1 can be used in
+the optional argument to produce the counter with one of the styles , , ,  and
+. For example:
+\begin{lstlisting}
+\begin{inparaenum}[(i)]
+\end{lstlisting}
+ 
+produces the labels (i), (ii), (iii) ...

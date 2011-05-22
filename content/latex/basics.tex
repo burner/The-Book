@@ -1,6 +1,6 @@
 \section{Document Classes}
 The first information LaTeX needs to know when processing an input file is the type of document the author wants to create. This is specified with the \lstinline{\documentclass} command.
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 \documentclass[options]{class}
 \end{lstlisting}
 
@@ -8,7 +8,7 @@ The first information LaTeX needs to know when processing an input file is the t
 Here class specifies the type of document to be created. The LaTeX distribution provides additional classes for other documents, including letters and slides. The options parameter customizes the behavior of the document class. The options have to be separated by commas. 
 
 Example: an input file for a LaTeX document could start with the line
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 \documentclass[11pt,twoside,a4paper]{article}
 \end{lstlisting}
 
@@ -106,7 +106,7 @@ makes LaTeX indicate hyphenation and justification problems with a small square 
 
 For example, if you want a report to be in 12pt type on A4, but printed one-sided in draft mode, you would use:
 	
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 \documentclass[12pt,a4paper,oneside,draft]{report}
 \end{lstlisting}
 
@@ -115,7 +115,7 @@ For example, if you want a report to be in 12pt type on A4, but printed one-side
 While writing your document, you will probably find that there are some areas where basic LaTeX cannot solve your problem. If you want to include
 graphics, colored text or source code from a file into your document, you need to enhance the capabilities of LaTeX. Such enhancements are called packages. Packages are activated with the
 
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 \usepackage[options]{package}
 \end{lstlisting}
 
@@ -137,7 +137,7 @@ with cross-references.  \\
  \texttt{.blg} & BiBTeX log file.  \\
  \texttt{.bst} & BiBTeX style file.  \\
  \texttt{.cls} & Class files define what your document looks like. They are selected with the 
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 \documentclass 
 \end{lstlisting} command.  \\
  \texttt{.dtx} & Documented TeX. This is the main distribution format for LaTeX style files. If you process a \texttt{.dtx} file you get documented macro code of the LaTeX package contained in the \texttt{.dtx} file.  \\
@@ -162,12 +162,12 @@ with cross-references.  \\
 \subsection{Big Projects}
 When working on big documents, you might want to split the input file into several parts. LaTeX has three commands to insert a file into another when building the document.
 The simplest is the 
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 \lstinline{\input}
 \end{lstlisting}
 command:
 
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 \input{filename}
 \end{lstlisting}
 
@@ -175,7 +175,7 @@ command:
 
 The other main inclusion command is \include:
 
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 \include{filename}
 \end{lstlisting}
 
@@ -184,7 +184,7 @@ The \lstinline{\include} command is different from \lstinline{\input} in that it
 
 Very large documents (that usually include many files) take a very long time to compile, and most users find it convenient to test their last changes by including only the files they have been working on. One option is to hunt down all \lstinline{\include} commands in the inclusion hierarchy and to comment them out:
 
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 %\include{filename1}
 \include{filename2}
 \include{filename3}
@@ -194,7 +194,7 @@ Very large documents (that usually include many files) take a very long time to 
 
 In this case, the user wants to include only \textit{filename2.tex} and \textit{filename3.tex}. If the inclusion hierarchy is intricate, commenting can become error-prone: page numbering will change, and any cross references won't work. A better alternative is to retain the include calls and use the \lstinline{\includeonly} command \textit{in the preamble}:
 
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 \includeonly{filename2,filename3}
 \end{lstlisting}
 
@@ -203,7 +203,7 @@ This way, only \lstinline{\include} commands for the specified files will be exe
 
 Remember that the input file should omit all the commands referring to the main document structure, which should be kept in the original document file. This includes lines containing usepackages, document class, and everything but the code strictly referring to the section that is to be included. In this way you'll avoid finding characters of your code in the output document, or worse, not finding anything after the included file, in case you forget to erase the 
 
-\begin{lstlisting}[language={TeX}, breaklines=true,xleftmargin=15pt]
+\begin{lstlisting}
 \end{document}
 \end{lstlisting}
  
